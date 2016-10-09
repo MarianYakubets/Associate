@@ -26,10 +26,10 @@ BasicGame.Game = function (game) {
 BasicGame.Game.prototype = {
 
     create: function () {
-        //	Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-        var test = this.game.add.sprite(100, 100, "test");
+        this.game.stage.backgroundColor = '#717ED5';
+        var test = this.game.add.sprite(400, 400, "test");
         test.width = 150;
-        test.height = 150;
+        test.height =150;
     },
 
     update: function () {

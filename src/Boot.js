@@ -11,7 +11,8 @@ BasicGame = {
 
 };
 
-BasicGame.Boot = function (game) {};
+BasicGame.Boot = function (game) {
+};
 
 BasicGame.Boot.prototype = {
 
@@ -25,7 +26,7 @@ BasicGame.Boot.prototype = {
         this.scale.pageAlignVertically = true;
 
         if (!this.game.device.desktop) {
-            this.scale.forceOrientation(true, false);
+            this.scale.forceOrientation(true, true);
             this.scale.setResizeCallback(this.gameResized, this);
             this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
             this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
@@ -37,7 +38,7 @@ BasicGame.Boot.prototype = {
 
         //  Here we load the assets required for our preloader (in this case a background and a loading bar)
         /*this.load.image('preloaderBackground', 'images/preloader_background.jpg');
-        this.load.image('preloaderBar', 'images/preloader_bar.png');*/
+         this.load.image('preloaderBar', 'images/preloader_bar.png');*/
 
     },
 

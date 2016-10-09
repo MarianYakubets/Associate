@@ -28,7 +28,7 @@ BasicGame.Preloader.prototype = {
         this.load.audio('titleMusic', ['audio/main_menu.mp3']);
         this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');*/
         //	+ lots of other required assets here
-        this.load.image('test', 'images/tiles/ai.png');
+        this.load.image('test', 'images/tiles/airplane.png');
     },
 
     create: function () {
