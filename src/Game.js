@@ -26,10 +26,12 @@ Associate.Game = function (game) {
 Associate.Game.prototype = {
 
     create: function () {
-        this.game.stage.backgroundColor = '#717ED5';
-        var test = this.game.add.sprite(400, 400, "test");
-        test.width = 150;
-        test.height =150;
+        this.game.stage.backgroundColor = '#96ceb4';
+        this.game.add.sprite(100, 100, "blue");
+        this.game.add.sprite(200, 100, "green");
+        this.game.add.sprite(300, 100, "grey");
+        this.game.add.sprite(400, 100, "red");
+        this.game.add.sprite(500, 100, "yellow");
     },
 
     update: function () {
