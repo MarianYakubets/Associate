@@ -18,6 +18,8 @@ Associate.Game = function (game) {
     this.physics; //	the physics manager
     this.rnd; //	the repeatable random number generator
 
+    this.tileSize = 48;
+
     //	You can use any of these from any function within this State.
     //	But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
@@ -27,11 +29,23 @@ Associate.Game.prototype = {
 
     create: function () {
         this.game.stage.backgroundColor = '#96ceb4';
-        this.game.add.sprite(100, 100, "blue");
+/*        this.game.add.sprite(100, 100, "blue");
         this.game.add.sprite(200, 100, "green");
         this.game.add.sprite(300, 100, "grey");
         this.game.add.sprite(400, 100, "red");
-        this.game.add.sprite(500, 100, "yellow");
+        this.game.add.sprite(500, 100, "yellow");*/
+
+        var startX = 100;
+        var startY = 100;
+
+        var width = 10;
+        var height = 10;
+
+        for (var i = 0; i < width; i++) {
+            for (var j = 0; j < height; j++) {
+                this.game.add.sprite(startX + i * this.tileSize, startY + j * this.tileSize, "grey");
+            }
+        }
     },
 
     update: function () {
