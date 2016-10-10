@@ -29,11 +29,6 @@ Associate.Game.prototype = {
 
     create: function () {
         this.game.stage.backgroundColor = '#96ceb4';
-/*        this.game.add.sprite(100, 100, "blue");
-        this.game.add.sprite(200, 100, "green");
-        this.game.add.sprite(300, 100, "grey");
-        this.game.add.sprite(400, 100, "red");
-        this.game.add.sprite(500, 100, "yellow");*/
 
         var startX = 100;
         var startY = 100;
@@ -43,8 +38,17 @@ Associate.Game.prototype = {
 
         for (var i = 0; i < width; i++) {
             for (var j = 0; j < height; j++) {
-                this.game.add.sprite(startX + i * this.tileSize, startY + j * this.tileSize, "grey");
+                var tile = this.game.add.sprite(startX + i * this.tileSize, startY + j * this.tileSize, "grey");
+                tile.inputEnabled = true;
+                tile.events.onInputDown.add(this.onClick(tile), this);
+
             }
+        }
+    },
+
+    onClick: function (tile) {
+        return function () {
+            this.game.add.sprite(tile.x, tile.y, "blue");
         }
     },
 
