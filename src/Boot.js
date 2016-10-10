@@ -1,4 +1,4 @@
-BasicGame = {
+Associate = {
 
     /* Here we've just got some global level vars that persist regardless of State swaps */
     score: 0,
@@ -6,15 +6,15 @@ BasicGame = {
     /* If the music in your game needs to play through-out a few State swaps, then you could reference it here */
     music: null,
 
-    /* Your game can check BasicGame.orientated in internal loops to know if it should pause or not */
+    /* Your game can check Associate.orientated in internal loops to know if it should pause or not */
     orientated: false
 
 };
 
-BasicGame.Boot = function (game) {
+Associate.Boot = function (game) {
 };
 
-BasicGame.Boot.prototype = {
+Associate.Boot.prototype = {
 
     init: function () {
 
@@ -58,7 +58,7 @@ BasicGame.Boot.prototype = {
 
     enterIncorrectOrientation: function () {
 
-        BasicGame.orientated = false;
+        Associate.orientated = false;
 
         document.getElementById('orientation').style.display = 'block';
 
@@ -66,7 +66,7 @@ BasicGame.Boot.prototype = {
 
     leaveIncorrectOrientation: function () {
 
-        BasicGame.orientated = true;
+        Associate.orientated = true;
 
         document.getElementById('orientation').style.display = 'none';
 
