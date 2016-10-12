@@ -33,14 +33,6 @@ Associate.Game.prototype = {
         this.game.stage.backgroundColor = '#96ceb4';
         var group = this.game.add.group();
 
-        //group.create(3, 3, 'green');
-        /*group.createMultiple(23, "grey", [0], true);
-         group.createMultiple(26, "blue", [0], true);
-         group.createMultiple(24, "yellow", [0], true);
-         group.createMultiple(5, "red", [0], true);
-         group.align(12, -1, this.tileSize, this.tileSize);
-         group.create(16, 3, 'green');*/
-
         for (var i = 0; i < this.w; i++) {
             this.tiles[i] = [];
             for (var j = 0; j < this.h; j++) {
