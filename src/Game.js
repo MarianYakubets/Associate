@@ -19,7 +19,9 @@ Associate.Game = function (game) {
     this.rnd; //    the repeatable random number generator
 
     this.tileSize = 48;
-
+    this.w = 16;
+    this.h = 16;
+    this.tiles = [];
     //  You can use any of these from any function within this State.
     //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
@@ -29,48 +31,92 @@ Associate.Game.prototype = {
 
     create: function () {
         this.game.stage.backgroundColor = '#96ceb4';
-
         var group = this.game.add.group();
 
-        group.create(3, 3, 'green');
-        group.createMultiple(23, "grey", [0], true);
-        group.createMultiple(26, "blue", [0], true);
-        group.createMultiple(24, "yellow", [0], true);
-        group.createMultiple(5, "red", [0], true);
-        group.create(16, 3, 'green');
+        //group.create(3, 3, 'green');
+        /*group.createMultiple(23, "grey", [0], true);
+         group.createMultiple(26, "blue", [0], true);
+         group.createMultiple(24, "yellow", [0], true);
+         group.createMultiple(5, "red", [0], true);
+         group.align(12, -1, this.tileSize, this.tileSize);
+         group.create(16, 3, 'green');*/
+
+        for (var i = 0; i < this.w; i++) {
+            this.tiles[i] = [];
+            for (var j = 0; j < this.h; j++) {
+                this.tiles[i][j] = group.create(i * this.tileSize, j * this.tileSize, 'red');
+                this.tiles[i][j].anchor.x = 0.5;
+
+            }
+        }
 
         group.setAll('inputEnabled', true);
-        group.callAll('events.onInputDown.add', 'events.onInputDown', this.flip(this, 'green'));
+        group.callAll('events.onInputDown.add', 'events.onInputDown', this.onTileClick(this));
 
-        group.align(12, -1, 48, 48);
-
-        group.create(16, 3, 'green');
+        this.flip(this, 'yellow', this.tiles[1][1]);
+        this.flip(this, 'blue', this.tiles[7][8]);
+        this.flip(this, 'grey', this.tiles[5][5]);
+        this.flip(this, 'green', this.tiles[10][10]);
 
         group.x = 100;
         group.y = 100;
     },
 
-
-    flip: function (context, type) {
+    onTileClick: function (context) {
         return function (item) {
-            item.anchor.x = 0.5;
-            item.x = item.x + item.width / 2;
-            var name = item.key;
-            var flip = context.game.add.tween(item.scale).to({
-                x: 0,
+            var x = Math.floor(item.x / context.tileSize);
+            var y = Math.floor(item.y / context.tileSize);
+            context.getNeighbors(x, y).forEach(function (a, i, arr) {
+                context.flip(context, item.key, context.tiles[a[0]][a[1]]);
+            }, context);
+        }
+    },
+
+    flip: function (context, type, item) {
+        if (item.key == type) {
+            return;
+        }
+        var flip = context.game.add.tween(item.scale).to({
+            x: 0,
+            y: 1
+        }, 200, Phaser.Easing.None, true);
+        flip.onComplete.add(function () {
+            item.loadTexture(type);
+            context.game.add.tween(item.scale).to({
+                x: 1,
                 y: 1
             }, 200, Phaser.Easing.None, true);
-            flip.onComplete.add(function () {
-                item.loadTexture(type);
-                context.game.add.tween(item.scale).to({
-                    x: 1,
-                    y: 1
-                }, 200, Phaser.Easing.None, true).onComplete.add(function () {
-                    item.anchor.x = 0;
-                    item.x = item.x - item.width / 2;
-                }, this);
-            }, this);
+        }, this);
+    },
+
+    getNeighbors: function (x, y) {
+        var n = [];
+
+        var i = x - 1;
+        while (i >= 0) {
+            n.push([i, y]);
+            i--;
         }
+
+        i = x + 1;
+        while (i < this.w) {
+            n.push([i, y]);
+            i++;
+        }
+
+        i = y - 1;
+        while (i >= 0) {
+            n.push([x, i]);
+            i--;
+        }
+
+        i = y + 1;
+        while (i < this.h) {
+            n.push([x, i]);
+            i++;
+        }
+
+        return n;
     },
 
     update: function () {
