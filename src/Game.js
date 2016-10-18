@@ -19,8 +19,8 @@ Associate.Game = function (game) {
     this.rnd; //    the repeatable random number generator
 
     this.tileSize = 48;
-    this.w = 16;
-    this.h = 16;
+    this.w = 7;
+    this.h = 7;
     this.tiles = [];
     //  You can use any of these from any function within this State.
     //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
@@ -46,9 +46,9 @@ Associate.Game.prototype = {
         group.callAll('events.onInputDown.add', 'events.onInputDown', this.onTileClick(this));
 
         this.flip(this, 'yellow', this.tiles[1][1]);
-        this.flip(this, 'blue', this.tiles[7][8]);
+        this.flip(this, 'blue', this.tiles[6][3]);
         this.flip(this, 'grey', this.tiles[5][5]);
-        this.flip(this, 'green', this.tiles[10][10]);
+        this.flip(this, 'green', this.tiles[1][2]);
 
         group.x = 100;
         group.y = 100;
