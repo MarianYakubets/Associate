@@ -59,25 +59,25 @@ Associate.Game.prototype = {
             var x = Math.floor(item.x / context.tileSize);
             var y = Math.floor(item.y / context.tileSize);
             context.getNeighbors(x, y).forEach(function (a, i, arr) {
-                context.flip(context, item.key, context.tiles[a[0]][a[1]]);
+                context.flip(context, item.key, context.tiles[a[0]][a[1]], i * 50);
             }, context);
         }
     },
 
-    flip: function (context, type, item) {
+    flip: function (context, type, item, delay) {
         if (item.key == type) {
             return;
         }
         var flip = context.game.add.tween(item.scale).to({
             x: 0,
             y: 1
-        }, 200, Phaser.Easing.None, true);
+        }, 200, Phaser.Easing.None, true, delay);
         flip.onComplete.add(function () {
             item.loadTexture(type);
             context.game.add.tween(item.scale).to({
                 x: 1,
                 y: 1
-            }, 200, Phaser.Easing.None, true);
+            }, 150, Phaser.Easing.None, true);
         }, this);
     },
 
