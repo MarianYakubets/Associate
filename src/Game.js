@@ -22,11 +22,13 @@ Associate.Game = function(game) {
     this.spacing = 8;
     this.bigTileSize = 56;
 
-
-    this.w = 7;
-    this.h = 7;
+    this.w = 3;
+    this.h = 3;
     this.tiles = [];
+    this.legendTiles = [];
     this.sprites = [];
+
+    this.tilesGroup;
 
     //  You can use any of these from any function within this State.
     //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
@@ -35,6 +37,10 @@ Associate.Game = function(game) {
 
 Associate.Game.prototype = {
 
+    init: function(levelNumber) {
+        console.log(levelNumber);
+    },
+
     create: function() {
         this.game.stage.backgroundColor = '#96ceb4';
 
@@ -42,43 +48,72 @@ Associate.Game.prototype = {
         groupBcg.x = 100;
         groupBcg.y = 100;
 
-        var group = this.game.add.group();
-        group.x = 100;
-        group.y = 100;
-
+        this.tilesGroup = this.game.add.group();
+        this.tilesGroup.x = 100;
+        this.tilesGroup.y = 100;
 
         for (var i = 0; i < this.w; i++) {
+            this.legendTiles[i] = [];
             for (var j = 0; j < this.h; j++) {
                 var sprite = groupBcg.create(i * (this.bigTileSize), j * (this.bigTileSize), Color.BLUE);
                 sprite.anchor.x = 0.5;
                 sprite.anchor.y = 0.5;
                 sprite.width = this.bigTileSize;
                 sprite.height = this.bigTileSize;
+                this.legendTiles[i][j] = new Tile(i, j, Color.BLUE);
             }
         }
+        this.game.add.button(this.game.world.width - 95, 10, 'save', this.onSaveClick, this, 2, 1, 0);
+        this.game.add.button(this.game.world.width - 95, 100, 'load', this.onLoadClick, this, 2, 1, 0);
+    },
 
 
+    drawTiles: function(tiles) {
+        this.tiles = tiles;
 
-        for (var i = 0; i < this.w; i++) {
+        if (this.tilesGroup != null) {
+            this.tilesGroup.destroy();
+        }
+
+        this.tilesGroup = this.game.add.group();
+        this.tilesGroup.x = 100;
+        this.tilesGroup.y = 100;
+
+        tiles.forEach(function(row, i) {
             this.sprites[i] = [];
-            this.tiles[i] = [];
-            for (var j = 0; j < this.h; j++) {
-                this.sprites[i][j] = group.create(i * (this.bigTileSize), j * (this.bigTileSize), Color.RED);
-                this.sprites[i][j].anchor.x = 0.5;
-                this.sprites[i][j].anchor.y = 0.5;
-                this.tiles[i][j] = new Tile(i, j);
+            row.forEach(function(tile) {
+                var sprite = this.tilesGroup.create(tile.x * (this.bigTileSize), tile.y * (this.bigTileSize), tile.color);
+                sprite.anchor.x = 0.5;
+                sprite.anchor.y = 0.5;
+                this.sprites[tile.x][tile.y] = sprite;
+            }, this);
+        }, this);
+
+        this.tilesGroup.setAll('inputEnabled', true);
+        this.tilesGroup.callAll('events.onInputDown.add', 'events.onInputDown', this.onTileClick(this));
+    },
+
+
+    loadLevel: function(json) {
+        //var legend = JSON.parse(legendJson);
+        var tiles = JSON.parse(json);
+        this.drawTiles(tiles);
+    },
+
+    checkWin: function() {
+        var victory = true;
+        this.legendTiles.forEach(function(row) {
+            row.forEach(function(tile) {
+                if (this.tiles[tile.x][tile.y].color != tile.color) {
+                    victory = false;
+                    return;
+                }
+            }, this);
+            if (!victory) {
+                return;
             }
-        }
-
-        group.setAll('inputEnabled', true);
-        group.callAll('events.onInputDown.add', 'events.onInputDown', this.onTileClick(this));
-
-        this.flip(this, Color.YELLOW, this.sprites[1][1]);
-        this.flip(this, Color.BLUE, this.sprites[6][3]);
-        this.flip(this, Color.GREY, this.sprites[5][5]);
-        this.flip(this, Color.GREEN, this.sprites[1][2]);
-
-        this.tiles[3][3].mutable = false;
+        }, this);
+        return victory;
     },
 
     onTileClick: function(context) {
@@ -86,8 +121,10 @@ Associate.Game.prototype = {
             var x = Math.floor(item.x / (context.bigTileSize));
             var y = Math.floor(item.y / (context.bigTileSize));
             context.getNeighbors(x, y, context.tiles).forEach(function(a, i, arr) {
+                context.tiles[a[0]][a[1]].color = item.key;
                 context.flip(context, item.key, context.sprites[a[0]][a[1]], i * 50);
             }, context);
+            console.log("Victory : " + context.checkWin());
         }
     },
 
@@ -148,6 +185,16 @@ Associate.Game.prototype = {
         }
 
         return n;
+    },
+
+    onSaveClick: function() {
+        var json = JSON.stringify(this.tiles);
+        console.log(json);
+    },
+
+
+    onLoadClick: function() {
+        this.loadLevel('[[{"x":0,"y":0,"color":"red","mutable":true},{"x":0,"y":1,"color":"red","mutable":true},{"x":0,"y":2,"color":"red","mutable":true}],[{"x":1,"y":0,"color":"red","mutable":true},{"x":1,"y":1,"color":"blue","mutable":false},{"x":1,"y":2,"color":"red","mutable":true}],[{"x":2,"y":0,"color":"red","mutable":true},{"x":2,"y":1,"color":"red","mutable":true},{"x":2,"y":2,"color":"red","mutable":true}]]');
     },
 
     update: function() {

@@ -33,13 +33,27 @@ Associate.Preloader.prototype = {
         this.load.image('grey', 'images/tiles/grey.png');
         this.load.image('red', 'images/tiles/red.png');
         this.load.image('yellow', 'images/tiles/yellow.png');
+
+        this.load.image('save', 'images/save.png');
+        this.load.image('load', 'images/load.png');
+
+        this.load.image('0', 'images/numbers/0.png');
+        this.load.image('1', 'images/numbers/1.png');
+        this.load.image('2', 'images/numbers/2.png');
+        this.load.image('3', 'images/numbers/3.png');
+        this.load.image('4', 'images/numbers/4.png');
+        this.load.image('5', 'images/numbers/5.png');
+        this.load.image('6', 'images/numbers/6.png');
+        this.load.image('7', 'images/numbers/7.png');
+        this.load.image('8', 'images/numbers/8.png');
+        this.load.image('9', 'images/numbers/9.png');
     },
 
     create: function () {
 
         //	Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes
         //this.preloadBar.cropEnabled = false;
-        this.state.start('Game');
+        this.state.start('MainMenu');
 
 
     },
