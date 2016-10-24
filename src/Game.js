@@ -59,7 +59,7 @@ Associate.Game.prototype = {
                 sprite.anchor.y = 0.5;
                 sprite.width = this.bigTileSize;
                 sprite.height = this.bigTileSize;
-                this.legendTiles[[i, j]] = new Tile(i, j, Color.BLUE);
+                this.legendTiles.set(new Pair(i, j), new Tile(i, j, Color.BLUE));
             }
         }
         this.game.add.button(this.game.world.width - 95, 10, 'save', this.onSaveClick, this, 2, 1, 0);
@@ -67,8 +67,11 @@ Associate.Game.prototype = {
     },
 
 
-    drawTiles: function (tiles) {
-        this.tiles = tiles;
+    drawTiles: function (array) {
+        this.tiles = new TileMap();
+        array.forEach(function (tile) {
+            this.tiles.set(new Pair(tile.x, tile.y), tile);
+        }, this);
 
         if (this.tilesGroup != null) {
             this.tilesGroup.destroy();
@@ -78,11 +81,11 @@ Associate.Game.prototype = {
         this.tilesGroup.x = 200;
         this.tilesGroup.y = 400;
 
-        tiles.forEach(function (tile) {
+        this.tiles.entities.forEach(function (tile) {
             var sprite = this.tilesGroup.create(tile.x * (this.bigTileSize), tile.y * (this.bigTileSize), tile.color);
             sprite.anchor.x = 0.5;
             sprite.anchor.y = 0.5;
-            this.sprites[[tile.x, tile.y]] = sprite;
+            this.sprites.set(new Pair(tile.x, tile.y), sprite);
         }, this);
 
         this.tilesGroup.setAll('inputEnabled', true);
@@ -98,14 +101,9 @@ Associate.Game.prototype = {
 
     checkWin: function () {
         var victory = true;
-        this.legendTiles.forEach(function (row) {
-            row.forEach(function (tile) {
-                if (this.tiles[[tile.x, tile.y]].color != tile.color) {
-                    victory = false;
-                    return;
-                }
-            }, this);
-            if (!victory) {
+        this.legendTiles.entities.forEach(function (tile) {
+            if (this.tiles.get(new Pair(tile.x, tile.y)).color != tile.color) {
+                victory = false;
                 return;
             }
         }, this);
@@ -116,9 +114,9 @@ Associate.Game.prototype = {
         return function (item) {
             var x = Math.floor(item.x / (context.bigTileSize));
             var y = Math.floor(item.y / (context.bigTileSize));
-            context.getNeighbors(x, y, context.tiles).forEach(function (a, i, arr) {
-                context.tiles[[a[0], a[1]]].color = item.key;
-                context.flip(context, item.key, context.sprites[a[0]][a[1]], i * 50);
+            context.getNeighbors(x, y, context.tiles).forEach(function (a, i) {
+                context.tiles.get(new Pair(a[0], a[1])).color = item.key;
+                context.flip(context, item.key, context.sprites.get(new Pair(a[0], a[1])), i * 50);
             }, context);
             console.log("Victory : " + context.checkWin());
         }
@@ -146,7 +144,7 @@ Associate.Game.prototype = {
 
         var i = x - 1;
         while (i >= 0) {
-            if (!tiles[[i, y]].mutable) {
+            if (!tiles.get(new Pair(i, y)).mutable) {
                 break;
             }
             n.push([i, y]);
@@ -155,7 +153,7 @@ Associate.Game.prototype = {
 
         i = x + 1;
         while (i < this.w) {
-            if (!tiles[[i, y]].mutable) {
+            if (!tiles.get(new Pair(i, y)).mutable) {
                 break;
             }
             n.push([i, y]);
@@ -164,7 +162,7 @@ Associate.Game.prototype = {
 
         i = y - 1;
         while (i >= 0) {
-            if (!tiles[[x, i]].mutable) {
+            if (!tiles.get(new Pair(x, i)).mutable) {
                 break;
             }
             n.push([x, i]);
@@ -173,7 +171,7 @@ Associate.Game.prototype = {
 
         i = y + 1;
         while (i < this.h) {
-            if (!tiles[[x, i]].mutable) {
+            if (!tiles.get(new Pair(x, i)).mutable) {
                 break;
             }
             n.push([x, i]);

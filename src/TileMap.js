@@ -11,36 +11,36 @@ TileMap.prototype = {
     },
 
     get: function (key) {
-        if (this.hasKey(key)) {
+        if (this.hasKey(this.simplify(key))) {
             return null;
         }
-        return this.entities[this.keys.indexOf(key)];
+        return this.entities[this.keys.indexOf(this.simplify(key))];
     },
 
     set: function (key, entity) {
-        if (!this.hasKey(key)) {
-            this.keys.push(key);
+        if (!this.hasKey(this.simplify(key))) {
+            this.keys.push(this.simplify(key));
             this.updateSize();
         }
-        this.entities[this.keys.indexOf(key)] = entity;
+        this.entities[this.keys.indexOf(this.simplify(key))] = entity;
     },
 
     delete: function (key) {
-        var index = this.keys.indexOf(key);
+        var index = this.keys.indexOf(this.simplify(key));
         this.keys.splice(index);
         this.entities.splice(index);
         this.updateSize();
     },
 
     hasKey: function (key) {
-        return this.keys.indexOf(key) != (-1);
-    },
-
-    hasEntity: function (entity) {
-        return this.entities.indexOf(entity) != (-1);
+        return this.keys.indexOf(this.simplify(key)) != (-1);
     },
 
     updateSize: function () {
         this.size = this.keys.length;
+    },
+
+    simplify: function (key) {
+        return "" + key.x + key.y;
     }
 };
