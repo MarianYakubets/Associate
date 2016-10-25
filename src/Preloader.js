@@ -1,4 +1,4 @@
-Associate.Preloader = function (game) {
+Associate.Preloader = function(game) {
 
     this.background = null;
     this.preloadBar = null;
@@ -9,7 +9,7 @@ Associate.Preloader = function (game) {
 
 Associate.Preloader.prototype = {
 
-    preload: function () {
+    preload: function() {
 
         //	These are the assets we loaded in Boot.js
         //	A nice sparkly background and a loading progress bar
@@ -34,8 +34,16 @@ Associate.Preloader.prototype = {
         this.load.image('red', 'images/tiles/red.png');
         this.load.image('yellow', 'images/tiles/yellow.png');
 
-        this.load.image('save', 'images/save.png');
-        this.load.image('load', 'images/load.png');
+        this.load.image('start', 'images/btn/buttonStart.png');
+        this.load.image('select', 'images/btn/buttonSelect.png');
+
+        this.load.image('save', 'images/btn/import.png');
+        this.load.image('load', 'images/btn/export.png');
+        this.load.image('back', 'images/btn/exitLeft.png');
+        this.load.image('btn1', 'images/btn/button1.png');
+        this.load.image('btn2', 'images/btn/button2.png');
+        this.load.image('btn3', 'images/btn/button3.png');
+
 
         this.load.image('0', 'images/numbers/0.png');
         this.load.image('1', 'images/numbers/1.png');
@@ -49,7 +57,7 @@ Associate.Preloader.prototype = {
         this.load.image('9', 'images/numbers/9.png');
     },
 
-    create: function () {
+    create: function() {
 
         //	Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes
         //this.preloadBar.cropEnabled = false;
@@ -58,7 +66,7 @@ Associate.Preloader.prototype = {
 
     },
 
-    update: function () {
+    update: function() {
 
         //	You don't actually need to do this, but I find it gives a much smoother game experience.
         //	Basically it will wait for our audio file to be decoded before proceeding to the MainMenu.

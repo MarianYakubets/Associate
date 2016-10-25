@@ -34,13 +34,17 @@
     <link rel="stylesheet" href="css/stylesheet.css" type="text/css" charset="utf-8" />
     <script src="js/phaser.js"></script>
     <script src="src/Enum.js"></script>
+    <script src="src/LevelManager.js"></script>
+    <script src="src/Level.js"></script>
     <script src="src/Pair.js"></script>
     <script src="src/TileMap.js"></script>
     <script src="src/Tile.js"></script>
     <script src="src/Boot.js"></script>
     <script src="src/Preloader.js"></script>
     <script src="src/MainMenu.js"></script>
+    <script src="src/LevelMenu.js"></script>
     <script src="src/Game.js"></script>
+        <script src="src/Editor.js"></script>
 </head>
 
 <body>
@@ -62,6 +66,9 @@
             game.state.add('Preloader', Associate.Preloader);
             game.state.add('MainMenu', Associate.MainMenu);
             game.state.add('Game', Associate.Game);
+            game.state.add('Editor', Associate.Editor);
+            game.state.add('LevelMenu', Associate.LevelMenu);
+
 
             //	Now start the Boot state.
             game.state.start('Boot');

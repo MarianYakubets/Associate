@@ -20,11 +20,8 @@ Associate.MainMenu.prototype = {
          this.add.sprite(0, 0, 'titlepage');
 
          this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');*/
-        this.add.button(100, 300, '1', this.onLevelClick(1), this);
-        this.add.button(200, 300, '2', this.onLevelClick(2), this);
-        this.add.button(300, 300, '3', this.onLevelClick(3), this);
-        this.add.button(400, 300, '4', this.onLevelClick(4), this);
-        this.add.button(500, 300, '5', this.onLevelClick(5), this);
+        this.add.button(350, 200, 'start', this.onBtnClick('Game'), this);
+        this.add.button(350, 300, 'select', this.onBtnClick('Editor'), this);
     },
     update: function () {
 
@@ -32,12 +29,9 @@ Associate.MainMenu.prototype = {
 
     },
 
-    onLevelClick: function (levelNumber) {
+    onBtnClick: function (state) {
         return function () {
-            //	Ok, the Play Button has been clicked or touched, so let's stop the music (otherwise it'll carry on playing)
-            //this.music.stop();
-            //	And start the actual game
-            this.state.start('Game', true, false, levelNumber);
+            this.state.start('LevelMenu', true, false, state);
         }
     }
 
