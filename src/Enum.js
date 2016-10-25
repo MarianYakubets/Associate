@@ -2,7 +2,7 @@ var TileAttribute = {
 	COLOR: "color",
 	FIXED: "fixed",
 	TRIANGLED: "has 2 colors as triangles bottom right and top left"
-}
+};
 
 var Color = {
 	RED: "red",
@@ -11,4 +11,4 @@ var Color = {
 	GREEN: "green",
 	GREY: "grey",
 	NONE: "none"
-}
+};

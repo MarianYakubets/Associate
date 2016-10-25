@@ -4,4 +4,4 @@ var Level = function(number, w, h, tiles, legend) {
 	this.h = h;
 	this.tiles = tiles;
 	this.legend = legend;
-}
+};
