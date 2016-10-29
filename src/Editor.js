@@ -56,19 +56,18 @@ Associate.Editor.prototype = {
     create: function() {
         this.game.stage.backgroundColor = '#96ceb4';
 
-        this.game.add.button(20, 10, 'back', this.onBackClick, this, 2, 1, 0);
-        this.game.add.button(100, 10, 'save', this.onSaveClick, this, 2, 1, 0);
-        this.game.add.button(150, 10, 'load', this.onLoadClick, this, 2, 1, 0);
+        this.game.add.button(5, 5, 'back', this.onBackClick, this, 2, 1, 0);
+        this.game.add.button(50, 5, 'save', this.onSaveClick, this, 2, 1, 0);
+        this.game.add.button(100, 5, 'load', this.onLoadClick, this, 2, 1, 0);
 
-        var groupBcg = this.game.add.group();
-        groupBcg.x = 200;
-        groupBcg.y = 400;
-        this.drawTiles(this.legendTiles, groupBcg, this.tileDistance);
+        this.game.add.button(150, 5, 'left', this.onLeftBtnClick, this, 2, 1, 0);
+        this.game.add.button(200, 5, 'right', this.onRightBtnClick, this, 2, 1, 0);
+        this.game.add.button(250, 5, 'up', this.onUpBtnClick, this, 2, 1, 0);
+        this.game.add.button(300, 5, 'down', this.onDownBtnClick, this, 2, 1, 0);
 
+        //this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance);
 
         this.tilesGroup = this.game.add.group();
-        this.tilesGroup.x = 200;
-        this.tilesGroup.y = 400;
         this.drawTiles(this.tiles, this.tilesGroup, this.tileSize);
         this.tilesGroup.setAll('inputEnabled', true);
         this.tilesGroup.callAll('events.onInputDown.add', 'events.onInputDown', this.onTileClick(this));
@@ -84,112 +83,63 @@ Associate.Editor.prototype = {
             sprite.height = size;
             this.sprites.set(new Pair(tile.x, tile.y), sprite);
         }, this);
+        group.x = this.game.world.centerX - this.w * this.tileDistance / 2;
+        group.y = this.game.world.centerY - this.h * this.tileDistance / 2;
     },
-
 
     loadLevel: function() {
-    },
-
-    checkWin: function() {
-        var victory = true;
-        this.legendTiles.entities.forEach(function(tile) {
-            if (this.tiles.get(new Pair(tile.x, tile.y)).color != tile.color) {
-                victory = false;
-                return;
-            }
-        }, this);
-        return victory;
+        this.game.world.removeAll();
+        this.create();
     },
 
     onTileClick: function(context) {
         return function(item) {
-            var x = Math.floor(item.x / (context.tileDistance));
-            var y = Math.floor(item.y / (context.tileDistance));
-            context.getNeighbors(x, y, context.tiles).forEach(function(a, i) {
-                context.tiles.get(new Pair(a[0], a[1])).color = item.key;
-                context.flip(context, item.key, context.sprites.get(new Pair(a[0], a[1])), i * 50);
-            }, context);
-            console.log("Victory : " + context.checkWin());
+
         }
-    },
-
-    flip: function(context, type, item, delay) {
-        if (item.key == type) {
-            return;
-        }
-        var flip = context.game.add.tween(item.scale).to({
-            x: 0,
-            y: 1
-        }, 200, Phaser.Easing.None, true, delay);
-        flip.onComplete.add(function() {
-            item.loadTexture(type);
-            context.game.add.tween(item.scale).to({
-                x: 1,
-                y: 1
-            }, 150, Phaser.Easing.None, true);
-        }, this);
-    },
-
-    getNeighbors: function(x, y, tiles) {
-        var n = [];
-
-        var i = x - 1;
-        while (i >= 0) {
-            if (!tiles.get(new Pair(i, y)).mutable) {
-                break;
-            }
-            n.push([i, y]);
-            i--;
-        }
-
-        i = x + 1;
-        while (i < this.w) {
-            if (!tiles.get(new Pair(i, y)).mutable) {
-                break;
-            }
-            n.push([i, y]);
-            i++;
-        }
-
-        i = y - 1;
-        while (i >= 0) {
-            if (!tiles.get(new Pair(x, i)).mutable) {
-                break;
-            }
-            n.push([x, i]);
-            i--;
-        }
-
-        i = y + 1;
-        while (i < this.h) {
-            if (!tiles.get(new Pair(x, i)).mutable) {
-                break;
-            }
-            n.push([x, i]);
-            i++;
-        }
-
-        return n;
-    },
-
-    onSaveClick: function() {
-        var json = JSON.stringify(this.tiles);
-        console.log(json);
-    },
-
-
-    onLoadClick: function() {
-        this.loadLevel();
     },
 
     onBackClick: function() {
         this.state.start('MainMenu', true, false);
     },
 
+    onLoadClick: function() {
+        this.loadLevel();
+    },
+
+    onLeftBtnClick: function() {
+        this.w -= 1;
+        for (var i = 0; i < this.h; i++) {
+            this.tiles.delete(new Pair(this.w, i));
+        }
+        this.loadLevel();
+    },
+
+    onRightBtnClick: function() {
+        for (var i = 0; i < this.h; i++) {
+            this.tiles.set(new Pair(this.w, i), new Tile(this.w, i, Color.GREY));
+        }
+        this.w += 1;
+        this.loadLevel();
+    },
+
+    onUpBtnClick: function() {
+        this.h -= 1;
+        for (var i = 0; i < this.w; i++) {
+            this.tiles.delete(new Pair(i, this.h));
+        }
+        this.loadLevel();
+    },
+
+    onDownBtnClick: function() {
+        for (var i = 0; i < this.w; i++) {
+            this.tiles.set(new Pair(i, this.h), new Tile(i, this.h, Color.GREY));
+        }
+        this.h += 1;
+        this.loadLevel();
+    },
+
     update: function() {
-
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-
     },
 
     quitGame: function(pointer) {

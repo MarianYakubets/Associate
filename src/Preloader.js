@@ -44,6 +44,11 @@ Associate.Preloader.prototype = {
         this.load.image('btn2', 'images/btn/button2.png');
         this.load.image('btn3', 'images/btn/button3.png');
 
+        this.load.image('left', 'images/btn/left.png');
+        this.load.image('right', 'images/btn/right.png');
+        this.load.image('up', 'images/btn/up.png');
+        this.load.image('down', 'images/btn/down.png');
+
 
         this.load.image('0', 'images/numbers/0.png');
         this.load.image('1', 'images/numbers/1.png');

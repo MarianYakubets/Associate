@@ -60,15 +60,9 @@ Associate.Game.prototype = {
         this.game.add.button(100, 10, 'save', this.onSaveClick, this, 2, 1, 0);
         this.game.add.button(150, 10, 'load', this.onLoadClick, this, 2, 1, 0);
 
-        var groupBcg = this.game.add.group();
-        groupBcg.x = 200;
-        groupBcg.y = 400;
-        this.drawTiles(this.legendTiles, groupBcg, this.tileDistance);
-
+        this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance);
 
         this.tilesGroup = this.game.add.group();
-        this.tilesGroup.x = 200;
-        this.tilesGroup.y = 400;
         this.drawTiles(this.tiles, this.tilesGroup, this.tileSize);
         this.tilesGroup.setAll('inputEnabled', true);
         this.tilesGroup.callAll('events.onInputDown.add', 'events.onInputDown', this.onTileClick(this));
@@ -84,11 +78,12 @@ Associate.Game.prototype = {
             sprite.height = size;
             this.sprites.set(new Pair(tile.x, tile.y), sprite);
         }, this);
+        group.x = this.game.world.centerX - this.w * this.tileDistance / 2;
+        group.y = this.game.world.centerY - this.h * this.tileDistance / 2;
     },
 
 
-    loadLevel: function() {
-    },
+    loadLevel: function() {},
 
     checkWin: function() {
         var victory = true;

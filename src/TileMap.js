@@ -27,8 +27,8 @@ TileMap.prototype = {
 
     delete: function (key) {
         var index = this.keys.indexOf(this.simplify(key));
-        this.keys.splice(index);
-        this.entities.splice(index);
+        this.keys.splice(index, 1);
+        this.entities.splice(index, 1);
         this.updateSize();
     },
 
