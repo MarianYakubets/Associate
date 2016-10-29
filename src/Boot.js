@@ -21,15 +21,15 @@ Associate.Boot.prototype = {
         this.input.maxPointers = 1;
         this.stage.disableVisibilityChange = true;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.scale.setMinMax(260, 480, 1080, 1920);
+        this.scale.setMinMax(768, 1024, 1536, 2048);
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
 
         if (!this.game.device.desktop) {
             this.scale.forceOrientation(true, true);
             this.scale.setResizeCallback(this.gameResized, this);
-            this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
-            this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
+            //this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
+            //this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
         }
 
     },

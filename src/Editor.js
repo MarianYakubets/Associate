@@ -61,9 +61,9 @@ Associate.Editor.prototype = {
         this.game.add.button(100, 5, 'load', this.onLoadClick, this, 2, 1, 0);
 
         this.game.add.button(150, 5, 'left', this.onLeftBtnClick, this, 2, 1, 0);
-        this.game.add.button(200, 5, 'right', this.onRightBtnClick, this, 2, 1, 0);
-        this.game.add.button(250, 5, 'up', this.onUpBtnClick, this, 2, 1, 0);
-        this.game.add.button(300, 5, 'down', this.onDownBtnClick, this, 2, 1, 0);
+        this.game.add.button(250, 5, 'right', this.onRightBtnClick, this, 2, 1, 0);
+        this.game.add.button(350, 5, 'up', this.onUpBtnClick, this, 2, 1, 0);
+        this.game.add.button(450, 5, 'down', this.onDownBtnClick, this, 2, 1, 0);
 
         //this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance);
 
