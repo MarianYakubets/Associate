@@ -22,6 +22,8 @@ Associate.Editor = function(game) {
     this.spacing = 8;
     this.tileDistance = 56;
 
+    this.selectedColor = null;
+
     this.w = 3;
     this.h = 3;
     this.tiles = new TileMap();
@@ -29,8 +31,6 @@ Associate.Editor = function(game) {
     this.sprites = new TileMap();
 
     this.tilesGroup;
-
-    this.level;
     //  You can use any of these from any function within this State.
     //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
@@ -65,6 +65,22 @@ Associate.Editor.prototype = {
         this.game.add.button(350, 5, 'up', this.onUpBtnClick, this, 2, 1, 0);
         this.game.add.button(450, 5, 'down', this.onDownBtnClick, this, 2, 1, 0);
 
+        var palette = this.game.add.group();
+        palette.x = this.game.world.width - this.tileSize;
+        palette.y = 0;
+
+        palette.create(0, 0 * this.tileSize, 'square');
+        palette.create(0, 0 * this.tileSize, 'none');
+        palette.create(0, 1 * this.tileSize, 'blue');
+        palette.create(0, 2 * this.tileSize, 'green');
+        palette.create(0, 3 * this.tileSize, 'grey');
+        palette.create(0, 4 * this.tileSize, 'red');
+        palette.create(0, 5 * this.tileSize, 'yellow');
+
+        palette.setAll('inputEnabled', true);
+        palette.callAll('events.onInputDown.add', 'events.onInputDown', this.onPaletteClick(this));
+
+
         //this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance);
 
         this.tilesGroup = this.game.add.group();
@@ -88,15 +104,32 @@ Associate.Editor.prototype = {
     },
 
     loadLevel: function() {
+        this.tilesGroup.setAll('inputEnabled', false);
         this.game.world.removeAll();
         this.create();
     },
 
     onTileClick: function(context) {
         return function(item) {
-
+            if (context.selectedColor != null) {
+                var x = Math.floor(item.x / (context.tileDistance));
+                var y = Math.floor(item.y / (context.tileDistance));
+                context.tiles.get(new Pair(x, y)).color = context.selectedColor;
+                item.loadTexture(context.selectedColor);
+            }
         }
     },
+
+    onPaletteClick: function(context) {
+        return function(item) {
+            if (item.key != context.selectedColor) {
+                context.selectedColor = item.key;
+            } else {
+                context.selectedColor = null;
+            }
+        }
+    },
+
 
     onBackClick: function() {
         this.state.start('MainMenu', true, false);

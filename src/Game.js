@@ -130,7 +130,7 @@ Associate.Game.prototype = {
 
         var i = x - 1;
         while (i >= 0) {
-            if (!tiles.get(new Pair(i, y)).mutable) {
+            if (!tiles.get(new Pair(i, y)).mutable || (tiles.get(new Pair(i, y)).color == Color.NONE)) {
                 break;
             }
             n.push([i, y]);
@@ -139,7 +139,7 @@ Associate.Game.prototype = {
 
         i = x + 1;
         while (i < this.w) {
-            if (!tiles.get(new Pair(i, y)).mutable) {
+            if (!tiles.get(new Pair(i, y)).mutable || (tiles.get(new Pair(i, y)).color == Color.NONE)) {
                 break;
             }
             n.push([i, y]);
@@ -148,7 +148,7 @@ Associate.Game.prototype = {
 
         i = y - 1;
         while (i >= 0) {
-            if (!tiles.get(new Pair(x, i)).mutable) {
+            if (!tiles.get(new Pair(x, i)).mutable || (tiles.get(new Pair(x, i)).color == Color.NONE)) {
                 break;
             }
             n.push([x, i]);
@@ -157,7 +157,7 @@ Associate.Game.prototype = {
 
         i = y + 1;
         while (i < this.h) {
-            if (!tiles.get(new Pair(x, i)).mutable) {
+            if (!tiles.get(new Pair(x, i)).mutable || (tiles.get(new Pair(x, i)).color == Color.NONE)) {
                 break;
             }
             n.push([x, i]);

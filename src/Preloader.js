@@ -28,11 +28,13 @@ Associate.Preloader.prototype = {
         this.load.audio('titleMusic', ['audio/main_menu.mp3']);
         this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');*/
         //	+ lots of other required assets here
+        this.load.image('square', 'images/tiles/square.png');
         this.load.image('blue', 'images/tiles/blue.png');
         this.load.image('green', 'images/tiles/green.png');
         this.load.image('grey', 'images/tiles/grey.png');
         this.load.image('red', 'images/tiles/red.png');
         this.load.image('yellow', 'images/tiles/yellow.png');
+        this.load.image('none', 'images/tiles/none.png');
 
         this.load.image('start', 'images/btn/buttonStart.png');
         this.load.image('select', 'images/btn/buttonSelect.png');
