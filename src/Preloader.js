@@ -38,6 +38,8 @@ Associate.Preloader.prototype = {
 
         this.load.image('start', 'images/btn/buttonStart.png');
         this.load.image('select', 'images/btn/buttonSelect.png');
+        this.load.image('l1', 'images/btn/buttonL1.png');
+        this.load.image('l2', 'images/btn/buttonL2.png');
 
         this.load.image('save', 'images/btn/import.png');
         this.load.image('load', 'images/btn/export.png');

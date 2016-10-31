@@ -1,4 +1,4 @@
-Associate.Editor = function(game) {
+Associate.Editor = function (game) {
 
     //  When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
 
@@ -24,6 +24,8 @@ Associate.Editor = function(game) {
 
     this.selectedColor = null;
 
+    this.number;
+    this.level;
     this.w = 3;
     this.h = 3;
     this.tiles = new TileMap();
@@ -31,6 +33,10 @@ Associate.Editor = function(game) {
     this.sprites = new TileMap();
 
     this.tilesGroup;
+    this.layer1Active = true;
+    this.legendGroup;
+    this.layer2Active = true;
+
     //  You can use any of these from any function within this State.
     //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
@@ -38,22 +44,23 @@ Associate.Editor = function(game) {
 
 Associate.Editor.prototype = {
 
-    init: function(level) {
+    init: function (level) {
+        this.number = level.number;
         this.level = level;
         this.w = level.w;
         this.h = level.h;
         this.legendTiles = new TileMap();
-        this.level.legend.forEach(function(tile) {
+        this.level.legend.forEach(function (tile) {
             this.legendTiles.set(new Pair(tile.x, tile.y), tile);
         }, this);
 
         this.tiles = new TileMap();
-        this.level.tiles.forEach(function(tile) {
+        this.level.tiles.forEach(function (tile) {
             this.tiles.set(new Pair(tile.x, tile.y), tile);
         }, this);
     },
 
-    create: function() {
+    create: function () {
         this.game.stage.backgroundColor = '#96ceb4';
 
         this.game.add.button(5, 5, 'back', this.onBackClick, this, 2, 1, 0);
@@ -61,9 +68,11 @@ Associate.Editor.prototype = {
         this.game.add.button(100, 5, 'load', this.onLoadClick, this, 2, 1, 0);
 
         this.game.add.button(150, 5, 'left', this.onLeftBtnClick, this, 2, 1, 0);
-        this.game.add.button(250, 5, 'right', this.onRightBtnClick, this, 2, 1, 0);
-        this.game.add.button(350, 5, 'up', this.onUpBtnClick, this, 2, 1, 0);
-        this.game.add.button(450, 5, 'down', this.onDownBtnClick, this, 2, 1, 0);
+        this.game.add.button(220, 5, 'right', this.onRightBtnClick, this, 2, 1, 0);
+        this.game.add.button(290, 5, 'up', this.onUpBtnClick, this, 2, 1, 0);
+        this.game.add.button(360, 5, 'down', this.onDownBtnClick, this, 2, 1, 0);
+        this.game.add.button(450, 5, 'l1', this.onLayer1Click, this, 2, 1, 0);
+        this.game.add.button(550, 5, 'l2', this.onLayer2Click, this, 2, 1, 0);
 
         var palette = this.game.add.group();
         palette.x = this.game.world.width - this.tileSize;
@@ -81,17 +90,20 @@ Associate.Editor.prototype = {
         palette.callAll('events.onInputDown.add', 'events.onInputDown', this.onPaletteClick(this));
 
 
-        //this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance);
+        this.legendGroup = this.game.add.group();
+        this.drawTiles(this.legendTiles, this.legendGroup, this.tileDistance);
+        this.legendGroup.setAll('inputEnabled', true);
+        this.legendGroup.callAll('events.onInputDown.add', 'events.onInputDown', this.onTileClick(this, this.legendTiles));
 
         this.tilesGroup = this.game.add.group();
         this.drawTiles(this.tiles, this.tilesGroup, this.tileSize);
         this.tilesGroup.setAll('inputEnabled', true);
-        this.tilesGroup.callAll('events.onInputDown.add', 'events.onInputDown', this.onTileClick(this));
+        this.tilesGroup.callAll('events.onInputDown.add', 'events.onInputDown', this.onTileClick(this, this.tiles));
     },
 
 
-    drawTiles: function(tiles, group, size) {
-        tiles.entities.forEach(function(tile) {
+    drawTiles: function (tiles, group, size) {
+        tiles.entities.forEach(function (tile) {
             var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, tile.color);
             sprite.anchor.x = 0.5;
             sprite.anchor.y = 0.5;
@@ -103,25 +115,25 @@ Associate.Editor.prototype = {
         group.y = this.game.world.centerY - this.h * this.tileDistance / 2;
     },
 
-    loadLevel: function() {
+    loadLevel: function () {
         this.tilesGroup.setAll('inputEnabled', false);
         this.game.world.removeAll();
         this.create();
     },
 
-    onTileClick: function(context) {
-        return function(item) {
+    onTileClick: function (context, tiles) {
+        return function (item) {
             if (context.selectedColor != null) {
                 var x = Math.floor(item.x / (context.tileDistance));
                 var y = Math.floor(item.y / (context.tileDistance));
-                context.tiles.get(new Pair(x, y)).color = context.selectedColor;
+                tiles.get(new Pair(x, y)).color = context.selectedColor;
                 item.loadTexture(context.selectedColor);
             }
         }
     },
 
-    onPaletteClick: function(context) {
-        return function(item) {
+    onPaletteClick: function (context) {
+        return function (item) {
             if (item.key != context.selectedColor) {
                 context.selectedColor = item.key;
             } else {
@@ -131,51 +143,84 @@ Associate.Editor.prototype = {
     },
 
 
-    onBackClick: function() {
+    onBackClick: function () {
         this.state.start('MainMenu', true, false);
     },
 
-    onLoadClick: function() {
+    onLoadClick: function () {
+        this.init(this.level);
         this.loadLevel();
     },
 
-    onLeftBtnClick: function() {
+    onSaveClick: function () {
+        var json = JSON.stringify(new Level(this.number, this.w, this.h, this.tiles.entities, this.legendTiles.entities));
+        console.log(json);
+    },
+
+
+    onLeftBtnClick: function () {
         this.w -= 1;
         for (var i = 0; i < this.h; i++) {
             this.tiles.delete(new Pair(this.w, i));
+            this.legendTiles.delete(new Pair(this.w, i));
         }
         this.loadLevel();
     },
 
-    onRightBtnClick: function() {
+    onRightBtnClick: function () {
         for (var i = 0; i < this.h; i++) {
             this.tiles.set(new Pair(this.w, i), new Tile(this.w, i, Color.GREY));
+            this.legendTiles.set(new Pair(this.w, i), new Tile(this.w, i, Color.GREY));
         }
         this.w += 1;
         this.loadLevel();
     },
 
-    onUpBtnClick: function() {
+    onUpBtnClick: function () {
         this.h -= 1;
         for (var i = 0; i < this.w; i++) {
             this.tiles.delete(new Pair(i, this.h));
+            this.legendTiles.delete(new Pair(i, this.h));
         }
         this.loadLevel();
     },
 
-    onDownBtnClick: function() {
+    onDownBtnClick: function () {
         for (var i = 0; i < this.w; i++) {
             this.tiles.set(new Pair(i, this.h), new Tile(i, this.h, Color.GREY));
+            this.legendTiles.set(new Pair(i, this.h), new Tile(i, this.h, Color.GREY));
         }
         this.h += 1;
         this.loadLevel();
     },
 
-    update: function() {
+    onLayer1Click: function () {
+        this.layer1Active = !this.layer1Active;
+        if (this.layer1Active) {
+            this.tilesGroup.alpha = 1;
+            this.tilesGroup.setAll('inputEnabled', true);
+        } else {
+            this.tilesGroup.alpha = 0;
+            this.tilesGroup.setAll('inputEnabled', false);
+        }
+    },
+
+    onLayer2Click: function () {
+        this.layer2Active = !this.layer2Active;
+        if (this.layer2Active) {
+            this.legendGroup.alpha = 1;
+            this.legendGroup.setAll('inputEnabled', true);
+        } else {
+            this.legendGroup.alpha = 0;
+            this.legendGroup.setAll('inputEnabled', false);
+        }
+    },
+
+    update: function () {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
     },
 
-    quitGame: function(pointer) {
+    quitGame: function (pointer) {
 
         //  Here you should destroy anything you no longer need.
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
