@@ -32,8 +32,21 @@
     <link rel="apple-touch-icon" sizes="512x512" href="icons/app_icon_512x512.png">
     <link rel="apple-touch-icon" sizes="1024x1024" href="icons/app_icon_1024x1024.png">
     <link rel="stylesheet" href="css/stylesheet.css" type="text/css" charset="utf-8" />
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyCwlh3LJrv248PyVE0d1RelXI7Do-4OOJU",
+            authDomain: "associate-aef04.firebaseapp.com",
+            databaseURL: "https://associate-aef04.firebaseio.com",
+            storageBucket: "associate-aef04.appspot.com",
+            messagingSenderId: "644718760744"
+        };
+        firebase.initializeApp(config);
+    </script>
     <script src="js/phaser.js"></script>
     <script src="src/Enum.js"></script>
+    <script src="src/LabelButton.js"></script>
     <script src="src/LevelManager.js"></script>
     <script src="src/Level.js"></script>
     <script src="src/Pair.js"></script>
