@@ -28,7 +28,9 @@ Associate.Preloader.prototype = {
         this.load.audio('titleMusic', ['audio/main_menu.mp3']);
         this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');*/
         //	+ lots of other required assets here
-        this.load.image('square', 'images/tiles/square.png');
+        this.load.image('squareBlack', 'images/tiles/squareBlack.png');
+        this.load.image('squareWhite', 'images/tiles/squareWhite.png');
+
         this.load.image('blue', 'images/tiles/blue.png');
         this.load.image('green', 'images/tiles/green.png');
         this.load.image('grey', 'images/tiles/grey.png');
@@ -40,6 +42,12 @@ Associate.Preloader.prototype = {
         this.load.image('select', 'images/btn/buttonSelect.png');
         this.load.image('l1', 'images/btn/buttonL1.png');
         this.load.image('l2', 'images/btn/buttonL2.png');
+
+        this.load.image('flat_red_btn_1', 'images/btn/red_button00.png');
+        this.load.image('flat_red_btn_2', 'images/btn/red_button01.png');
+        this.load.image('flat_red_btn_3', 'images/btn/red_button02.png');
+        this.load.image('red_circle', 'images/btn/red_button09.png');
+
 
         this.load.image('save', 'images/btn/import.png');
         this.load.image('load', 'images/btn/export.png');

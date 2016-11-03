@@ -176,7 +176,7 @@ Associate.Game.prototype = {
     },
 
     onBackClick: function() {
-        this.state.start('MainMenu', true, false);
+        this.state.start('LevelMenu', true, false, 'Game');
     },
 
     update: function() {
