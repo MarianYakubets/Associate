@@ -67,15 +67,15 @@ Associate.Editor.prototype = {
     create: function() {
         this.game.stage.backgroundColor = '#96ceb4';
 
-        this.game.add.button(5, 5, 'back', this.onBackClick, this, 2, 1, 0);
-        this.game.add.button(50, 5, 'save', this.onSaveClick, this, 2, 1, 0);
+        this.game.add.button(5, 1, 'back', this.onBackClick, this, 2, 1, 0).scale.setTo(0.7, 0.7);
+        this.game.add.button(70, 1, 'save', this.onSaveClick, this, 2, 1, 0).scale.setTo(0.7, 0.7);
 
         this.game.add.button(150, 1, 'left', this.onLeftBtnClick, this, 2, 1, 0).scale.setTo(0.7, 0.7);
         this.game.add.button(220, 1, 'right', this.onRightBtnClick, this, 2, 1, 0).scale.setTo(0.7, 0.7);
         this.game.add.button(290, 1, 'up', this.onUpBtnClick, this, 2, 1, 0).scale.setTo(0.7, 0.7);
         this.game.add.button(360, 1, 'down', this.onDownBtnClick, this, 2, 1, 0).scale.setTo(0.7, 0.7);
-        this.l1Btn = this.game.add.button(450, 1, 'l1', this.onLayer1Click, this, 2, 1, 0);
-        this.l2Btn = this.game.add.button(550, 1, 'l2', this.onLayer2Click, this, 2, 1, 0);
+        this.l1Btn = this.game.add.button(450, 1, 'l1', this.onLayer1Click, this, 2, 1, 0).scale.setTo(0.7, 0.7);
+        this.l2Btn = this.game.add.button(550, 1, 'l2', this.onLayer2Click, this, 2, 1, 0).scale.setTo(0.7, 0.7);
 
         var palette = this.game.add.group();
         palette.x = this.game.world.width - this.tileSize;
@@ -144,7 +144,7 @@ Associate.Editor.prototype = {
         } else {
             this.tilesGroup.alpha = 0;
             this.tilesGroup.setAll('inputEnabled', false);
-            this.l1Btn.tint = 0;
+            this.l1Btn.tint = 0x000000;
         }
         if (this.layer2Active) {
             this.legendGroup.alpha = 1;
@@ -153,7 +153,7 @@ Associate.Editor.prototype = {
         } else {
             this.legendGroup.alpha = 0;
             this.legendGroup.setAll('inputEnabled', false);
-            this.l2Btn.tint = 0;
+            this.l2Btn.tint = 0x000000;
         }
     },
 

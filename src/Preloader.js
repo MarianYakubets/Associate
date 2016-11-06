@@ -37,6 +37,8 @@ Associate.Preloader.prototype = {
         this.load.image('red', 'images/tiles/red.png');
         this.load.image('yellow', 'images/tiles/yellow.png');
         this.load.image('none', 'images/tiles/none.png');
+        this.load.image('lock', 'images/btn/locked.png');
+
 
         this.load.image('start', 'images/btn/buttonStart.png');
         this.load.image('select', 'images/btn/buttonSelect.png');

@@ -75,6 +75,15 @@ Associate.Game.prototype = {
             sprite.width = size;
             sprite.height = size;
             this.sprites.set(new Pair(tile.x, tile.y), sprite);
+
+            if (!tile.mutable) {
+                var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'lock');
+                sprite.anchor.x = 0.5;
+                sprite.anchor.y = 0.5;
+                sprite.width = size;
+                sprite.height = size;
+                sprite.input.enabled = false;
+            }
         }, this);
         group.x = this.game.world.centerX - this.w * this.tileDistance / 2;
         group.y = this.game.world.centerY - this.h * this.tileDistance / 2;
