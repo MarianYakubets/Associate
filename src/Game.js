@@ -82,7 +82,7 @@ Associate.Game.prototype = {
                 sprite.anchor.y = 0.5;
                 sprite.width = size;
                 sprite.height = size;
-                sprite.input.enabled = false;
+                //sprite.input.enabled = false;
             }
         }, this);
         group.x = this.game.world.centerX - this.w * this.tileDistance / 2;
