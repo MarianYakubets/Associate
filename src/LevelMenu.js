@@ -1,4 +1,4 @@
-Associate.LevelMenu = function(game) {
+Associate.LevelMenu = function (game) {
 
     this.music = null;
     this.playButton = null;
@@ -7,13 +7,13 @@ Associate.LevelMenu = function(game) {
 
 Associate.LevelMenu.prototype = {
 
-    init: function(state) {
+    init: function (state) {
         this.stateName = state;
     },
 
-    create: function() {
+    create: function () {
         this.game.stage.backgroundColor = '#96ceb4';
-        this.game.add.button(20, 10, 'back', this.onBackClick, this, 2, 1, 0);
+        this.game.add.button(20, 10, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
         //	Naturally I expect you to do something significantly better :)
@@ -35,23 +35,25 @@ Associate.LevelMenu.prototype = {
             var y = Math.floor(i / rowSize);
             var x = i - y * rowSize;
             var num = i + 1 + "";
-            new LabelButton(this.game, border + x * (distX + size), border + y * (distY + size), "red_circle", num, null, this.onLevelClick(num), this);
+            var btn = new LabelButton(this.game, border + x * (distX + size), border + y * (distY + size), "circle", num, null, this.onLevelClick(num), this, 1, 0, 2, 3);
+            btn.width = size * 2;
+            btn.height = size * 2;
         }
     },
 
-    update: function() {
+    update: function () {
         //	Do some nice funky main menu effect here
 
     },
 
-    onLevelClick: function(levelNumber) {
-        return function() {
+    onLevelClick: function (levelNumber) {
+        return function () {
             this.state.start(this.stateName, true, false, LevelManager.getLevel(levelNumber));
         }
     },
 
 
-    onBackClick: function() {
+    onBackClick: function () {
         this.state.start('MainMenu', true, false);
     }
 };

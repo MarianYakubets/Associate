@@ -56,7 +56,7 @@ Associate.Game.prototype = {
     create: function () {
         this.game.stage.backgroundColor = '#96ceb4';
 
-        this.game.add.button(20, 10, 'back', this.onBackClick, this, 2, 1, 0);
+        this.game.add.button(20, 10, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
 
         this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance);
 

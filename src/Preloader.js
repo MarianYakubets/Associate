@@ -1,4 +1,4 @@
-Associate.Preloader = function(game) {
+Associate.Preloader = function (game) {
 
     this.background = null;
     this.preloadBar = null;
@@ -9,7 +9,7 @@ Associate.Preloader = function(game) {
 
 Associate.Preloader.prototype = {
 
-    preload: function() {
+    preload: function () {
 
         //	These are the assets we loaded in Boot.js
         //	A nice sparkly background and a loading progress bar
@@ -24,9 +24,9 @@ Associate.Preloader.prototype = {
         //	Here we load the rest of the assets our game needs.
         //	As this is just a Project Template I've not provided these assets, the lines below won't work as the files themselves will 404, they are just an example of use.
         /*this.load.image('titlepage', 'images/title.jpg');
-        this.load.atlas('playButton', 'images/play_button.png', 'images/play_button.json');
-        this.load.audio('titleMusic', ['audio/main_menu.mp3']);
-        this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');*/
+         this.load.atlas('playButton', 'images/play_button.png', 'images/play_button.json');
+         this.load.audio('titleMusic', ['audio/main_menu.mp3']);
+         this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');*/
         //	+ lots of other required assets here
         this.load.image('squareBlack', 'images/tiles/squareBlack.png');
         this.load.image('squareWhite', 'images/tiles/squareWhite.png');
@@ -37,32 +37,29 @@ Associate.Preloader.prototype = {
         this.load.image('red', 'images/tiles/red.png');
         this.load.image('yellow', 'images/tiles/yellow.png');
         this.load.image('none', 'images/tiles/none.png');
-        this.load.image('lock', 'images/btn/locked.png');
+        this.load.image('lock', 'images/tiles/locked.png');
 
-
-        this.load.image('start', 'images/btn/buttonStart.png');
-        this.load.image('select', 'images/btn/buttonSelect.png');
         this.load.image('l1', 'images/btn/buttonL1.png');
         this.load.image('l2', 'images/btn/buttonL2.png');
 
-        this.load.image('flat_red_btn_1', 'images/btn/red_button00.png');
-        this.load.image('flat_red_btn_2', 'images/btn/red_button01.png');
-        this.load.image('flat_red_btn_3', 'images/btn/red_button02.png');
-        this.load.image('red_circle', 'images/btn/red_button09.png');
+
+        this.load.spritesheet('long', 'images/btn/long.png', 316, 140);
+        this.load.spritesheet('circle', 'images/btn/circle.png', 173, 173);
+        this.load.spritesheet('exit', 'images/btn/exit.png', 173, 173);
 
 
-        this.load.image('save', 'images/btn/import.png');
+        this.load.spritesheet('save', 'images/btn/save.png', 173, 173);
+
         this.load.image('load', 'images/btn/export.png');
         this.load.image('back', 'images/btn/exitLeft.png');
         this.load.image('btn1', 'images/btn/button1.png');
         this.load.image('btn2', 'images/btn/button2.png');
         this.load.image('btn3', 'images/btn/button3.png');
 
-        this.load.image('left', 'images/btn/left.png');
-        this.load.image('right', 'images/btn/right.png');
-        this.load.image('up', 'images/btn/up.png');
-        this.load.image('down', 'images/btn/down.png');
-
+        this.load.spritesheet('left', 'images/btn/left.png', 173, 173);
+        this.load.spritesheet('right', 'images/btn/right.png', 173, 173);
+        this.load.spritesheet('up', 'images/btn/up.png', 173, 173);
+        this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
 
         this.load.image('0', 'images/numbers/0.png');
         this.load.image('1', 'images/numbers/1.png');
@@ -76,7 +73,7 @@ Associate.Preloader.prototype = {
         this.load.image('9', 'images/numbers/9.png');
     },
 
-    create: function() {
+    create: function () {
 
         //	Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes
         //this.preloadBar.cropEnabled = false;
@@ -85,7 +82,7 @@ Associate.Preloader.prototype = {
 
     },
 
-    update: function() {
+    update: function () {
 
         //	You don't actually need to do this, but I find it gives a much smoother game experience.
         //	Basically it will wait for our audio file to be decoded before proceeding to the MainMenu.
@@ -96,9 +93,9 @@ Associate.Preloader.prototype = {
         //	If you don't have any music in your game then put the game.state.start line into the create function and delete
         //	the update function completely.
         /*if (this.cache.isSoundDecoded('titleMusic') && this.ready == false) {
-            this.ready = true;
-            this.state.start('MainMenu');
-        }*/
+         this.ready = true;
+         this.state.start('MainMenu');
+         }*/
 
     }
 

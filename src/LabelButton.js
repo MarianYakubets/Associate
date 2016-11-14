@@ -6,7 +6,7 @@ var LabelButton = function(game, x, y, key, label, style, callback,
  
     //Style how you wish...
     this.style = style || {
-        'font': '32px Arial',
+        'font': '40px Arial',
         'fill': 'white'
     };
     this.anchor.setTo( 0.5, 0.5 );
