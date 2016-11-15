@@ -68,15 +68,15 @@ Associate.Editor.prototype = {
     create: function () {
         this.game.stage.backgroundColor = '#96ceb4';
 
-        this.game.add.button(5, 1, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
-        this.game.add.button(100, 1, 'save', this.onSaveClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
+        this.game.add.button(5, 1, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
+        this.game.add.button(70, 1, 'save', this.onSaveClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
 
-        this.game.add.button(200, 1, 'left', this.onLeftBtnClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
-        this.game.add.button(300, 1, 'right', this.onRightBtnClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
-        this.game.add.button(400, 1, 'up', this.onUpBtnClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
-        this.game.add.button(500, 1, 'down', this.onDownBtnClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
-        this.l1Btn = this.game.add.button(450, 1, 'l1', this.onLayer1Click, this, 1, 0, 2).scale.setTo(0.5, 0.5);
-        this.l2Btn = this.game.add.button(550, 1, 'l2', this.onLayer2Click, this, 1, 0, 2).scale.setTo(0.5, 0.5);
+        this.game.add.button(200, 1, 'left', this.onLeftBtnClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
+        this.game.add.button(270, 1, 'right', this.onRightBtnClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
+        this.game.add.button(340, 1, 'up', this.onUpBtnClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
+        this.game.add.button(410, 1, 'down', this.onDownBtnClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
+        this.l1Btn = this.game.add.button(500, 1, 'top', this.onLayer1Click, this, 1, 0, 2).scale.setTo(0.4, 0.4);
+        this.l2Btn = this.game.add.button(570, 1, 'bottom', this.onLayer2Click, this, 1, 0, 2).scale.setTo(0.4, 0.4);
 
         var palette = this.game.add.group();
         palette.x = this.game.world.width - this.palleteSize;
@@ -261,11 +261,21 @@ Associate.Editor.prototype = {
 
     onLayer1Click: function (item) {
         this.layer1Active = !this.layer1Active;
+        /*if (this.layer1Active) {
+            this.l1Btn.setFrames(1, 0, 2);
+        } else {
+            this.l1Btn.setFrames(2, 0, 1);
+        }*/
         this.showLevels();
     },
 
     onLayer2Click: function (item) {
         this.layer2Active = !this.layer2Active;
+      /*  if (this.layer2Active) {
+            this.l2Btn.setFrames(1, 0, 2);
+        } else {
+            this.l2Btn.setFrames(2, 0, 1);
+        }*/
         this.showLevels();
     },
 
