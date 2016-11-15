@@ -12,7 +12,11 @@ Associate.LevelMenu.prototype = {
     },
 
     create: function () {
-        this.game.stage.backgroundColor = '#96ceb4';
+        this.game.add.tileSprite(-2, -2, this.game.world.width + 2, this.game.world.height + 2, 'paper');
+        var bcgr = this.game.add.sprite(0, 0, 'sakura');
+        bcgr.width = this.game.world.width;
+        bcgr.height = this.game.world.height;
+        bcgr.alpha = 0.3;
         this.game.add.button(20, 10, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
@@ -31,7 +35,7 @@ Associate.LevelMenu.prototype = {
         var rowSize = Math.floor((this.game.world.width - border) / (size + distX));
 
 
-        for (var i = 0; i <= 34; i++) {
+        for (var i = 0; i <= 16; i++) {
             var y = Math.floor(i / rowSize);
             var x = i - y * rowSize;
             var num = i + 1 + "";

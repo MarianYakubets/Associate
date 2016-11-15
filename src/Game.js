@@ -1,4 +1,4 @@
-Associate.Game = function (game) {
+Associate.Game = function(game) {
 
     //  When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
 
@@ -18,9 +18,10 @@ Associate.Game = function (game) {
     this.physics; //    the physics manager
     this.rnd; //    the repeatable random number generator
 
-    this.tileSize = 100;
-    this.spacing = this.tileSize / 5;
-    this.tileDistance = this.tileSize + this.spacing;
+
+    this.tileSize;
+    this.spacing;
+    this.tileDistance;
 
     this.w = 3;
     this.h = 3;
@@ -38,23 +39,32 @@ Associate.Game = function (game) {
 
 Associate.Game.prototype = {
 
-    init: function (level) {
+    init: function(level) {
         this.level = level;
         this.w = level.w;
         this.h = level.h;
+
+        this.tileSize = this.calculateTileSize(this.game.world.width, Math.floor(this.game.world.width / 30), level.w);
+        this.spacing = this.tileSize / 5;
+        this.tileDistance = this.tileSize + this.spacing;
+
         this.legendTiles = new TileMap();
-        this.level.legend.forEach(function (tile) {
+        this.level.legend.forEach(function(tile) {
             this.legendTiles.set(new Pair(tile.x, tile.y), tile);
         }, this);
 
         this.tiles = new TileMap();
-        this.level.tiles.forEach(function (tile) {
+        this.level.tiles.forEach(function(tile) {
             this.tiles.set(new Pair(tile.x, tile.y), tile);
         }, this);
     },
 
-    create: function () {
-        this.game.stage.backgroundColor = '#96ceb4';
+    create: function() {
+        this.game.add.tileSprite(-2, -2, this.game.world.width + 2, this.game.world.height + 2, 'paper');
+        var bcgr = this.game.add.sprite(0, 0, 'sakura');
+        bcgr.width = this.game.world.width;
+        bcgr.height = this.game.world.height;
+        bcgr.alpha = 0.3;
 
         this.game.add.button(20, 10, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
 
@@ -63,15 +73,15 @@ Associate.Game.prototype = {
         this.tilesGroup = this.game.add.group();
         this.drawTiles(this.tiles, this.tilesGroup, this.tileSize);
 
-        this.sprites.entities.forEach(function (sprite) {
+        this.sprites.entities.forEach(function(sprite) {
             sprite.inputEnabled = true;
             sprite.events.onInputDown.add(this.onTileClick(this), this);
         }, this);
     },
 
 
-    drawTiles: function (tiles, group, size) {
-        tiles.entities.forEach(function (tile) {
+    drawTiles: function(tiles, group, size) {
+        tiles.entities.forEach(function(tile) {
             var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, tile.color);
             sprite.anchor.x = 0.5;
             sprite.anchor.y = 0.5;
@@ -87,17 +97,16 @@ Associate.Game.prototype = {
                 sprite.height = size;
             }
         }, this);
-        group.x = this.game.world.centerX - this.w * this.tileDistance / 2;
-        group.y = this.game.world.centerY - this.h * this.tileDistance / 2;
+        group.x = this.game.world.centerX - (this.w - 1) * this.tileDistance / 2;
+        group.y = this.game.world.centerY - (this.h - 1) * this.tileDistance / 2;
     },
 
 
-    loadLevel: function () {
-    },
+    loadLevel: function() {},
 
-    checkWin: function () {
+    checkWin: function() {
         var victory = true;
-        this.legendTiles.entities.forEach(function (tile) {
+        this.legendTiles.entities.forEach(function(tile) {
             if (this.tiles.get(new Pair(tile.x, tile.y)).color != tile.color) {
                 victory = false;
                 return;
@@ -106,11 +115,11 @@ Associate.Game.prototype = {
         return victory;
     },
 
-    onTileClick: function (context) {
-        return function (item) {
+    onTileClick: function(context) {
+        return function(item) {
             var x = Math.floor(item.x / (context.tileDistance));
             var y = Math.floor(item.y / (context.tileDistance));
-            context.getNeighbors(x, y, context.tiles).forEach(function (a, i) {
+            context.getNeighbors(x, y, context.tiles).forEach(function(a, i) {
                 context.tiles.get(new Pair(a[0], a[1])).color = item.key;
                 context.flip(context, item.key, context.sprites.get(new Pair(a[0], a[1])), i * 50);
             }, context);
@@ -118,24 +127,25 @@ Associate.Game.prototype = {
         }
     },
 
-    flip: function (context, type, item, delay) {
+    flip: function(context, type, item, delay) {
         if (item.key == type) {
             return;
         }
+        var scale = item.scale.x;
         var flip = context.game.add.tween(item.scale).to({
             x: 0,
-            y: 1
+            y: scale
         }, 200, Phaser.Easing.None, true, delay);
-        flip.onComplete.add(function () {
+        flip.onComplete.add(function() {
             item.loadTexture(type);
             context.game.add.tween(item.scale).to({
-                x: 1,
-                y: 1
+                x: scale,
+                y: scale
             }, 150, Phaser.Easing.None, true);
         }, this);
     },
 
-    getNeighbors: function (x, y, tiles) {
+    getNeighbors: function(x, y, tiles) {
         var n = [];
 
         var i = x - 1;
@@ -177,17 +187,24 @@ Associate.Game.prototype = {
         return n;
     },
 
-    onBackClick: function () {
+    onBackClick: function() {
         this.state.start('LevelMenu', true, false, 'Game');
     },
 
-    update: function () {
+    calculateTileSize: function(width, border, rows) {
+        var w = width - 2 * border;
+        var distance = Math.floor(w / rows);
+        var size = Math.floor(distance * .8);
+        return size;
+    },
+
+    update: function() {
 
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
 
     },
 
-    quitGame: function (pointer) {
+    quitGame: function(pointer) {
 
         //  Here you should destroy anything you no longer need.
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.

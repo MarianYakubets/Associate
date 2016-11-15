@@ -8,8 +8,11 @@ Associate.MainMenu = function (game) {
 Associate.MainMenu.prototype = {
 
     create: function () {
-        this.game.stage.backgroundColor = '#96ceb4';
-
+        this.game.add.tileSprite(-2, -2, this.game.world.width + 2, this.game.world.height + 2, 'paper');
+        var bcgr = this.game.add.sprite(0, 0, 'sakura');
+        bcgr.width = this.game.world.width;
+        bcgr.height = this.game.world.height;
+        bcgr.alpha = 0.3;
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
         //	Naturally I expect you to do something significantly better :)

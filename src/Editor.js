@@ -54,6 +54,7 @@ Associate.Editor.prototype = {
         this.level = level;
         this.w = level.w;
         this.h = level.h;
+
         this.legendTiles = new TileMap();
         this.level.legend.forEach(function (tile) {
             this.legendTiles.set(new Pair(tile.x, tile.y), tile);
@@ -66,10 +67,14 @@ Associate.Editor.prototype = {
     },
 
     create: function () {
-        this.game.stage.backgroundColor = '#96ceb4';
+        this.game.add.tileSprite(-2, -2, this.game.world.width + 2, this.game.world.height + 2, 'paper');
+        var bcgr = this.game.add.sprite(0, 0, 'sakura');
+        bcgr.width = this.game.world.width;
+        bcgr.height = this.game.world.height;
+        bcgr.alpha = 0.3;
 
         this.game.add.button(5, 1, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
-        this.game.add.button(70, 1, 'save', this.onSaveClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
+        this.game.add.button(80, 1, 'save', this.onSaveClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
 
         this.game.add.button(200, 1, 'left', this.onLeftBtnClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
         this.game.add.button(270, 1, 'right', this.onRightBtnClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
@@ -143,8 +148,8 @@ Associate.Editor.prototype = {
                 sprite.height = size;
             }
         }, this);
-        group.x = this.game.world.centerX - this.w * this.tileDistance / 2;
-        group.y = this.game.world.centerY - this.h * this.tileDistance / 2;
+        group.x = this.game.world.centerX - (this.w - 1) * this.tileDistance / 2;
+        group.y = this.game.world.centerY - (this.h - 1) * this.tileDistance / 2;
     },
 
     showLevels: function () {
@@ -169,6 +174,10 @@ Associate.Editor.prototype = {
     },
 
     loadLevel: function () {
+        this.tileSize = this.calculateTileSize(this.game.world.width, Math.floor(this.game.world.width / 30), this.w);
+        this.spacing = this.tileSize / 5;
+        this.tileDistance = this.tileSize + this.spacing;
+
         this.tilesGroup.setAll('inputEnabled', false);
         this.game.world.removeAll();
         this.create();
@@ -281,6 +290,13 @@ Associate.Editor.prototype = {
 
     update: function () {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
+    },
+
+    calculateTileSize: function(width, border, rows) {
+        var w = width - 2 * border;
+        var distance = Math.floor(w / rows);
+        var size = Math.floor(distance * .8);
+        return size;
     },
 
     quitGame: function (pointer) {

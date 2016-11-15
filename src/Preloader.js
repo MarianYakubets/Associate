@@ -53,6 +53,10 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('up', 'images/btn/up.png', 173, 173);
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
 
+        this.load.image('paper', 'images/bgr/paper.png');
+        this.load.image('sakura', 'images/bgr/sakura.jpg');
+
+
         this.load.image('0', 'images/numbers/0.png');
         this.load.image('1', 'images/numbers/1.png');
         this.load.image('2', 'images/numbers/2.png');
