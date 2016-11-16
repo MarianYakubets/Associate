@@ -1,4 +1,4 @@
-Associate.Game = function(game) {
+Associate.Game = function (game) {
 
     //  When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
 
@@ -40,7 +40,7 @@ Associate.Game = function(game) {
 
 Associate.Game.prototype = {
 
-    init: function(level) {
+    init: function (level) {
         this.level = level;
         this.w = level.w;
         this.h = level.h;
@@ -50,39 +50,38 @@ Associate.Game.prototype = {
         this.tileDistance = this.tileSize + this.spacing;
 
         this.legendTiles = new TileMap();
-        this.level.legend.forEach(function(tile) {
+        this.level.legend.forEach(function (tile) {
             this.legendTiles.set(new Pair(tile.x, tile.y), tile);
         }, this);
 
         this.tiles = new TileMap();
-        this.level.tiles.forEach(function(tile) {
+        this.level.tiles.forEach(function (tile) {
             this.tiles.set(new Pair(tile.x, tile.y), tile);
         }, this);
     },
 
-    create: function() {
+    create: function () {
         this.game.add.tileSprite(-2, -2, this.game.world.width + 2, this.game.world.height + 2, 'paper');
         var bcgr = this.game.add.sprite(0, 0, 'sakura');
         bcgr.width = this.game.world.width;
         bcgr.height = this.game.world.height;
         bcgr.alpha = 0.3;
 
-        this.game.add.button(0, 0, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
+        this.game.add.button(0, 0, 'pause', this.onPauseClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
 
         this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance);
 
         this.tilesGroup = this.game.add.group();
         this.drawTiles(this.tiles, this.tilesGroup, this.tileSize);
 
-        this.sprites.entities.forEach(function(sprite) {
+        this.sprites.entities.forEach(function (sprite) {
             sprite.inputEnabled = true;
             sprite.events.onInputDown.add(this.onTileClick(this), this);
         }, this);
     },
 
-
-    drawTiles: function(tiles, group, size) {
-        tiles.entities.forEach(function(tile) {
+    drawTiles: function (tiles, group, size) {
+        tiles.entities.forEach(function (tile) {
             var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, tile.color);
             sprite.anchor.x = 0.5;
             sprite.anchor.y = 0.5;
@@ -102,12 +101,9 @@ Associate.Game.prototype = {
         group.y = this.game.world.centerY - (this.h - 1) * this.tileDistance / 2;
     },
 
-
-    loadLevel: function() {},
-
-    checkWin: function() {
+    checkWin: function () {
         var victory = true;
-        this.legendTiles.entities.forEach(function(tile) {
+        this.legendTiles.entities.forEach(function (tile) {
             if (this.tiles.get(new Pair(tile.x, tile.y)).color != tile.color) {
                 victory = false;
                 return;
@@ -116,11 +112,11 @@ Associate.Game.prototype = {
         return victory;
     },
 
-    onTileClick: function(context) {
-        return function(item) {
+    onTileClick: function (context) {
+        return function (item) {
             var x = Math.floor(item.x / (context.tileDistance));
             var y = Math.floor(item.y / (context.tileDistance));
-            context.getNeighbors(x, y, context.tiles).forEach(function(a, i) {
+            context.getNeighbors(x, y, context.tiles).forEach(function (a, i) {
                 context.tiles.get(new Pair(a[0], a[1])).color = item.key;
                 context.flip(context, item.key, context.sprites.get(new Pair(a[0], a[1])), i * 50);
             }, context);
@@ -128,7 +124,7 @@ Associate.Game.prototype = {
         }
     },
 
-    flip: function(context, type, item, delay) {
+    flip: function (context, type, item, delay) {
         if (item.key == type) {
             return;
         }
@@ -137,7 +133,7 @@ Associate.Game.prototype = {
             x: 0,
             y: scale
         }, 200, Phaser.Easing.None, true, delay);
-        flip.onComplete.add(function() {
+        flip.onComplete.add(function () {
             item.loadTexture(type);
             context.game.add.tween(item.scale).to({
                 x: scale,
@@ -146,7 +142,7 @@ Associate.Game.prototype = {
         }, this);
     },
 
-    getNeighbors: function(x, y, tiles) {
+    getNeighbors: function (x, y, tiles) {
         var n = [];
 
         var i = x - 1;
@@ -188,25 +184,23 @@ Associate.Game.prototype = {
         return n;
     },
 
-    onBackClick: function() {
-        //this.state.start('LevelMenu', true, false, 'Game');
+    onPauseClick: function () {
         this.setOnPause();
     },
 
-    calculateTileSize: function(width, border, rows) {
+    calculateTileSize: function (width, border, rows) {
         var w = width - 2 * border;
         var distance = Math.floor(w / rows);
-        var size = Math.floor(distance * .8);
-        return size;
+        return Math.floor(distance * .8);
     },
 
-    update: function() {
+    update: function () {
 
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
 
     },
 
-    quitGame: function(pointer) {
+    quitGame: function (pointer) {
 
         //  Here you should destroy anything you no longer need.
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
@@ -216,36 +210,48 @@ Associate.Game.prototype = {
 
     },
 
-    setOnPause: function() {
-        this.game.paused = true;
-
+    setOnPause: function () {
         this.menu = this.game.add.group();
 
         var back = this.menu.create(0, 0, 'paper');
-        //var front = this.menu.create(0, 0, 'leaves');
         back.width = this.game.world.width * .8;
         back.height = this.game.world.height * .8;
         back.tint = 0xDAA520;
-        //front.alpha = 0.1;
-        //front.width = this.game.world.width * .8;
-        //front.height = this.game.world.height * .8;
+
+        var h = back.height / 7;
+
+        var rtr = new LabelButton(this.game, (back.width) / 2, h, "long", "Retry", null, this.onBtnClick('Game'), this, 1, 0, 2, 3);
+        this.menu.add(rtr);
+
+        var lvl = new LabelButton(this.game, (back.width ) / 2, h * 3, "long", "Levels", null, this.onBtnClick('LevelMenu'), this, 1, 0, 2, 3);
+        this.menu.add(lvl);
+
+        var mn = new LabelButton(this.game, (back.width) / 2, h * 5, "long", "Menu", null, this.onBtnClick('MainMenu'), this, 1, 0, 2, 3);
+        this.menu.add(mn);
+
+        var closeBtn = this.game.add.button(back.width - 67, this.menu.y, 'close', this.onCloseClick, this, 1, 0, 2);
+        closeBtn.scale.setTo(0.5, 0.5);
+        this.menu.add(closeBtn);
+
 
         this.menu.x = this.game.world.centerX - back.width / 2;
         this.menu.y = this.game.world.centerY - back.height / 2;
 
-        this.game.input.onDown.add(this.unPause, this);
     },
 
-    unPause: function(event) {
-        if (this.game.paused) {
-            if (event.x > this.menu.x && this.menu.x < this.menu.x + this.menu.width &&
-                event.y > this.menu.y && this.menu.y < this.menu.y + this.menu.height) {
-                //Click inside menu
-            } else {
-                this.menu.removeAll();
-                this.game.paused = false;
-            }
+    onBtnClick: function (name) {
+        return function () {
+            this.state.start(name, true, false, 'Game');
         }
+    },
+
+    onCloseClick: function () {
+        this.unPause();
+    },
+
+    unPause: function () {
+        this.menu.removeAll();
+        this.game.paused = false;
     }
 
 };

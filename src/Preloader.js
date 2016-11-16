@@ -46,6 +46,9 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('save', 'images/btn/save.png', 173, 173);
         this.load.spritesheet('bottom', 'images/btn/bottom.png', 173, 173);
         this.load.spritesheet('top', 'images/btn/top.png', 173, 173);
+        this.load.image('locker', 'images/btn/lock.png');
+        this.load.spritesheet('close', 'images/btn/close.png', 173, 173);
+        this.load.spritesheet('pause', 'images/btn/pause.png', 173, 173);
 
 
         this.load.spritesheet('left', 'images/btn/left.png', 173, 173);
