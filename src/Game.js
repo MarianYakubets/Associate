@@ -22,6 +22,7 @@ Associate.Game = function(game) {
     this.tileSize;
     this.spacing;
     this.tileDistance;
+    this.menu;
 
     this.w = 3;
     this.h = 3;
@@ -66,7 +67,7 @@ Associate.Game.prototype = {
         bcgr.height = this.game.world.height;
         bcgr.alpha = 0.3;
 
-        this.game.add.button(20, 10, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
+        this.game.add.button(0, 0, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
 
         this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance);
 
@@ -188,7 +189,8 @@ Associate.Game.prototype = {
     },
 
     onBackClick: function() {
-        this.state.start('LevelMenu', true, false, 'Game');
+        //this.state.start('LevelMenu', true, false, 'Game');
+        this.setOnPause();
     },
 
     calculateTileSize: function(width, border, rows) {
@@ -212,6 +214,38 @@ Associate.Game.prototype = {
         //  Then let's go back to the main menu.
         //this.state.start('MainMenu');
 
+    },
+
+    setOnPause: function() {
+        this.game.paused = true;
+
+        this.menu = this.game.add.group();
+
+        var back = this.menu.create(0, 0, 'paper');
+        //var front = this.menu.create(0, 0, 'leaves');
+        back.width = this.game.world.width * .8;
+        back.height = this.game.world.height * .8;
+        back.tint = 0xDAA520;
+        //front.alpha = 0.1;
+        //front.width = this.game.world.width * .8;
+        //front.height = this.game.world.height * .8;
+
+        this.menu.x = this.game.world.centerX - back.width / 2;
+        this.menu.y = this.game.world.centerY - back.height / 2;
+
+        this.game.input.onDown.add(this.unPause, this);
+    },
+
+    unPause: function(event) {
+        if (this.game.paused) {
+            if (event.x > this.menu.x && this.menu.x < this.menu.x + this.menu.width &&
+                event.y > this.menu.y && this.menu.y < this.menu.y + this.menu.height) {
+                //Click inside menu
+            } else {
+                this.menu.removeAll();
+                this.game.paused = false;
+            }
+        }
     }
 
 };

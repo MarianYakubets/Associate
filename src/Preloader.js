@@ -55,6 +55,7 @@ Associate.Preloader.prototype = {
 
         this.load.image('paper', 'images/bgr/paper.png');
         this.load.image('sakura', 'images/bgr/sakura.jpg');
+        this.load.image('leaves', 'images/bgr/leaves.jpg');
 
 
         this.load.image('0', 'images/numbers/0.png');

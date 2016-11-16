@@ -17,7 +17,7 @@ Associate.LevelMenu.prototype = {
         bcgr.width = this.game.world.width;
         bcgr.height = this.game.world.height;
         bcgr.alpha = 0.3;
-        this.game.add.button(20, 10, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
+        this.game.add.button(0, 0, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
         //	Naturally I expect you to do something significantly better :)
