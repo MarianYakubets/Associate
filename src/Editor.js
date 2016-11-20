@@ -1,4 +1,4 @@
-Associate.Editor = function (game) {
+Associate.Editor = function(game) {
 
     //  When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
 
@@ -49,24 +49,32 @@ Associate.Editor = function (game) {
 
 Associate.Editor.prototype = {
 
-    init: function (level) {
+    init: function(level) {
         this.number = level.number;
         this.level = level;
         this.w = level.w;
         this.h = level.h;
 
         this.legendTiles = new TileMap();
-        this.level.legend.forEach(function (tile) {
-            this.legendTiles.set(new Pair(tile.x, tile.y), tile);
+        this.level.legend.forEach(function(tile) {
+            this.legendTiles.set(new Pair(tile.x, tile.y), new Tile(tile.x, tile.y, tile.color, tile.lock));
         }, this);
 
         this.tiles = new TileMap();
-        this.level.tiles.forEach(function (tile) {
-            this.tiles.set(new Pair(tile.x, tile.y), tile);
+        this.level.tiles.forEach(function(tile) {
+            this.tiles.set(new Pair(tile.x, tile.y), new Tile(tile.x, tile.y, tile.color, tile.lock));
         }, this);
     },
 
-    create: function () {
+    create: function() {
+        var size1 = this.calculateTileSize(this.game.world.width, Math.floor(this.game.world.width / 30), this.w);
+        var size2 = this.calculateTileSize(this.game.world.height, Math.floor(this.game.world.height / 30), this.h);
+
+        this.tileSize = size2 < size1 ? size2 : size1;
+        this.spacing = this.tileSize / 5;
+        this.tileDistance = this.tileSize + this.spacing;
+
+
         this.game.add.tileSprite(-2, -2, this.game.world.width + 2, this.game.world.height + 2, 'paper');
         var bcgr = this.game.add.sprite(0, 0, 'sakura');
         bcgr.width = this.game.world.width;
@@ -108,7 +116,7 @@ Associate.Editor.prototype = {
         this.drawLevelTiles();
     },
 
-    drawLegendTiles: function () {
+    drawLegendTiles: function() {
         if (this.legendGroup) {
             this.legendGroup.destroy();
         }
@@ -119,7 +127,7 @@ Associate.Editor.prototype = {
     },
 
 
-    drawLevelTiles: function () {
+    drawLevelTiles: function() {
         if (this.tilesGroup) {
             this.tilesGroup.destroy();
         }
@@ -131,8 +139,8 @@ Associate.Editor.prototype = {
     },
 
 
-    drawTiles: function (tiles, group, size) {
-        tiles.entities.forEach(function (tile) {
+    drawTiles: function(tiles, group, size) {
+        tiles.entities.forEach(function(tile) {
             var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, tile.color);
             sprite.anchor.x = 0.5;
             sprite.anchor.y = 0.5;
@@ -152,7 +160,7 @@ Associate.Editor.prototype = {
         group.y = this.game.world.centerY - (this.h - 1) * this.tileDistance / 2;
     },
 
-    showLevels: function () {
+    showLevels: function() {
         if (this.layer1Active) {
             this.tilesGroup.alpha = 1;
             this.tilesGroup.setAll('inputEnabled', true);
@@ -173,18 +181,14 @@ Associate.Editor.prototype = {
         }
     },
 
-    loadLevel: function () {
-        this.tileSize = this.calculateTileSize(this.game.world.width, Math.floor(this.game.world.width / 30), this.w);
-        this.spacing = this.tileSize / 5;
-        this.tileDistance = this.tileSize + this.spacing;
-
+    loadLevel: function() {
         this.tilesGroup.setAll('inputEnabled', false);
         this.game.world.removeAll();
         this.create();
     },
 
-    onTileClick: function (context, tiles) {
-        return function (item) {
+    onTileClick: function(context, tiles) {
+        return function(item) {
             if (context.selectedColor != null) {
                 var x = Math.floor(item.x / (context.tileDistance));
                 var y = Math.floor(item.y / (context.tileDistance));
@@ -204,8 +208,8 @@ Associate.Editor.prototype = {
     },
 
 
-    onPaletteClick: function (context) {
-        return function (item) {
+    onPaletteClick: function(context) {
+        return function(item) {
             if (item.key != context.selectedColor) {
                 context.selectedColor = item.key;
                 context.squareMask.y = item.y;
@@ -217,22 +221,21 @@ Associate.Editor.prototype = {
     },
 
 
-    onBackClick: function () {
+    onBackClick: function() {
         this.state.start('LevelMenu', true, false, 'Editor');
     },
 
-    onLoadClick: function () {
+    onLoadClick: function() {
         this.init(this.level);
         this.loadLevel();
     },
 
-    onSaveClick: function () {
+    onSaveClick: function() {
         var json = JSON.stringify(new Level(this.number, this.w, this.h, this.tiles.entities, this.legendTiles.entities));
         firebase.database().ref('levels/' + this.number).set(json);
     },
 
-
-    onLeftBtnClick: function () {
+    onLeftBtnClick: function() {
         this.w -= 1;
         for (var i = 0; i < this.h; i++) {
             this.tiles.delete(new Pair(this.w, i));
@@ -241,7 +244,7 @@ Associate.Editor.prototype = {
         this.loadLevel();
     },
 
-    onRightBtnClick: function () {
+    onRightBtnClick: function() {
         for (var i = 0; i < this.h; i++) {
             this.tiles.set(new Pair(this.w, i), new Tile(this.w, i, Color.GREY));
             this.legendTiles.set(new Pair(this.w, i), new Tile(this.w, i, Color.GREY));
@@ -250,7 +253,7 @@ Associate.Editor.prototype = {
         this.loadLevel();
     },
 
-    onUpBtnClick: function () {
+    onUpBtnClick: function() {
         this.h -= 1;
         for (var i = 0; i < this.w; i++) {
             this.tiles.delete(new Pair(i, this.h));
@@ -259,7 +262,7 @@ Associate.Editor.prototype = {
         this.loadLevel();
     },
 
-    onDownBtnClick: function () {
+    onDownBtnClick: function() {
         for (var i = 0; i < this.w; i++) {
             this.tiles.set(new Pair(i, this.h), new Tile(i, this.h, Color.GREY));
             this.legendTiles.set(new Pair(i, this.h), new Tile(i, this.h, Color.GREY));
@@ -268,7 +271,7 @@ Associate.Editor.prototype = {
         this.loadLevel();
     },
 
-    onLayer1Click: function (item) {
+    onLayer1Click: function(item) {
         this.layer1Active = !this.layer1Active;
         /*if (this.layer1Active) {
             this.l1Btn.setFrames(1, 0, 2);
@@ -278,17 +281,17 @@ Associate.Editor.prototype = {
         this.showLevels();
     },
 
-    onLayer2Click: function (item) {
+    onLayer2Click: function(item) {
         this.layer2Active = !this.layer2Active;
-      /*  if (this.layer2Active) {
-            this.l2Btn.setFrames(1, 0, 2);
-        } else {
-            this.l2Btn.setFrames(2, 0, 1);
-        }*/
+        /*  if (this.layer2Active) {
+              this.l2Btn.setFrames(1, 0, 2);
+          } else {
+              this.l2Btn.setFrames(2, 0, 1);
+          }*/
         this.showLevels();
     },
 
-    update: function () {
+    update: function() {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
     },
 
@@ -299,7 +302,7 @@ Associate.Editor.prototype = {
         return size;
     },
 
-    quitGame: function (pointer) {
+    quitGame: function(pointer) {
 
         //  Here you should destroy anything you no longer need.
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.

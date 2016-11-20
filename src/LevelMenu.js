@@ -1,5 +1,4 @@
-Associate.LevelMenu = function (game) {
-
+Associate.LevelMenu = function(game) {
     this.music = null;
     this.playButton = null;
     this.stateName;
@@ -7,11 +6,11 @@ Associate.LevelMenu = function (game) {
 
 Associate.LevelMenu.prototype = {
 
-    init: function (state) {
+    init: function(state) {
         this.stateName = state;
     },
 
-    create: function () {
+    create: function() {
         this.game.add.tileSprite(-2, -2, this.game.world.width + 2, this.game.world.height + 2, 'paper');
         var bcgr = this.game.add.sprite(0, 0, 'sakura');
         bcgr.width = this.game.world.width;
@@ -34,30 +33,44 @@ Associate.LevelMenu.prototype = {
         var size = 50;
         var rowSize = Math.floor((this.game.world.width - border) / (size + distX));
 
+        var highestLevel = localStorage.getItem("reached-level");
+        if (highestLevel == null) {
+            highestLevel = 1;
+            localStorage.setItem("reached-level", highestLevel);
+        }
 
         for (var i = 0; i <= 16; i++) {
             var y = Math.floor(i / rowSize);
             var x = i - y * rowSize;
             var num = i + 1 + "";
+
             var btn = new LabelButton(this.game, border + x * (distX + size), border + y * (distY + size), "circle", num, null, this.onLevelClick(num), this, 1, 0, 2, 3);
             btn.width = size * 2;
             btn.height = size * 2;
+
+
+            if (i + 1 > highestLevel) {
+                var lock = this.game.add.sprite(btn.x, btn.y, 'locker');
+                lock.width = btn.width;
+                lock.height = btn.height;
+                lock.anchor.setTo(0.5, 0.5);
+                lock.alpha = 0.4;
+            }
         }
     },
 
-    update: function () {
+    update: function() {
         //	Do some nice funky main menu effect here
 
     },
 
-    onLevelClick: function (levelNumber) {
-        return function () {
+    onLevelClick: function(levelNumber) {
+        return function() {
             this.state.start(this.stateName, true, false, LevelManager.getLevel(levelNumber));
         }
     },
 
-
-    onBackClick: function () {
+    onBackClick: function() {
         this.state.start('MainMenu', true, false);
     }
 };
