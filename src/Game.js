@@ -131,13 +131,17 @@ Associate.Game.prototype = {
         return function (item) {
             var x = Math.floor(item.x / (context.tileDistance));
             var y = Math.floor(item.y / (context.tileDistance));
-            var neightbors = context.getNeighbors(x, y, context.tiles);
-            neightbors.forEach(function (a, i) {
-                context.flip(context, context.tileByPoint(x, y).color, context.sprites.get(new Pair(a[0], a[1])), i * 50);
-                context.tiles.get(new Pair(a[0], a[1])).color = context.tileByPoint(x, y).color;
+            var nearTiles = context.getNeighbors(x, y, context.tiles);
+            var baseTile = context.tiles.get(new Pair(x, y));
+            nearTiles.forEach(function (a, i) {
+                var tile = context.tiles.get(new Pair(a[0], a[1]));
+                //if (tile.color != baseTile.color) {
+                    context.flip(context, baseTile.color, context.sprites.get(new Pair(a[0], a[1])), i * 50);
+                    this.tiles.get(new Pair(a[0], a[1])).color = baseTile.color;
+                //}
             }, context);
             var timer = context.game.time.create(false);
-            timer.add(neightbors.length * 50 + 750, context.checkWin, this);
+            timer.add(nearTiles.length * 50 + 750, context.checkWin, this);
             timer.start();
         }
     },
@@ -149,13 +153,9 @@ Associate.Game.prototype = {
     },
 
     flip: function (context, type, item, delay) {
-        if (this.tileByPoint(item.x, item.y).color == type) {
-            return;
-        }
         var scale = item.scale.x;
-        var flip = context.game.add.tween(item.scale).to({
-            x: 0,
-            y: scale
+        var flip = context.game.add.tween(item.width).to({
+            width: 0
         }, 200, Phaser.Easing.None, true, delay);
         flip.onComplete.add(function () {
             item.frame = ColorToFrame[type];
@@ -266,7 +266,7 @@ Associate.Game.prototype = {
         }
         this.menu = this.game.add.group();
 
-        var back = this.menu.create(0, 0, 'panel');
+        var back = this.menu.create(0, 0, 'menu');
         back.width = this.game.world.width * .8;
         back.height = this.game.world.height * .8;
         back.tint = 0xDAA520;
