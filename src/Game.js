@@ -136,8 +136,8 @@ Associate.Game.prototype = {
             nearTiles.forEach(function (a, i) {
                 var tile = context.tiles.get(new Pair(a[0], a[1]));
                 //if (tile.color != baseTile.color) {
-                    context.flip(context, baseTile.color, context.sprites.get(new Pair(a[0], a[1])), i * 50);
-                    this.tiles.get(new Pair(a[0], a[1])).color = baseTile.color;
+                context.flip(context, baseTile.color, context.sprites.get(new Pair(a[0], a[1])), i * 50);
+                this.tiles.get(new Pair(a[0], a[1])).color = baseTile.color;
                 //}
             }, context);
             var timer = context.game.time.create(false);
@@ -154,8 +154,9 @@ Associate.Game.prototype = {
 
     flip: function (context, type, item, delay) {
         var scale = item.scale.x;
-        var flip = context.game.add.tween(item.width).to({
-            width: 0
+        var flip = context.game.add.tween(item.scale).to({
+            x: 0,
+            y: scale
         }, 200, Phaser.Easing.None, true, delay);
         flip.onComplete.add(function () {
             item.frame = ColorToFrame[type];
