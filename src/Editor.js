@@ -74,12 +74,9 @@ Associate.Editor.prototype = {
         this.spacing = this.tileSize / 5;
         this.tileDistance = this.tileSize + this.spacing;
 
-
-        this.game.add.tileSprite(-2, -2, this.game.world.width + 2, this.game.world.height + 2, 'paper');
-        var bcgr = this.game.add.sprite(0, 0, 'sakura');
+        var bcgr = this.game.add.sprite(0, 0, 'BG');
         bcgr.width = this.game.world.width;
         bcgr.height = this.game.world.height;
-        bcgr.alpha = 0.3;
 
         this.game.add.button(5, 1, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);
         this.game.add.button(80, 1, 'save', this.onSaveClick, this, 1, 0, 2).scale.setTo(0.4, 0.4);

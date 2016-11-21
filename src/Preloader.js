@@ -28,9 +28,19 @@ Associate.Preloader.prototype = {
          this.load.audio('titleMusic', ['audio/main_menu.mp3']);
          this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');*/
         //	+ lots of other required assets here
+        this.load.image('0', 'images/numbers/0.png');
+        this.load.image('1', 'images/numbers/1.png');
+        this.load.image('2', 'images/numbers/2.png');
+        this.load.image('3', 'images/numbers/3.png');
+        this.load.image('4', 'images/numbers/4.png');
+        this.load.image('5', 'images/numbers/5.png');
+        this.load.image('6', 'images/numbers/6.png');
+        this.load.image('7', 'images/numbers/7.png');
+        this.load.image('8', 'images/numbers/8.png');
+        this.load.image('9', 'images/numbers/9.png');
+
         this.load.image('squareBlack', 'images/tiles/squareBlack.png');
         this.load.image('squareWhite', 'images/tiles/squareWhite.png');
-
         this.load.image('blue', 'images/tiles/blue.png');
         this.load.image('green', 'images/tiles/green.png');
         this.load.image('grey', 'images/tiles/grey.png');
@@ -56,21 +66,18 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('up', 'images/btn/up.png', 173, 173);
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
 
-        this.load.image('paper', 'images/bgr/paper.png');
-        this.load.image('sakura', 'images/bgr/sakura.jpg');
-        this.load.image('leaves', 'images/bgr/leaves.jpg');
+        this.load.image('BG', 'images/bgr/BG.png');
+        this.load.image('menu', 'images/bgr/menu.png');
+        this.load.image('tileLeave', 'images/bgr/tileLeave.png');
+        this.load.image('backTile', 'images/bgr/backTile.png');
+        this.load.image('backTileRound', 'images/bgr/backTileRound.png');
+
+        this.load.spritesheet('level', 'images/btn/level.png', 208, 229);
+
+        this.load.spritesheet('monster', 'images/tiles/monster.png', 156, 130);
 
 
-        this.load.image('0', 'images/numbers/0.png');
-        this.load.image('1', 'images/numbers/1.png');
-        this.load.image('2', 'images/numbers/2.png');
-        this.load.image('3', 'images/numbers/3.png');
-        this.load.image('4', 'images/numbers/4.png');
-        this.load.image('5', 'images/numbers/5.png');
-        this.load.image('6', 'images/numbers/6.png');
-        this.load.image('7', 'images/numbers/7.png');
-        this.load.image('8', 'images/numbers/8.png');
-        this.load.image('9', 'images/numbers/9.png');
+        this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
     },
 
     create: function () {

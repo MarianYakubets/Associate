@@ -1,4 +1,4 @@
-Associate.LevelMenu = function(game) {
+Associate.LevelMenu = function (game) {
     this.music = null;
     this.playButton = null;
     this.stateName;
@@ -6,17 +6,15 @@ Associate.LevelMenu = function(game) {
 
 Associate.LevelMenu.prototype = {
 
-    init: function(state) {
+    init: function (state) {
         this.stateName = state;
     },
 
-    create: function() {
-        this.game.add.tileSprite(-2, -2, this.game.world.width + 2, this.game.world.height + 2, 'paper');
-        var bcgr = this.game.add.sprite(0, 0, 'sakura');
+    create: function () {
+        var bcgr = this.game.add.sprite(0, 0, 'BG');
         bcgr.width = this.game.world.width;
         bcgr.height = this.game.world.height;
-        bcgr.alpha = 0.3;
-        this.game.add.button(0, 0, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(0.5, 0.5);
+        this.game.add.button(0, 0, 'exit', this.onBackClick, this, 0, 2, 1).scale.setTo(0.5, 0.5);
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
         //	Naturally I expect you to do something significantly better :)
@@ -44,33 +42,37 @@ Associate.LevelMenu.prototype = {
             var x = i - y * rowSize;
             var num = i + 1 + "";
 
-            var btn = new LabelButton(this.game, border + x * (distX + size), border + y * (distY + size), "circle", num, null, this.onLevelClick(num), this, 1, 0, 2, 3);
+            x = border + x * (distX + size);
+            y = border + y * (distY + size);
+
+            var btn = new LabelButton(this.game, x, y, "level", num, null, this.onLevelClick(num), this, 0);
             btn.width = size * 2;
             btn.height = size * 2;
 
 
-            if (i + 1 > highestLevel) {
-                var lock = this.game.add.sprite(btn.x, btn.y, 'locker');
-                lock.width = btn.width;
-                lock.height = btn.height;
-                lock.anchor.setTo(0.5, 0.5);
-                lock.alpha = 0.4;
+            if (this.stateName != 'Editor' && i + 1 > highestLevel) {
+                btn.destroy();
+                btn = this.game.add.sprite(btn.x, btn.y, 'level');
+                btn.anchor.set(.5, .5);
+                btn.width = size * 2;
+                btn.height = size * 2;
+                btn.frame = 4;
             }
         }
     },
 
-    update: function() {
+    update: function () {
         //	Do some nice funky main menu effect here
 
     },
 
-    onLevelClick: function(levelNumber) {
-        return function() {
+    onLevelClick: function (levelNumber) {
+        return function () {
             this.state.start(this.stateName, true, false, LevelManager.getLevel(levelNumber));
         }
     },
 
-    onBackClick: function() {
+    onBackClick: function () {
         this.state.start('MainMenu', true, false);
     }
 };
