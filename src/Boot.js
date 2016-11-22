@@ -19,8 +19,8 @@ Associate.Boot.prototype = {
 
         this.input.maxPointers = 1;
         this.stage.disableVisibilityChange = true;
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.scale.setMinMax(768, 1024, 1536, 2048);
+        this.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+        this.scale.setUserScale(ScreenMetrics.scaleX, ScreenMetrics.scaleY);
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
 
@@ -30,7 +30,7 @@ Associate.Boot.prototype = {
             //this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
             //this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
         }
-        
+
         LevelManager.syncLevels();
     },
 

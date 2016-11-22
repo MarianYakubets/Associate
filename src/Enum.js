@@ -20,3 +20,9 @@ var ColorToFrame = {
     "green": 3,
     "grey": 7
 };
+
+var Screen = {
+    MAX_TILE_SIZE: 156,
+    RATIO: .75,
+    PADDING_HEIGHT : 200
+};

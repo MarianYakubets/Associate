@@ -1,4 +1,4 @@
-Associate.LevelMenu = function (game) {
+Associate.LevelMenu = function(game) {
     this.music = null;
     this.playButton = null;
     this.stateName;
@@ -6,14 +6,24 @@ Associate.LevelMenu = function (game) {
 
 Associate.LevelMenu.prototype = {
 
-    init: function (state) {
+    init: function(state) {
         this.stateName = state;
     },
 
-    create: function () {
+    create: function() {
         var bcgr = this.game.add.sprite(0, 0, 'BG');
         bcgr.width = this.game.world.width;
         bcgr.height = this.game.world.height;
+
+        var back = this.game.add.group();
+        var leaveSize = 417;
+        back.create(0, 0, 'tileLeave');
+        back.create(417, 0, 'tileLeave');
+        back.create(2 * 417, 0, 'tileLeave');
+        back.create(3 * 417, 0, 'tileLeave');
+
+
+
         this.game.add.button(0, 0, 'exit', this.onBackClick, this, 0, 2, 1).scale.setTo(0.5, 0.5);
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
@@ -61,18 +71,18 @@ Associate.LevelMenu.prototype = {
         }
     },
 
-    update: function () {
+    update: function() {
         //	Do some nice funky main menu effect here
 
     },
 
-    onLevelClick: function (levelNumber) {
-        return function () {
+    onLevelClick: function(levelNumber) {
+        return function() {
             this.state.start(this.stateName, true, false, LevelManager.getLevel(levelNumber));
         }
     },
 
-    onBackClick: function () {
+    onBackClick: function() {
         this.state.start('MainMenu', true, false);
     }
 };

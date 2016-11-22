@@ -67,10 +67,7 @@ Associate.Editor.prototype = {
     },
 
     create: function() {
-        var size1 = this.calculateTileSize(this.game.world.width, Math.floor(this.game.world.width / 30), this.w);
-        var size2 = this.calculateTileSize(this.game.world.height, Math.floor(this.game.world.height / 30), this.h);
-
-        this.tileSize = size2 < size1 ? size2 : size1;
+        this.tileSize = this.calculateTileSize();
         this.spacing = this.tileSize / 5;
         this.tileDistance = this.tileSize + this.spacing;
 
@@ -292,11 +289,21 @@ Associate.Editor.prototype = {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
     },
 
-    calculateTileSize: function(width, border, rows) {
-        var w = width - 2 * border;
-        var distance = Math.floor(w / rows);
-        var size = Math.floor(distance * .8);
-        return size;
+    calculateTileSize: function() {
+        var h = this.game.world.height - Screen.PADDING_HEIGHT;
+        var distanceH = Math.floor(h / this.h);
+        var tileW = Math.floor(distanceH * .8)
+
+        var w = this.game.world.width;
+        var distanceW = Math.floor(w / this.w);
+        var tileH = Math.floor(distanceW * .8)
+        var tileSize = tileW < tileH ? tileW : tileH;
+
+        if (tileSize > Screen.MAX_TILE_SIZE) {
+            tileSize = Screen.MAX_TILE_SIZE;
+        }
+
+        return tileSize;
     },
 
     quitGame: function(pointer) {

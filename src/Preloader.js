@@ -28,17 +28,6 @@ Associate.Preloader.prototype = {
          this.load.audio('titleMusic', ['audio/main_menu.mp3']);
          this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');*/
         //	+ lots of other required assets here
-        this.load.image('0', 'images/numbers/0.png');
-        this.load.image('1', 'images/numbers/1.png');
-        this.load.image('2', 'images/numbers/2.png');
-        this.load.image('3', 'images/numbers/3.png');
-        this.load.image('4', 'images/numbers/4.png');
-        this.load.image('5', 'images/numbers/5.png');
-        this.load.image('6', 'images/numbers/6.png');
-        this.load.image('7', 'images/numbers/7.png');
-        this.load.image('8', 'images/numbers/8.png');
-        this.load.image('9', 'images/numbers/9.png');
-
         this.load.image('squareBlack', 'images/tiles/squareBlack.png');
         this.load.image('squareWhite', 'images/tiles/squareWhite.png');
         this.load.image('blue', 'images/tiles/blue.png');
