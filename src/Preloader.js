@@ -71,7 +71,7 @@ Associate.Preloader.prototype = {
 
         this.load.spritesheet('level', 'images/btn/level.png', 208, 229);
 
-        this.load.spritesheet('monster', 'images/tiles/monster.png', 156, 130);
+        this.load.spritesheet('monster', 'images/tiles/monsters.png', 562, 562);
 
 
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);

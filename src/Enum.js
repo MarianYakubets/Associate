@@ -14,11 +14,11 @@ var Color = {
 };
 
 var ColorToFrame = {
-    "red": 9,
-    "yellow": 11,
-    "blue": 1,
-    "green": 3,
-    "grey": 7
+    "red": 0,
+    "yellow": 4,
+    "blue": 2,
+    "green": 6,
+    "grey": 10
 };
 
 var Screen = {
