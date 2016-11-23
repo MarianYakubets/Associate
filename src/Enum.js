@@ -22,7 +22,9 @@ var ColorToFrame = {
 };
 
 var Screen = {
+    MAX_ROWS: 12,
+    MAX_COLUMNS: 8,
     MAX_TILE_SIZE: 156,
     RATIO: .75,
-    PADDING_HEIGHT : 200
+    PADDING_HEIGHT: 200
 };

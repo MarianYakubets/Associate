@@ -8,9 +8,7 @@ Associate.MainMenu = function(game) {
 Associate.MainMenu.prototype = {
 
     create: function() {
-        var bcgr = this.game.add.sprite(0, 0, 'BG');
-        bcgr.width = this.game.world.width;
-        bcgr.height = this.game.world.height;
+        this.drawLeavesBgr();
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
         //	Naturally I expect you to do something significantly better :)
@@ -18,10 +16,22 @@ Associate.MainMenu.prototype = {
          this.music.play();
          this.add.sprite(0, 0, 'titlepage');
          this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');*/
-
-        new LabelButton(this.game, this.game.world.centerX, 300, "long", "Game", null, this.onBtnClick('Game'), this, 0, 1, 2, 3);
-        new LabelButton(this.game, this.game.world.centerX, 500, "long", "Editor", null, this.onBtnClick('Editor'), this, 0, 1, 2, 3);
+        this.game.add.button(this.game.world.centerX - 75, this.game.world.centerY * 1.3, 'playBig', this.onBtnClick('Game'), this, 1, 0);
+        this.game.add.button(this.game.world.width - 80, this.game.world.height - 80, 'option', this.onBtnClick('Editor'), this, 1, 0);
     },
+
+    drawLeavesBgr: function() {
+        var back = this.game.add.group();
+        var leaveSize = 415;
+        var w = Math.ceil(this.game.world.width / leaveSize);
+        var h = Math.ceil(this.game.world.height / leaveSize);
+        for (var i = 0; i < w; i++) {
+            for (var j = 0; j < h; j++) {
+                back.create(i * leaveSize, j * leaveSize, 'tileLeave');
+            }
+        }
+    },
+
 
 
     update: function() {

@@ -11,20 +11,8 @@ Associate.LevelMenu.prototype = {
     },
 
     create: function() {
-        var bcgr = this.game.add.sprite(0, 0, 'BG');
-        bcgr.width = this.game.world.width;
-        bcgr.height = this.game.world.height;
-
-        var back = this.game.add.group();
-        var leaveSize = 417;
-        back.create(0, 0, 'tileLeave');
-        back.create(417, 0, 'tileLeave');
-        back.create(2 * 417, 0, 'tileLeave');
-        back.create(3 * 417, 0, 'tileLeave');
-
-
-
-        this.game.add.button(0, 0, 'exit', this.onBackClick, this, 0, 2, 1).scale.setTo(0.5, 0.5);
+        this.drawLeavesBgr();
+        this.game.add.button(5, this.game.world.height - 80, 'home', this.onBackClick, this, 1, 0);
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
         //	Naturally I expect you to do something significantly better :)
@@ -67,6 +55,18 @@ Associate.LevelMenu.prototype = {
                 btn.width = size * 2;
                 btn.height = size * 2;
                 btn.frame = 4;
+            }
+        }
+    },
+
+    drawLeavesBgr: function() {
+        var back = this.game.add.group();
+        var leaveSize = 415;
+        var w = Math.ceil(this.game.world.width / leaveSize);
+        var h = Math.ceil(this.game.world.height / leaveSize);
+        for (var i = 0; i < w; i++) {
+            for (var j = 0; j < h; j++) {
+                back.create(i * leaveSize, j * leaveSize, 'tileLeave');
             }
         }
     },

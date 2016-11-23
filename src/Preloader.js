@@ -1,4 +1,4 @@
-Associate.Preloader = function (game) {
+Associate.Preloader = function(game) {
 
     this.background = null;
     this.preloadBar = null;
@@ -9,7 +9,7 @@ Associate.Preloader = function (game) {
 
 Associate.Preloader.prototype = {
 
-    preload: function () {
+    preload: function() {
 
         //	These are the assets we loaded in Boot.js
         //	A nice sparkly background and a loading progress bar
@@ -38,22 +38,30 @@ Associate.Preloader.prototype = {
         this.load.image('none', 'images/tiles/none.png');
         this.load.image('lock', 'images/tiles/locked.png');
 
-
-        this.load.spritesheet('long', 'images/btn/long.png', 316, 140);
-        this.load.spritesheet('circle', 'images/btn/circle.png', 173, 173);
         this.load.spritesheet('exit', 'images/btn/exit.png', 173, 173);
         this.load.spritesheet('save', 'images/btn/save.png', 173, 173);
         this.load.spritesheet('bottom', 'images/btn/bottom.png', 173, 173);
         this.load.spritesheet('top', 'images/btn/top.png', 173, 173);
         this.load.image('locker', 'images/btn/lock.png');
         this.load.spritesheet('close', 'images/btn/close.png', 173, 173);
-        this.load.spritesheet('pause', 'images/btn/pause.png', 173, 173);
 
 
         this.load.spritesheet('left', 'images/btn/left.png', 173, 173);
         this.load.spritesheet('right', 'images/btn/right.png', 173, 173);
         this.load.spritesheet('up', 'images/btn/up.png', 173, 173);
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
+
+        this.load.spritesheet('retry', 'images/btn/retry.png', 101, 101);
+        this.load.spritesheet('next', 'images/btn/next.png', 161, 101);
+        this.load.spritesheet('playBig', 'images/btn/playBig.png', 157, 157);
+        this.load.spritesheet('option', 'images/btn/option.png', 73, 73);
+        this.load.spritesheet('homeBig', 'images/btn/homeBig.png', 101, 101);
+        this.load.spritesheet('home', 'images/btn/home.png', 73, 73);
+        this.load.spritesheet('pause', 'images/btn/pause.png', 69, 69);
+
+        this.load.image('frameTop', 'images/btn/frameTop.png');
+        this.load.image('frameBottom', 'images/btn/frameBottom.png');
+
 
         this.load.image('BG', 'images/bgr/BG.png');
         this.load.image('menu', 'images/bgr/menu.png');
@@ -69,7 +77,7 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
     },
 
-    create: function () {
+    create: function() {
 
         //	Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes
         //this.preloadBar.cropEnabled = false;
@@ -78,7 +86,7 @@ Associate.Preloader.prototype = {
 
     },
 
-    update: function () {
+    update: function() {
 
         //	You don't actually need to do this, but I find it gives a much smoother game experience.
         //	Basically it will wait for our audio file to be decoded before proceeding to the MainMenu.
