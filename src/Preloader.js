@@ -10,6 +10,9 @@ Associate.Preloader = function(game) {
 Associate.Preloader.prototype = {
 
     preload: function() {
+        google: {
+            families: ['Dosis']
+        }
 
         //	These are the assets we loaded in Boot.js
         //	A nice sparkly background and a loading progress bar
@@ -42,7 +45,6 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('save', 'images/btn/save.png', 173, 173);
         this.load.spritesheet('bottom', 'images/btn/bottom.png', 173, 173);
         this.load.spritesheet('top', 'images/btn/top.png', 173, 173);
-        this.load.image('locker', 'images/btn/lock.png');
         this.load.spritesheet('close', 'images/btn/close.png', 173, 173);
 
 
@@ -75,6 +77,8 @@ Associate.Preloader.prototype = {
 
 
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
+
+        this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     },
 
     create: function() {

@@ -28,6 +28,8 @@ Associate.Game = function(game) {
     this.legendTiles;
     this.sprites;
     this.tilesGroup;
+    this.noClickSprites;
+
 
     this.level;
     this.clicked = false;
@@ -39,6 +41,8 @@ Associate.Game.prototype = {
         this.tiles = new TileMap();
         this.legendTiles = new TileMap();
         this.sprites = new TileMap();
+        this.noClickSprites = new TileMap();
+
 
         this.level = level;
         this.w = level.w;
@@ -62,10 +66,15 @@ Associate.Game.prototype = {
         this.drawTilesBcgr();
 
         var frameTop = this.game.add.sprite(0, 0, 'frameTop');
-        var frameScale = this.game.world.width / frameTop.width;
-        frameTop.scale.setTo(frameScale, frameScale);
+        frameTop.width = this.game.world.width;
+        frameTop.height = 200;
 
-        this.game.add.button(0, 0, 'pause', this.onPauseClick, this, 0, 0, 1, 0).scale.setTo(frameScale, frameScale);
+
+        var frameBottom = this.game.add.sprite(0, 1820, 'frameTop');
+        frameBottom.width = this.game.world.width;
+        frameBottom.height = 100;
+
+        this.game.add.button(0, 0, 'pause', this.onPauseClick, this, 0, 0, 1, 0);
 
         var legendGroup = this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance, 'legend');
         legendGroup.alpha = 0.0;
@@ -90,15 +99,15 @@ Associate.Game.prototype = {
                 var tile = back.create(i * leaveSize, j * leaveSize, 'backTile');
                 tile.width = leaveSize + 10;
                 tile.height = leaveSize + 10;
-                if (i % 2 == 1 || j % 2 == 1) {
+                if ((i % 2 == 1 && j % 2 == 0) || (i % 2 == 0 && j % 2 == 1)) {
                     var tile = back.create(i * leaveSize, j * leaveSize, 'backTileRound');
-                    tile.width = leaveSize + 2;
-                    tile.height = leaveSize + 2;
+                    tile.width = leaveSize;
+                    tile.height = leaveSize;
                 }
             }
         }
         back.x = 0;
-        back.y = 250 - this.tileDistance / 2;
+        back.y = 200;
     },
 
     drawTiles: function(tiles, group, size, type) {
@@ -121,17 +130,25 @@ Associate.Game.prototype = {
                 this.sprites.set(new Pair(tile.x, tile.y), sprite);
 
                 if (tile.lock) {
-                    var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'lock');
+                    var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'monster');
+                    sprite.frame = 12;
+
+                    sprite.tileX = tile.x;
+                    sprite.tileY = tile.y;
+
                     sprite.anchor.x = 0.5;
                     sprite.anchor.y = 0.5;
+
                     sprite.width = size;
                     sprite.height = size;
+
+                    this.noClickSprites.set(new Pair(tile.x, tile.y), sprite);
                 }
             }
 
         }, this);
         group.x = this.tileDistance / 2;
-        group.y = 250;
+        group.y = 200 + this.tileDistance / 2;
         return group;
     },
 
@@ -154,7 +171,7 @@ Associate.Game.prototype = {
 
     onTileClick: function(context) {
         return function(item) {
-            if (context.clicked) {
+            if (context.clicked || context.tiles.get(new Pair(item.tileX, item.tileY)).lock) {
                 return;
             }
             context.clicked = true;
@@ -166,7 +183,11 @@ Associate.Game.prototype = {
                 var tile = context.tiles.get(new Pair(a[0], a[1]));
                 if (tile.color != baseTile.color) {
                     context.flip(context, baseTile.color, context.sprites.get(new Pair(a[0], a[1])), i * 50);
-                    this.tiles.get(new Pair(a[0], a[1])).color = baseTile.color;
+                    tile.color = baseTile.color;
+                    if (tile.lock) {
+                        context.noClickSprites.get(new Pair(a[0], a[1])).destroy();
+                        tile.lock = false;
+                    }
                 }
             }, context);
             var timer = context.game.time.create(false);
@@ -195,37 +216,49 @@ Associate.Game.prototype = {
 
         var i = x - 1;
         while (i >= 0) {
-            if (tiles.get(new Pair(i, y)).lock || (tiles.get(new Pair(i, y)).color == Color.NONE)) {
+            if ((tiles.get(new Pair(i, y)).color == Color.NONE)) {
                 break;
             }
             n.push([i, y]);
+            if (tiles.get(new Pair(i, y)).lock) {
+                break;
+            }
             i--;
         }
 
         i = x + 1;
         while (i < this.w) {
-            if (tiles.get(new Pair(i, y)).lock || (tiles.get(new Pair(i, y)).color == Color.NONE)) {
+            if ((tiles.get(new Pair(i, y)).color == Color.NONE)) {
                 break;
             }
             n.push([i, y]);
+            if (tiles.get(new Pair(i, y)).lock) {
+                break;
+            }
             i++;
         }
 
         i = y - 1;
         while (i >= 0) {
-            if (tiles.get(new Pair(x, i)).lock || (tiles.get(new Pair(x, i)).color == Color.NONE)) {
+            if ((tiles.get(new Pair(x, i)).color == Color.NONE)) {
                 break;
             }
             n.push([x, i]);
+            if (tiles.get(new Pair(x, i)).lock) {
+                break;
+            }
             i--;
         }
 
         i = y + 1;
         while (i < this.h) {
-            if (tiles.get(new Pair(x, i)).lock || (tiles.get(new Pair(x, i)).color == Color.NONE)) {
+            if ((tiles.get(new Pair(x, i)).color == Color.NONE)) {
                 break;
             }
             n.push([x, i]);
+            if (tiles.get(new Pair(x, i)).lock) {
+                break;
+            }
             i++;
         }
 
