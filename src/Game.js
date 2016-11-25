@@ -74,7 +74,7 @@ Associate.Game.prototype = {
         frameBottom.width = this.game.world.width;
         frameBottom.height = 100;
 
-        this.game.add.button(0, 0, 'pause', this.onPauseClick, this, 0, 0, 1, 0);
+        this.game.add.button(20, 20, 'pause', this.onPauseClick, this, 0, 0, 1, 0).scale.setTo(2, 2);
 
         var legendGroup = this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance, 'legend');
         legendGroup.alpha = 0.0;
@@ -117,7 +117,13 @@ Associate.Game.prototype = {
                     var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, tile.color);
                 } else {
                     var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'monster');
-                    sprite.frame = ColorToFrame[tile.color];
+
+                    var legend = this.legendTiles.get(new Pair(tile.x, tile.y));
+                    if (legend.color == tile.color) {
+                        sprite.frame = ColorToFrame[tile.color] + 1;
+                    } else {
+                        sprite.frame = ColorToFrame[tile.color];
+                    }
                 }
 
                 sprite.tileX = tile.x;
@@ -181,13 +187,20 @@ Associate.Game.prototype = {
             var baseTile = context.tiles.get(new Pair(x, y));
             nearTiles.forEach(function(a, i) {
                 var tile = context.tiles.get(new Pair(a[0], a[1]));
-                if (tile.color != baseTile.color) {
+                if (tile.lock) {
+                    var ice = context.noClickSprites.get(new Pair(a[0], a[1]));
+                    ice.loadTexture('explosionIce', 0);
+                    ice.height = item.height * .7;
+                    ice.width = item.width * .7;
+                    var anim = ice.animations.add('boom');
+                    anim.onComplete.add(function() {
+                        ice.destroy();
+                    }, this);
+                    ice.animations.play('boom', 20, false);
+                    tile.lock = false;
+                } else if (tile.color != baseTile.color) {
                     context.flip(context, baseTile.color, context.sprites.get(new Pair(a[0], a[1])), i * 50);
                     tile.color = baseTile.color;
-                    if (tile.lock) {
-                        context.noClickSprites.get(new Pair(a[0], a[1])).destroy();
-                        tile.lock = false;
-                    }
                 }
             }, context);
             var timer = context.game.time.create(false);
@@ -197,18 +210,28 @@ Associate.Game.prototype = {
     },
 
     flip: function(context, type, item, delay) {
-        var scale = item.scale.x;
-        var flip = context.game.add.tween(item.scale).to({
-            x: 0,
-            y: scale
-        }, 200, Phaser.Easing.None, true, delay);
-        flip.onComplete.add(function() {
-            item.frame = ColorToFrame[type];
-            context.game.add.tween(item.scale).to({
-                x: scale,
-                y: scale
-            }, 150, Phaser.Easing.None, true);
+        item.alpha = 0;
+        var tile = this.tiles.get(new Pair(item.tileX, item.tileY));
+        var boom = this.game.add.sprite(item.world.x, item.world.y, 'explosion' + tile.color, 0);
+        boom.anchor.x = .5;
+        boom.anchor.y = .5;
+        var anim = boom.animations.add('boom', [0, 1, 2, 3, 4, 5]);
+        anim.onComplete.add(function() {
+            boom.loadTexture('explosion' + type, 0);
+            var reverse = boom.animations.add('reverse', [0, 1, 2, 3, 4, 5]).reverse();
+            reverse.onComplete.add(function() {
+                boom.destroy();
+
+                var legend = this.legendTiles.get(new Pair(item.tileX, item.tileY));
+                item.frame = ColorToFrame[type];
+                if (legend.color == type) {
+                    item.frame = ColorToFrame[type] + 1;
+                }
+                item.alpha = 1;
+            }, this);
+            boom.animations.play('reverse', 20, false);
         }, this);
+        boom.animations.play('boom', 20, false);
     },
 
     getNeighbors: function(x, y, tiles) {
