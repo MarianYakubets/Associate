@@ -12,7 +12,7 @@ Associate.LevelMenu.prototype = {
 
     create: function() {
         this.drawLeavesBgr();
-        this.game.add.button(5, this.game.world.height - 80, 'home', this.onBackClick, this, 1, 0);
+        this.game.add.button(5, this.game.world.height - 100, 'homeBig', this.onBackClick, this, 1, 0);
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
         //	Naturally I expect you to do something significantly better :)

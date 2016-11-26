@@ -45,7 +45,6 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('save', 'images/btn/save.png', 173, 173);
         this.load.spritesheet('bottom', 'images/btn/bottom.png', 173, 173);
         this.load.spritesheet('top', 'images/btn/top.png', 173, 173);
-        this.load.spritesheet('close', 'images/btn/close.png', 173, 173);
 
 
         this.load.spritesheet('left', 'images/btn/left.png', 173, 173);
@@ -56,6 +55,7 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('retry', 'images/btn/retry.png', 101, 101);
         this.load.spritesheet('next', 'images/btn/next.png', 161, 101);
         this.load.spritesheet('playBig', 'images/btn/playBig.png', 157, 157);
+        this.load.spritesheet('playLong', 'images/btn/playLong.png', 667, 427);
         this.load.spritesheet('option', 'images/btn/option.png', 73, 73);
         this.load.spritesheet('homeBig', 'images/btn/homeBig.png', 101, 101);
         this.load.spritesheet('home', 'images/btn/home.png', 73, 73);
@@ -74,7 +74,6 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('explosionIce', 'images/explosion/explosionIce.png', 87, 87, 10)
 
 
-        this.load.image('BG', 'images/bgr/BG.png');
         this.load.image('menu', 'images/bgr/menu.png');
         this.load.image('tileLeave', 'images/bgr/tileLeave.png');
         this.load.image('backTile', 'images/bgr/backTile.png');
@@ -83,6 +82,7 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('level', 'images/btn/level.png', 208, 229);
 
         this.load.spritesheet('monster', 'images/tiles/monsters.png', 562, 562);
+        this.load.spritesheet('frame', 'images/tiles/frame.png', 522, 513);
 
 
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);

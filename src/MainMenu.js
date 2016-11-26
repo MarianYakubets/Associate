@@ -1,4 +1,4 @@
-Associate.MainMenu = function(game) {
+Associate.MainMenu = function (game) {
 
     this.music = null;
     this.playButton = null;
@@ -7,7 +7,7 @@ Associate.MainMenu = function(game) {
 
 Associate.MainMenu.prototype = {
 
-    create: function() {
+    create: function () {
         this.drawLeavesBgr();
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
@@ -16,11 +16,12 @@ Associate.MainMenu.prototype = {
          this.music.play();
          this.add.sprite(0, 0, 'titlepage');
          this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');*/
-        this.game.add.button(this.game.world.centerX - 75, this.game.world.centerY * 1.3, 'playBig', this.onBtnClick('Game'), this, 1, 0);
-        this.game.add.button(this.game.world.width - 80, this.game.world.height - 80, 'option', this.onBtnClick('Editor'), this, 1, 0);
+        this.game.add.button(this.game.world.centerX, this.game.world.centerY * 1.3, 'playLong', this.onBtnClick('Game'), this, 1, 0).anchor.set(.5, .5);
+
+        this.game.add.button(this.game.world.width - 80, this.game.world.height - 80, 'option', this.onBtnClick('Editor'), this, 1, 0).alpha = 0;
     },
 
-    drawLeavesBgr: function() {
+    drawLeavesBgr: function () {
         var back = this.game.add.group();
         var leaveSize = 415;
         var w = Math.ceil(this.game.world.width / leaveSize);
@@ -33,15 +34,14 @@ Associate.MainMenu.prototype = {
     },
 
 
-
-    update: function() {
+    update: function () {
 
         //	Do some nice funky main menu effect here
 
     },
 
-    onBtnClick: function(state) {
-        return function() {
+    onBtnClick: function (state) {
+        return function () {
             this.state.start('LevelMenu', true, false, state);
         }
     }
