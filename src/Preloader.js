@@ -64,14 +64,14 @@ Associate.Preloader.prototype = {
         this.load.image('frameTop', 'images/btn/frameTop.png');
         this.load.image('frameBottom', 'images/btn/frameBottom.png');
 
-        this.load.spritesheet('explosionred', 'images/explosion/explosionRed.png', 108, 112)
-        this.load.spritesheet('explosionblue', 'images/explosion/explosionBlue.png', 108, 112)
-        this.load.spritesheet('explosiongreen', 'images/explosion/explosionGreen.png', 108, 112)
-        this.load.spritesheet('explosiongrey', 'images/explosion/explosionGrey.png', 108, 112)
-        this.load.spritesheet('explosionorange', 'images/explosion/explosionOrange.png', 108, 112)
-        this.load.spritesheet('explosionpurple', 'images/explosion/explosionPurple.png', 108, 112)
-        this.load.spritesheet('explosionyellow', 'images/explosion/explosionYellow.png', 108, 112)
-        this.load.spritesheet('explosionIce', 'images/explosion/explosionIce.png', 87, 87, 10)
+        this.load.spritesheet('explosionred', 'images/explosion/explosionRed.png', 108, 112);
+        this.load.spritesheet('explosionblue', 'images/explosion/explosionBlue.png', 108, 112);
+        this.load.spritesheet('explosiongreen', 'images/explosion/explosionGreen.png', 108, 112);
+        this.load.spritesheet('explosiongrey', 'images/explosion/explosionGrey.png', 108, 112);
+        this.load.spritesheet('explosionorange', 'images/explosion/explosionOrange.png', 108, 112);
+        this.load.spritesheet('explosionpurple', 'images/explosion/explosionPurple.png', 108, 112);
+        this.load.spritesheet('explosionyellow', 'images/explosion/explosionYellow.png', 108, 112);
+        this.load.spritesheet('explosionIce', 'images/explosion/explosionIce.png', 87, 87, 10);
 
 
         this.load.image('menu', 'images/bgr/menu.png');
@@ -81,7 +81,7 @@ Associate.Preloader.prototype = {
 
         this.load.spritesheet('level', 'images/btn/level.png', 208, 229);
 
-        this.load.spritesheet('monster', 'images/tiles/monsters.png', 562, 562);
+        this.load.spritesheet('monster', 'images/tiles/monsters.png', 562, 560);
         this.load.spritesheet('frame', 'images/tiles/frame.png', 522, 513);
 
 

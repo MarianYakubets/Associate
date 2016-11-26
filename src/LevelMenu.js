@@ -1,4 +1,4 @@
-Associate.LevelMenu = function(game) {
+Associate.LevelMenu = function (game) {
     this.music = null;
     this.playButton = null;
     this.stateName;
@@ -6,13 +6,24 @@ Associate.LevelMenu = function(game) {
 
 Associate.LevelMenu.prototype = {
 
-    init: function(state) {
+    init: function (state) {
         this.stateName = state;
     },
 
-    create: function() {
+    create: function () {
         this.drawLeavesBgr();
         this.game.add.button(5, this.game.world.height - 100, 'homeBig', this.onBackClick, this, 1, 0);
+        var style = {
+            'font': '120px Dosis',
+            'fill': 'white',
+            'fontWeight': 'bold'
+        };
+        var label = this.game.add.text(0, 100, 'Level Menu', style);
+        //puts the label in the center of the button
+        label.anchor.setTo(0.5, 0.5);
+        label.x = this.game.world.centerX;
+
+
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button
         //	Naturally I expect you to do something significantly better :)
@@ -23,10 +34,10 @@ Associate.LevelMenu.prototype = {
          this.add.sprite(0, 0, 'titlepage');
 
          this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');*/
-        var distX = 70;
-        var distY = 70;
-        var border = 150;
-        var size = 50;
+        var distX = 150;
+        var distY = 150;
+        var border = 180;
+        var size = 110;
         var rowSize = Math.floor((this.game.world.width - border) / (size + distX));
 
         var highestLevel = localStorage.getItem("reached-level");
@@ -41,7 +52,7 @@ Associate.LevelMenu.prototype = {
             var num = i + 1 + "";
 
             x = border + x * (distX + size);
-            y = border + y * (distY + size);
+            y = border + y * (distY + size) + 200;
 
             var btn = new LabelButton(this.game, x, y, "level", num, null, this.onLevelClick(num), this, 0);
             btn.width = size * 2;
@@ -59,7 +70,7 @@ Associate.LevelMenu.prototype = {
         }
     },
 
-    drawLeavesBgr: function() {
+    drawLeavesBgr: function () {
         var back = this.game.add.group();
         var leaveSize = 415;
         var w = Math.ceil(this.game.world.width / leaveSize);
@@ -71,18 +82,18 @@ Associate.LevelMenu.prototype = {
         }
     },
 
-    update: function() {
+    update: function () {
         //	Do some nice funky main menu effect here
 
     },
 
-    onLevelClick: function(levelNumber) {
-        return function() {
+    onLevelClick: function (levelNumber) {
+        return function () {
             this.state.start(this.stateName, true, false, LevelManager.getLevel(levelNumber));
         }
     },
 
-    onBackClick: function() {
+    onBackClick: function () {
         this.state.start('MainMenu', true, false);
     }
 };
