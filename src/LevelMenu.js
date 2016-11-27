@@ -12,14 +12,15 @@ Associate.LevelMenu.prototype = {
 
     create: function () {
         this.drawLeavesBgr();
-        this.game.add.button(5, this.game.world.height - 100, 'homeBig', this.onBackClick, this, 1, 0);
+        var home = this.game.add.button(30, this.game.world.height - 230, 'homeBig', this.onBackClick, this, 1, 0);
+        home.scale.setTo(2, 2);
+
         var style = {
             'font': '120px Dosis',
             'fill': 'white',
             'fontWeight': 'bold'
         };
-        var label = this.game.add.text(0, 100, 'Level Menu', style);
-        //puts the label in the center of the button
+        var label = this.game.add.text(0, 100, 'Select Level', style);
         label.anchor.setTo(0.5, 0.5);
         label.x = this.game.world.centerX;
 
@@ -46,7 +47,7 @@ Associate.LevelMenu.prototype = {
             localStorage.setItem("reached-level", highestLevel);
         }
 
-        for (var i = 0; i <= 16; i++) {
+        for (var i = 0; i <= 19; i++) {
             var y = Math.floor(i / rowSize);
             var x = i - y * rowSize;
             var num = i + 1 + "";
@@ -57,6 +58,7 @@ Associate.LevelMenu.prototype = {
             var btn = new LabelButton(this.game, x, y, "level", num, null, this.onLevelClick(num), this, 0);
             btn.width = size * 2;
             btn.height = size * 2;
+            btn.frame = this.game.rnd.integerInRange(0, 3);
 
 
             if (this.stateName != 'Editor' && i + 1 > highestLevel) {
