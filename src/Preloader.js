@@ -84,6 +84,7 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('monster', 'images/tiles/monsters.png', 562, 560);
         this.load.spritesheet('frame', 'images/tiles/frame.png', 522, 513);
         this.load.image('shadow', 'images/tiles/shadow.png');
+        this.load.image('hiliteCircle', 'images/tiles/hiliteCircle.png');
 
 
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);

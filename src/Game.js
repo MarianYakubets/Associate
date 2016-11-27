@@ -28,6 +28,7 @@ Associate.Game = function (game) {
     this.legendTiles;
     this.sprites;
     this.tilesGroup;
+    this.selectedGroup;
     this.noClickSprites;
 
 
@@ -68,6 +69,7 @@ Associate.Game.prototype = {
                 context.selectedTile.width = context.selectedTile.width / 1.1;
                 context.selectedTile.height = context.selectedTile.height / 1.1;
                 context.selectedTile = null;
+                context.selectedGroup.removeAll();
             }
         }
     },
@@ -86,6 +88,10 @@ Associate.Game.prototype = {
         frameBottom.height = 100;
 
         this.game.add.button(1020, 20, 'pause', this.onPauseClick, this, 0, 0, 1, 0).scale.setTo(2, 2);
+
+        this.selectedGroup = this.game.add.group();
+        this.selectedGroup.x = this.tileDistance / 2;
+        this.selectedGroup.y = 200 + this.tileDistance / 2;
 
         var legendGroup = this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance, 'legend');
 
@@ -136,8 +142,8 @@ Associate.Game.prototype = {
                     var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'frame');
                     sprite.frame = ColorToFrame[tile.color] / 2;
 
-                    sprite.width = size * .8;
-                    sprite.height = size * .8;
+                    sprite.width = size * .85;
+                    sprite.height = size * .85;
 
                     sprite.alpha = .6;
                 } else {
@@ -210,16 +216,17 @@ Associate.Game.prototype = {
             this.saveHighestLevel();
         }
         this.clicked = false;
+        this.selectedGroup.removeAll();
         return victory;
     },
 
     onTileClick: function (context) {
         return function (item) {
-
             if (context.selectedTile == null) {
                 context.selectedTile = item;
                 context.selectedTile.width = context.selectedTile.width * 1.1;
                 context.selectedTile.height = context.selectedTile.height * 1.1;
+                context.selectNeighbors();
                 return;
             }
 
@@ -287,6 +294,24 @@ Associate.Game.prototype = {
             boom.animations.play('reverse', 20, false);
         }, this);
         boom.animations.play('boom', 20, false);
+    },
+
+    selectNeighbors: function () {
+        var tile = this.selectedTile;
+
+        var circle = this.selectedGroup.create(tile.x, tile.y, 'hiliteCircle');
+        circle.anchor.set(.5, .5);
+        circle.width = tile.width;
+        circle.height = tile.height;
+
+        var nearTiles = this.getNeighbors(tile.tileX, tile.tileY, this.tiles);
+        nearTiles.forEach(function (tile) {
+            var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
+            var circle = this.selectedGroup.create(sprite.x, sprite.y, 'hiliteCircle');
+            circle.anchor.set(.5, .5);
+            circle.width = sprite.width;
+            circle.height = sprite.height;
+        }, this);
     },
 
     getNeighbors: function (x, y, tiles) {
