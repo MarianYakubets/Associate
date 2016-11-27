@@ -68,10 +68,42 @@ Associate.Game.prototype = {
             if (context.selectedTile != null) {
                 context.selectedTile.width = context.selectedTile.width / 1.1;
                 context.selectedTile.height = context.selectedTile.height / 1.1;
+                context.deselectNeighbors();
                 context.selectedTile = null;
-                context.selectedGroup.removeAll();
             }
         }
+    },
+
+    addQuake: function (sprite) {
+
+        // define the camera offset for the quake
+        var rumbleOffset = 5;
+
+        // we need to move according to the camera's current position
+        var properties = {
+            x: sprite.x - rumbleOffset
+        };
+
+        // we make it a relly fast movement
+        var duration = 30;
+        // because it will repeat
+        var repeat = 2;
+        // we use bounce in-out to soften it a little bit
+        var ease = Phaser.Easing.Bounce.InOut;
+        var autoStart = false;
+        // a little delay because we will run it indefinitely
+        var delay = 10;
+        // we want to go back to the original position
+        var yoyo = true;
+
+        var quake = this.game.add.tween(sprite)
+            .to(properties, duration, ease, autoStart, delay, 4, yoyo);
+
+        // we're using this line for the example to run indefinitely
+        //quake.onComplete.addOnce(this.addQuake);
+
+        // let the earthquake begins
+        quake.start();
     },
 
     create: function () {
@@ -93,7 +125,7 @@ Associate.Game.prototype = {
         this.selectedGroup.x = this.tileDistance / 2;
         this.selectedGroup.y = 200 + this.tileDistance / 2;
 
-        var legendGroup = this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance, 'legend');
+        this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance, 'legend');
 
 
         this.tilesGroup = this.game.add.group();
@@ -103,6 +135,15 @@ Associate.Game.prototype = {
             sprite.inputEnabled = true;
             sprite.events.onInputDown.add(this.onTileClick(this), this);
         }, this);
+
+
+        this.game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
+    },
+
+    updateCounter: function () {
+        var x = this.game.rnd.integerInRange(0, this.sprites.entities.length - 1);
+        var tile = this.sprites.entities[x];
+        this.addQuake(tile);
     },
 
     drawTilesBcgr: function () {
@@ -117,10 +158,18 @@ Associate.Game.prototype = {
                 tile.width = leaveSize + 10;
                 tile.height = leaveSize + 10;
                 if ((i % 2 == 1 && j % 2 == 0) || (i % 2 == 0 && j % 2 == 1)) {
-                    if ((w == 4) && ( j < 5)) {
-                        var tile = back.create(i * leaveSize, j * leaveSize, 'backTileRound');
-                        tile.width = leaveSize;
-                        tile.height = leaveSize;
+                    if ((w == 4)) {
+                        if (j < 5) {
+                            tile = back.create(i * leaveSize, j * leaveSize, 'backTileRound');
+                            tile.width = leaveSize;
+                            tile.height = leaveSize;
+                        }
+                    } else {
+                        if (j < 10) {
+                            tile = back.create(i * leaveSize, j * leaveSize, 'backTileRound');
+                            tile.width = leaveSize;
+                            tile.height = leaveSize;
+                        }
                     }
                 }
             }
@@ -157,11 +206,11 @@ Associate.Game.prototype = {
                     shadow.anchor.y = 0.5;
                     shadow.y = shadow.y + size * .3;
 
-                    var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'monster');
+                    sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'monster');
 
                     var legend = this.legendTiles.get(new Pair(tile.x, tile.y));
                     if (legend.color == tile.color) {
-                        sprite.frame = ColorToFrame[tile.color] + 1;
+                        sprite.frame = ColorToFrame[tile.color] /*+ 1*/;
                     } else {
                         sprite.frame = ColorToFrame[tile.color];
                     }
@@ -207,21 +256,25 @@ Associate.Game.prototype = {
         this.legendTiles.entities.forEach(function (tile) {
             if (this.tiles.get(new Pair(tile.x, tile.y)).color != tile.color) {
                 victory = false;
-                return;
             }
         }, this);
 
         if (victory) {
-            this.setOnVictory();
+            var timer = this.game.time.create(false);
+            timer.add(750, this.setOnVictory, this);
+            timer.start();
             this.saveHighestLevel();
         }
         this.clicked = false;
-        this.selectedGroup.removeAll();
         return victory;
     },
 
     onTileClick: function (context) {
         return function (item) {
+            if (context.clicked || context.tiles.get(new Pair(item.tileX, item.tileY)).lock) {
+                return;
+            }
+
             if (context.selectedTile == null) {
                 context.selectedTile = item;
                 context.selectedTile.width = context.selectedTile.width * 1.1;
@@ -234,14 +287,13 @@ Associate.Game.prototype = {
             context.selectedTile.height = context.selectedTile.height / 1.1;
 
             if (context.selectedTile != item) {
+                this.deselectNeighbors();
                 context.selectedTile = null;
                 return;
             }
+            this.deselectNeighbors();
             context.selectedTile = null;
 
-            if (context.clicked || context.tiles.get(new Pair(item.tileX, item.tileY)).lock) {
-                return;
-            }
             context.clicked = true;
             var x = item.tileX;
             var y = item.tileY;
@@ -266,12 +318,12 @@ Associate.Game.prototype = {
                 }
             }, context);
             var timer = context.game.time.create(false);
-            timer.add(nearTiles.length * 50 + 750, context.checkWin, this);
+            timer.add(nearTiles.length * 50 + 550, context.checkWin, this);
             timer.start();
         }
     },
 
-    flip: function (context, type, item, delay) {
+    flip: function (context, type, item) {
         item.alpha = 0;
         var tile = this.tiles.get(new Pair(item.tileX, item.tileY));
         var boom = this.game.add.sprite(item.world.x, item.world.y, 'explosion' + tile.color, 0);
@@ -284,11 +336,11 @@ Associate.Game.prototype = {
             reverse.onComplete.add(function () {
                 boom.destroy();
 
-                var legend = this.legendTiles.get(new Pair(item.tileX, item.tileY));
+                this.legendTiles.get(new Pair(item.tileX, item.tileY));
                 item.frame = ColorToFrame[type];
-                if (legend.color == type) {
-                    item.frame = ColorToFrame[type] + 1;
-                }
+                /*if (legend.color == type) {
+                 item.frame = ColorToFrame[type] + 1;
+                 }*/
                 item.alpha = 1;
             }, this);
             boom.animations.play('reverse', 20, false);
@@ -296,21 +348,43 @@ Associate.Game.prototype = {
         boom.animations.play('boom', 20, false);
     },
 
-    selectNeighbors: function () {
+    deselectNeighbors: function () {
+        this.selectedGroup.removeAll();
+        if (this.selectedTile == null) {
+            return;
+        }
         var tile = this.selectedTile;
-
-        var circle = this.selectedGroup.create(tile.x, tile.y, 'hiliteCircle');
-        circle.anchor.set(.5, .5);
-        circle.width = tile.width;
-        circle.height = tile.height;
+        tile.frame = tile.frame - 1;
 
         var nearTiles = this.getNeighbors(tile.tileX, tile.tileY, this.tiles);
         nearTiles.forEach(function (tile) {
             var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
-            var circle = this.selectedGroup.create(sprite.x, sprite.y, 'hiliteCircle');
-            circle.anchor.set(.5, .5);
-            circle.width = sprite.width;
-            circle.height = sprite.height;
+            sprite.frame = sprite.frame - 1;
+        }, this);
+    },
+
+    selectNeighbors: function () {
+        var tile = this.selectedTile;
+
+        /* var circle = this.selectedGroup.create(tile.x, tile.y, 'hiliteCircle');
+         circle.anchor.set(.5, .5);
+         circle.width = tile.width * .8;
+         circle.height = tile.height * .8;*/
+
+        tile.frame = tile.frame + 1;
+
+        /* var h = this.selectedGroup.create(tile.x, tile.y, 'hiliteH');
+         h.anchor.set(0, .5);
+         h.scale.setTo(tile.width * .8 / 75, tile.height * .8 / 75);*/
+
+        var nearTiles = this.getNeighbors(tile.tileX, tile.tileY, this.tiles);
+        nearTiles.forEach(function (tile) {
+            var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
+            sprite.frame = sprite.frame + 1;
+            /*    var circle = this.selectedGroup.create(sprite.x, sprite.y, 'hiliteCircle');
+             circle.anchor.set(.5, .5);
+             circle.width = sprite.width;
+             circle.height = sprite.height;*/
         }, this);
     },
 
@@ -414,6 +488,18 @@ Associate.Game.prototype = {
         label.anchor.setTo(0.5, 0.5);
         this.menu.add(label);
 
+
+        var star1 = this.menu.create(back.centerX - 100, 300, 'starOn');
+        star1.anchor.setTo(0.5, 0.5);
+        star1.scale.setTo(2, 2);
+
+        var star2 = this.menu.create(back.centerX, 300, 'starOn');
+        star2.anchor.setTo(0.5, 0.5);
+        star2.scale.setTo(2, 2);
+
+        var star3 = this.menu.create(back.centerX + 100, 300, 'starOff');
+        star3.anchor.setTo(0.5, 0.5);
+        star3.scale.setTo(2, 2);
 
         var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function () {
             this.game.state.restart(true, false, this.level);

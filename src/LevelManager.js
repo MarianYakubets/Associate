@@ -13,7 +13,6 @@ var LevelManager = {
     },
 
     getLevel: function (number) {
-        console.log("level number " + number);
         var level;
         if (this.levels[number] == null) {
             level = this.levels[0];
