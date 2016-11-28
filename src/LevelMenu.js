@@ -1,4 +1,4 @@
-Associate.LevelMenu = function (game) {
+Associate.LevelMenu = function(game) {
     this.music = null;
     this.playButton = null;
     this.stateName;
@@ -6,97 +6,120 @@ Associate.LevelMenu = function (game) {
 
 Associate.LevelMenu.prototype = {
 
-    init: function (state) {
+    init: function(state) {
         this.stateName = state;
     },
 
-    create: function () {
-        this.drawLeavesBgr();
-        var home = this.game.add.button(30, this.game.world.height - 230, 'homeBig', this.onBackClick, this, 1, 0);
-        home.scale.setTo(2, 2);
-
-        var style = {
-            'font': '120px Dosis',
-            'fill': 'white',
-            'fontWeight': 'bold'
-        };
-        var label = this.game.add.text(0, 100, 'Select Level', style);
-        label.anchor.setTo(0.5, 0.5);
-        label.x = this.game.world.centerX;
-
-
-        //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
-        //	Here all we're doing is playing some music and adding a picture and button
-        //	Naturally I expect you to do something significantly better :)
-
-        /*this.music = this.add.audio('titleMusic');
-         this.music.play();
-
-         this.add.sprite(0, 0, 'titlepage');
-
-         this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');*/
-        var distX = 150;
-        var distY = 150;
-        var border = 180;
-        var size = 110;
-        var rowSize = Math.floor((this.game.world.width - border) / (size + distX));
-
+    create: function() {
+        var game = this.game;
         var highestLevel = localStorage.getItem("reached-level");
         if (highestLevel == null) {
             highestLevel = 1;
             localStorage.setItem("reached-level", highestLevel);
         }
 
-        for (var i = 0; i <= 19; i++) {
-            var y = Math.floor(i / rowSize);
-            var x = i - y * rowSize;
-            var num = i + 1 + "";
+        var colors = ["0xffffff", "0xff0000", "0x00ff00", "0x660066"];
+        var columns = 4;
+        var rows = 5;
+        var thumbWidth = 208;
+        var thumbHeight = 228;
+        var spacing = 40;
+        this.currentPage = 0;
+        this.pageSelectors = [];
+        var rowLength = thumbWidth * columns + spacing * (columns - 1);
+        var leftMargin = (game.width - rowLength) / 2;
+        var colHeight = thumbHeight * rows + spacing * (rows - 1);
+        var topMargin = (game.height - colHeight) / 3;
 
-            x = border + x * (distX + size);
-            y = border + y * (distY + size) + 200;
+        this.scrollingMap = game.add.tileSprite(0, 0, colors.length * game.width, game.height, "tileLeave");
+        this.scrollingMap.inputEnabled = true;
+        this.scrollingMap.input.enableDrag(false);
+        this.scrollingMap.input.allowVerticalDrag = false;
+        this.scrollingMap.input.boundsRect = new Phaser.Rectangle(game.width - this.scrollingMap.width, game.height - this.scrollingMap.height, this.scrollingMap.width * 2 - game.width, this.scrollingMap.height * 2 - game.height);
 
-            var frame = this.game.rnd.integerInRange(0, 3);
+        var home = this.game.add.button(30, this.game.world.height - 230, 'homeBig', this.onBackClick, this, 1, 0);
+        home.scale.setTo(2, 2);
 
-            var btn = new LabelButton(this.game, x, y, "level", num, null, this.onLevelClick(num), this, frame, frame, frame, frame);
-            btn.width = size * 2;
-            btn.height = size * 2;
-
-
-            if (this.stateName != 'Editor' && i + 1 > highestLevel) {
-                btn.destroy();
-                btn = this.game.add.sprite(btn.x, btn.y, 'level');
-                btn.anchor.set(.5, .5);
-                btn.width = size * 2;
-                btn.height = size * 2;
-                btn.frame = 4;
+        for (var k = 0; k < colors.length; k++) {
+            for (var i = 0; i < columns; i++) {
+                for (var j = 0; j < rows; j++) {
+                    var num = k * (rows * columns) + j * columns + i + 1;
+                    var frame = this.game.rnd.integerInRange(0, 3);
+                    var btn = new LabelButton(this.game, k * game.width + leftMargin + i * (thumbWidth + spacing) + thumbWidth / 2, topMargin + j * (thumbHeight + spacing) + thumbHeight / 2, "level", num, null, this.onLevelClick(num), this, frame, frame, frame, frame);
+                    if (this.stateName != 'Editor' && num > highestLevel) {
+                        btn.destroy();
+                        btn = this.game.add.sprite(btn.x - btn.width / 2, btn.y - btn.height / 2, 'level');
+                        btn.frame = 4;
+                    }
+                    this.scrollingMap.addChild(btn);
+                }
+            }
+            this.pageSelectors[k] = game.add.button(game.width / 3 * 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 100, game.height - 250, "sliderHandle", function(e) {
+                var difference = e.pageIndex - this.currentPage;
+                this.changePage(difference);
+            }, this);
+            this.pageSelectors[k].anchor.set(0.5);
+            this.pageSelectors[k].pageIndex = k;
+            this.pageSelectors[k].tint = colors[k];
+            if (k == this.currentPage) {
+                this.pageSelectors[k].height = 70;
+            } else {
+                this.pageSelectors[k].height = 50;
             }
         }
+        this.scrollingMap.events.onDragStart.add(function(sprite, pointer) {
+            this.scrollingMap.startPosition = this.scrollingMap.x;
+        }, this);
+        this.scrollingMap.events.onDragStop.add(function(sprite, pointer) {
+            if (this.scrollingMap.startPosition == this.scrollingMap.x) {
+                for (i = 0; i < this.scrollingMap.children.length; i++) {
+                    var bounds = this.scrollingMap.children[i].getBounds();
+                    if (bounds.contains(pointer.x, pointer.y)) {
+                        alert("Play level " + this.scrollingMap.children[i].levelNumber);
+                        break;
+                    }
+                }
+            } else {
+                if (this.scrollingMap.startPosition - this.scrollingMap.x > game.width / 8) {
+                    this.changePage(1);
+                } else {
+                    if (this.scrollingMap.startPosition - this.scrollingMap.x < -game.width / 8) {
+                        this.changePage(-1);
+                    } else {
+                        this.changePage(0);
+                    }
+                }
+            }
+        }, this);
+
+        this.colors = colors;
     },
 
-    drawLeavesBgr: function () {
-        var back = this.game.add.group();
-        var leaveSize = 415;
-        var w = Math.ceil(this.game.world.width / leaveSize);
-        var h = Math.ceil(this.game.world.height / leaveSize);
-        for (var i = 0; i < w; i++) {
-            for (var j = 0; j < h; j++) {
-                back.create(i * leaveSize, j * leaveSize, 'tileLeave');
+    changePage: function(page) {
+        this.currentPage += page;
+        for (var k = 0; k < this.colors.length; k++) {
+            if (k == this.currentPage) {
+                this.pageSelectors[k].height = 70;
+            } else {
+                this.pageSelectors[k].height = 50;
             }
         }
+        var tween = this.game.add.tween(this.scrollingMap).to({
+            x: this.currentPage * (-this.game.width)
+        }, 300, Phaser.Easing.Cubic.Out, true);
     },
 
-    update: function () {
-        //	Do some nice funky main menu effect here
+    update: function() {
 
     },
 
-    onLevelClick: function (levelNumber) {
-        return function () {
+    onLevelClick: function(levelNumber) {
+        return function() {
             this.state.start(this.stateName, true, false, LevelManager.getLevel(levelNumber));
         }
     },
 
-    onBackClick: function () {
+    onBackClick: function() {
         this.state.start('MainMenu', true, false);
     }
 };

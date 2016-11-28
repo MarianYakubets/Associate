@@ -119,7 +119,7 @@ Associate.Game.prototype = {
         frameBottom.width = this.game.world.width;
         frameBottom.height = 100;
 
-        this.game.add.button(1020, 20, 'pause', this.onPauseClick, this, 0, 0, 1, 0).scale.setTo(2, 2);
+        this.game.add.button(this.game.width - 160, 20, 'pause', this.onPauseClick, this, 0, 0, 1, 0).scale.setTo(2, 2);
 
         this.selectedGroup = this.game.add.group();
         this.selectedGroup.x = this.tileDistance / 2;

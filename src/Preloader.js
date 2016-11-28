@@ -60,6 +60,8 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('homeBig', 'images/btn/homeBig.png', 101, 101);
         this.load.spritesheet('home', 'images/btn/home.png', 73, 73);
         this.load.spritesheet('pause', 'images/btn/pause.png', 69, 69);
+        this.load.image('sliderHandle', 'images/btn/sliderHandle.png');
+
 
         this.load.image('frameTop', 'images/btn/frameTop.png');
         this.load.image('frameBottom', 'images/btn/frameBottom.png');
