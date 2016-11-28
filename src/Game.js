@@ -147,6 +147,8 @@ Associate.Game.prototype = {
     },
 
     drawTilesBcgr: function () {
+        this.game.add.tileSprite(0, 0, this.game.width, this.game.height, "backTile");
+
         var back = this.game.add.group();
         var leaveSize = this.tileDistance;
         var w = Math.ceil(this.game.world.width / leaveSize);
@@ -154,19 +156,16 @@ Associate.Game.prototype = {
 
         for (var i = 0; i < w; i++) {
             for (var j = 0; j < h; j++) {
-                var tile = back.create(i * leaveSize, j * leaveSize, 'backTile');
-                tile.width = leaveSize + 10;
-                tile.height = leaveSize + 10;
                 if ((i % 2 == 1 && j % 2 == 0) || (i % 2 == 0 && j % 2 == 1)) {
                     if ((w == 4)) {
                         if (j < 5) {
-                            tile = back.create(i * leaveSize, j * leaveSize, 'backTileRound');
+                            var tile = back.create(i * leaveSize, j * leaveSize, 'backTileRound');
                             tile.width = leaveSize;
                             tile.height = leaveSize;
                         }
                     } else {
                         if (j < 10) {
-                            tile = back.create(i * leaveSize, j * leaveSize, 'backTileRound');
+                            var tile = back.create(i * leaveSize, j * leaveSize, 'backTileRound');
                             tile.width = leaveSize;
                             tile.height = leaveSize;
                         }

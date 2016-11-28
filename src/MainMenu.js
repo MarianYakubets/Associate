@@ -24,15 +24,7 @@ Associate.MainMenu.prototype = {
     },
 
     drawLeavesBgr: function () {
-        var back = this.game.add.group();
-        var leaveSize = 415;
-        var w = Math.ceil(this.game.world.width / leaveSize);
-        var h = Math.ceil(this.game.world.height / leaveSize);
-        for (var i = 0; i < w; i++) {
-            for (var j = 0; j < h; j++) {
-                back.create(i * leaveSize, j * leaveSize, 'tileLeave');
-            }
-        }
+        this.game.add.tileSprite(0, 0, this.game.width, this.game.height, "tileLeave");
     },
 
 
