@@ -1,4 +1,4 @@
-Associate.Preloader = function(game) {
+Associate.Preloader = function (game) {
 
     this.background = null;
     this.preloadBar = null;
@@ -9,10 +9,24 @@ Associate.Preloader = function(game) {
 
 Associate.Preloader.prototype = {
 
-    preload: function() {
+    preload: function () {
         google: {
             families: ['Dosis']
         }
+        this.game.add.tileSprite(0, 0, this.game.width, this.game.height, "backTile");
+
+        var track = this.game.add.image(this.game.world.centerX, this.game.height * .8, 'preloaderTrack');
+        track.anchor.setTo(0.5, 0.5);
+        track.width = this.game.width * .7;
+        track.height = 30;
+
+        var bar = this.game.add.image(this.game.world.centerX - this.game.width * .35, this.game.height * .8, 'preloaderBar');
+        bar.anchor.setTo(0, 0.5);
+        bar.width = this.game.width * .7;
+        bar.height = 30;
+
+        this.load.setPreloadSprite(bar);
+
 
         //	These are the assets we loaded in Boot.js
         //	A nice sparkly background and a loading progress bar
@@ -31,6 +45,11 @@ Associate.Preloader.prototype = {
          this.load.audio('titleMusic', ['audio/main_menu.mp3']);
          this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');*/
         //	+ lots of other required assets here
+
+        /*this.load.binary('1', 'images/1.flac');*/
+        /*this.load.binary('2', 'images/2.flac');*/
+        /*this.load.binary('3', 'images/3.flac');*/
+
         this.load.image('squareBlack', 'images/tiles/squareBlack.png');
         this.load.image('squareWhite', 'images/tiles/squareWhite.png');
         this.load.image('blue', 'images/tiles/blue.png');
@@ -101,7 +120,7 @@ Associate.Preloader.prototype = {
         this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     },
 
-    create: function() {
+    create: function () {
 
         //	Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes
         //this.preloadBar.cropEnabled = false;
@@ -110,7 +129,7 @@ Associate.Preloader.prototype = {
 
     },
 
-    update: function() {
+    update: function () {
 
         //	You don't actually need to do this, but I find it gives a much smoother game experience.
         //	Basically it will wait for our audio file to be decoded before proceeding to the MainMenu.
