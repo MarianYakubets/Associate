@@ -8,6 +8,7 @@ Associate.MainMenu = function (game) {
 Associate.MainMenu.prototype = {
 
     create: function () {
+        LevelManager.syncLevels();
         this.drawLeavesBgr();
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
         //	Here all we're doing is playing some music and adding a picture and button

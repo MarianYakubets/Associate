@@ -10,6 +10,7 @@ var Color = {
     BLUE: "blue",
     GREEN: "green",
     GREY: "grey",
+    ORANGE: "orange",
     NONE: "none"
 };
 
@@ -17,6 +18,7 @@ var ColorToFrame = {
     "red": 0,
     "yellow": 4,
     "blue": 2,
+    "orange": 8,
     "green": 6,
     "grey": 10
 };

@@ -103,7 +103,9 @@ Associate.Editor.prototype = {
         palette.create(3 * this.palleteSize, palleteY, 'grey').scale.setTo(scaleBtn, scaleBtn);
         palette.create(4 * this.palleteSize, palleteY, 'red').scale.setTo(scaleBtn, scaleBtn);
         palette.create(5 * this.palleteSize, palleteY, 'yellow').scale.setTo(scaleBtn, scaleBtn);
-        var lock = palette.create(6 * this.palleteSize, palleteY, 'lock');
+        palette.create(6 * this.palleteSize, palleteY, 'orange').scale.setTo(scaleBtn, scaleBtn);
+
+        var lock = palette.create(7 * this.palleteSize, palleteY, 'lock');
         lock.width = this.palleteSize;
         lock.height = this.palleteSize;
         this.squareMask = palette.create(0, (-2) * this.palleteSize, 'squareBlack');
@@ -240,6 +242,7 @@ Associate.Editor.prototype = {
     onSaveClick: function () {
         var json = JSON.stringify(new Level(this.number, this.w, this.h, this.tiles.entities, this.legendTiles.entities));
         firebase.database().ref('levels/' + this.number).set(json);
+        alert('Level saved');
     },
 
     onLeftBtnClick: function () {

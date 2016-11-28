@@ -54,7 +54,7 @@ Associate.LevelMenu.prototype = {
                     this.scrollingMap.addChild(btn);
                 }
             }
-            this.pageSelectors[k] = game.add.button(game.width / 3 * 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 100, game.height - 250, "sliderHandle", function(e) {
+            /*this.pageSelectors[k] = game.add.button(game.width / 3 * 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 100, game.height - 250, "sliderHandle", function(e) {
                 var difference = e.pageIndex - this.currentPage;
                 this.changePage(difference);
             }, this);
@@ -65,7 +65,7 @@ Associate.LevelMenu.prototype = {
                 this.pageSelectors[k].height = 70;
             } else {
                 this.pageSelectors[k].height = 50;
-            }
+            }*/
         }
         this.scrollingMap.events.onDragStart.add(function(sprite, pointer) {
             this.scrollingMap.startPosition = this.scrollingMap.x;
@@ -75,7 +75,6 @@ Associate.LevelMenu.prototype = {
                 for (i = 0; i < this.scrollingMap.children.length; i++) {
                     var bounds = this.scrollingMap.children[i].getBounds();
                     if (bounds.contains(pointer.x, pointer.y)) {
-                        alert("Play level " + this.scrollingMap.children[i].levelNumber);
                         break;
                     }
                 }
@@ -99,9 +98,9 @@ Associate.LevelMenu.prototype = {
         this.currentPage += page;
         for (var k = 0; k < this.colors.length; k++) {
             if (k == this.currentPage) {
-                this.pageSelectors[k].height = 70;
+               // this.pageSelectors[k].height = 70;
             } else {
-                this.pageSelectors[k].height = 50;
+              //  this.pageSelectors[k].height = 50;
             }
         }
         var tween = this.game.add.tween(this.scrollingMap).to({
