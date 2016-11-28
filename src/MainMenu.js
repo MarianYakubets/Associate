@@ -17,9 +17,9 @@ Associate.MainMenu.prototype = {
          this.music.play();
          this.add.sprite(0, 0, 'titlepage');
          this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');*/
-        var play = this.game.add.button(this.game.world.centerX, this.game.world.centerY * 1.3, 'playLong', this.onBtnClick('Game'), this, 0, 0);
+        var play = this.game.add.button(this.game.world.centerX, this.game.world.centerY * 1.3, 'playBig', this.onBtnClick('Game'), this, 0, 0);
         play.anchor.set(.5, .5);
-        play.scale.setTo(.8, .8);
+        play.scale.setTo(1.8, 1.8);
 
         this.game.add.button(this.game.world.width - 80, this.game.world.height - 80, 'option', this.onBtnClick('Editor'), this, 1, 0).alpha = 0;
     },
