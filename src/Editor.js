@@ -42,6 +42,11 @@ Associate.Editor = function (game) {
     this.l1Btn;
     this.l2Btn;
 
+    this.menu = null;
+    this.threeStar = 4;
+    this.twoStar = 6;
+    this.oneStar = 8;
+
     //  You can use any of these from any function within this State.
     //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
@@ -67,6 +72,7 @@ Associate.Editor.prototype = {
     },
 
     create: function () {
+        this.menu = null;
         this.tileSize = this.calculateTileSize();
         this.spacing = this.tileSize / 5;
         this.tileDistance = this.tileSize + this.spacing;
@@ -114,10 +120,12 @@ Associate.Editor.prototype = {
         palette.setAll('inputEnabled', true);
         palette.callAll('events.onInputDown.add', 'events.onInputDown', this.onPaletteClick(this));
 
+        this.game.add.button(this.game.width - 160, this.game.height - 160, 'pause', this.setOnPause, this, 0, 0, 1, 0).scale.setTo(2, 2);
 
         this.squareMask.input.enabled = false;
         this.drawLegendTiles();
         this.drawLevelTiles();
+
     },
 
     drawLegendTiles: function () {
@@ -240,7 +248,7 @@ Associate.Editor.prototype = {
     },
 
     onSaveClick: function () {
-        var json = JSON.stringify(new Level(this.number, this.w, this.h, this.tiles.entities, this.legendTiles.entities));
+        var json = JSON.stringify(new Level(this.number, this.w, this.h, this.tiles.entities, this.legendTiles.entities, new Stars(this.threeStar, this.twoStar, this.oneStar)));
         firebase.database().ref('levels/' + this.number).set(json);
         alert('Level saved');
     },
@@ -331,6 +339,130 @@ Associate.Editor.prototype = {
 
         return tileSize;
     },
+
+    setOnPause: function () {
+        if (this.menu != null) {
+            return;
+        }
+        this.menu = this.game.add.group();
+        var scaleBtn = .6;
+
+
+        var back = this.menu.create(0, 0, 'menu');
+        back.width = this.game.world.width * .8;
+        back.height = this.game.world.height * .8;
+
+        var style = {
+            'font': '80px Dosis',
+            'fill': 'white',
+            'fontWeight': 'bold'
+        };
+
+        var label = this.game.add.text(back.centerX, 60, 'Edit Level', style);
+        label.anchor.setTo(0.5, 0.5);
+        this.menu.add(label);
+
+
+        // 3 stars
+        var lineY = 200;
+        var star1 = this.menu.create((back.centerX - 100) / 2.5, lineY, 'starOn');
+        star1.anchor.setTo(0.5, 0.5);
+        var star2 = this.menu.create(back.centerX / 2.5, lineY, 'starOn');
+        star2.anchor.setTo(0.5, 0.5);
+        var star3 = this.menu.create((back.centerX + 100) / 2.5, lineY, 'starOn');
+        star3.anchor.setTo(0.5, 0.5);
+
+        var label = this.game.add.text(back.centerX, lineY, this.threeStar, style);
+        label.anchor.setTo(0.5, 0.5);
+        this.menu.add(label);
+
+        var left = this.game.add.button(back.width * .7, lineY, 'left', this.onStarLeft('threeStar', label), this, 1, 0, 2);
+        left.anchor.set(.5, .5);
+        left.scale.setTo(scaleBtn, scaleBtn);
+        this.menu.add(left);
+        var right = this.game.add.button(back.width * .7 + 100, lineY, 'right', this.onStarRight('threeStar', label), this, 1, 0, 2);
+        right.anchor.set(.5, .5);
+        right.scale.setTo(scaleBtn, scaleBtn);
+        this.menu.add(right);
+
+
+        // 2 stars
+        lineY = 400;
+        var star1 = this.menu.create((back.centerX - 100) / 2.5, lineY, 'starOn');
+        star1.anchor.setTo(0.5, 0.5);
+        var star2 = this.menu.create(back.centerX / 2.5, lineY, 'starOn');
+        star2.anchor.setTo(0.5, 0.5);
+        var star3 = this.menu.create((back.centerX + 100) / 2.5, lineY, 'starOff');
+        star3.anchor.setTo(0.5, 0.5);
+        var label = this.game.add.text(back.centerX, lineY, this.twoStar, style);
+        label.anchor.setTo(0.5, 0.5);
+        this.menu.add(label);
+
+        var left = this.game.add.button(back.width * .7, lineY, 'left', this.onStarLeft('twoStar', label), this, 1, 0, 2);
+        left.anchor.set(.5, .5);
+        left.scale.setTo(scaleBtn, scaleBtn);
+        this.menu.add(left);
+        var right = this.game.add.button(back.width * .7 + 100, lineY, 'right', this.onStarRight('twoStar', label), this, 1, 0, 2);
+        right.anchor.set(.5, .5);
+        right.scale.setTo(scaleBtn, scaleBtn);
+        this.menu.add(right);
+
+
+        // 1 star
+        lineY = 600;
+        var star1 = this.menu.create((back.centerX - 100) / 2.5, lineY, 'starOn');
+        star1.anchor.setTo(0.5, 0.5);
+        var star2 = this.menu.create(back.centerX / 2.5, lineY, 'starOff');
+        star2.anchor.setTo(0.5, 0.5);
+        var star3 = this.menu.create((back.centerX + 100) / 2.5, lineY, 'starOff');
+        star3.anchor.setTo(0.5, 0.5);
+        var label = this.game.add.text(back.centerX, lineY, this.oneStar, style);
+        label.anchor.setTo(0.5, 0.5);
+        this.menu.add(label);
+
+        var left = this.game.add.button(back.width * .7, lineY, 'left', this.onStarLeft('oneStar', label), this, 1, 0, 2);
+        left.anchor.set(.5, .5);
+        left.scale.setTo(scaleBtn, scaleBtn);
+        this.menu.add(left);
+        var right = this.game.add.button(back.width * .7 + 100, lineY, 'right', this.onStarRight('oneStar', label), this, 1, 0, 2);
+        right.anchor.set(.5, .5);
+        right.scale.setTo(scaleBtn, scaleBtn);
+        this.menu.add(right);
+
+
+        var play = this.game.add.button(back.centerX, this.menu.height - 150, 'playBig', this.unPause, this, 0, 0, 1, 0);
+        play.anchor.x = .5;
+        play.scale.setTo(.7, .7);
+        this.menu.add(play);
+
+        this.menu.x = this.game.world.centerX - back.width / 2;
+        this.menu.y = this.game.world.centerY - back.height / 2;
+
+        this.game.add.tween(this.menu).from({
+            y: -600
+        }, 1000, Phaser.Easing.Bounce.Out, true);
+    },
+
+    onStarLeft: function (star, label) {
+        return function () {
+            this[star] = this[star] - 1;
+            label.text = this[star];
+        }
+    },
+
+    onStarRight: function (star, label) {
+        return function () {
+            this[star] = this[star] + 1;
+            label.text = this[star];
+        }
+    },
+
+    unPause: function () {
+        this.menu.removeAll();
+        this.menu = null;
+        this.game.paused = false;
+    },
+
 
     quitGame: function (pointer) {
 

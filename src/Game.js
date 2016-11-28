@@ -35,6 +35,8 @@ Associate.Game = function (game) {
     this.level;
     this.clicked = false;
     this.selectedTile = null;
+
+    this.transformed = 0;
 };
 
 Associate.Game.prototype = {
@@ -294,6 +296,7 @@ Associate.Game.prototype = {
             context.selectedTile = null;
 
             context.clicked = true;
+            context.transformed = context.transformed + 1;
             var x = item.tileX;
             var y = item.tileY;
             var nearTiles = context.getNeighbors(x, y, context.tiles);
@@ -499,6 +502,12 @@ Associate.Game.prototype = {
         var star3 = this.menu.create(back.centerX + 100, 300, 'starOff');
         star3.anchor.setTo(0.5, 0.5);
         star3.scale.setTo(2, 2);
+
+
+        var line = this.menu.create(this.menu.centerX, this.menu.centerY, 'lineHorz');
+        line.anchor.setTo(.5, .5);
+        line.width = this.menu.width * .8;
+        line.height = 20;
 
         var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function () {
             this.game.state.restart(true, false, this.level);

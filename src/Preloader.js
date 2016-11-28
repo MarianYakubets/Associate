@@ -85,6 +85,7 @@ Associate.Preloader.prototype = {
 
         this.load.image('frameTop', 'images/btn/frameTop.png');
         this.load.image('frameBottom', 'images/btn/frameBottom.png');
+        this.load.image('lineHorz', 'images/btn/lineHorz.png');
 
         this.load.spritesheet('explosionred', 'images/explosion/explosionRed.png', 108, 112);
         this.load.spritesheet('explosionblue', 'images/explosion/explosionBlue.png', 108, 112);
