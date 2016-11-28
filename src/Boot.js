@@ -11,11 +11,12 @@ Associate = {
 
 };
 
-Associate.Boot = function(game) {};
+Associate.Boot = function (game) {
+};
 
 Associate.Boot.prototype = {
 
-    init: function() {
+    init: function () {
 
         this.input.maxPointers = 1;
         this.stage.disableVisibilityChange = true;
@@ -30,11 +31,16 @@ Associate.Boot.prototype = {
             //this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
             //this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
         }
+        var timer = this.game.time.create(false);
+        timer.add(1, this.sync, this);
+        timer.start();
+    },
 
+    sync: function () {
         LevelManager.syncLevels();
     },
 
-    preload: function() {
+    preload: function () {
 
         //  Here we load the assets required for our preloader (in this case a background and a loading bar)
         /*this.load.image('preloaderBackground', 'images/preloader_background.jpg');
@@ -42,13 +48,13 @@ Associate.Boot.prototype = {
 
     },
 
-    create: function() {
+    create: function () {
 
         this.state.start('Preloader');
 
     },
 
-    gameResized: function(width, height) {
+    gameResized: function (width, height) {
 
         //  This could be handy if you need to do any extra processing if the game resizes.
         //  A resize could happen if for example swapping orientation on a device or resizing the browser window.
@@ -56,7 +62,7 @@ Associate.Boot.prototype = {
 
     },
 
-    enterIncorrectOrientation: function() {
+    enterIncorrectOrientation: function () {
 
         Associate.orientated = false;
 
@@ -64,7 +70,7 @@ Associate.Boot.prototype = {
 
     },
 
-    leaveIncorrectOrientation: function() {
+    leaveIncorrectOrientation: function () {
 
         Associate.orientated = true;
 
