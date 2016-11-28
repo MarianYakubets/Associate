@@ -4,13 +4,13 @@ var LevelManager = {
 
     syncLevels: function () {
         LevelManager.levels.splice(0, 0, JSON.parse(this.zeroLevel));
-        /*firebase.database().ref('levels').once('value').then(function (snapshot) {
+        firebase.database().ref('levels').once('value').then(function (snapshot) {
             Object.keys(snapshot.val()).forEach(function (key) {
                 var level = JSON.parse(snapshot.val()[key]);
                 LevelManager.levels[level.number] = level;
             }, this);
             //console.log(JSON.stringify(LevelManager.levels));
-        });*/
+        });
     },
 
     getLevel: function (number) {
