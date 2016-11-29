@@ -1,4 +1,4 @@
-Associate.LevelMenu = function (game) {
+Associate.LevelMenu = function(game) {
     this.music = null;
     this.playButton = null;
     this.stateName;
@@ -6,11 +6,11 @@ Associate.LevelMenu = function (game) {
 
 Associate.LevelMenu.prototype = {
 
-    init: function (state) {
+    init: function(state) {
         this.stateName = state;
     },
 
-    create: function () {
+    create: function() {
         var game = this.game;
         var highestLevel = localStorage.getItem("reached-level");
         if (highestLevel == null) {
@@ -67,10 +67,10 @@ Associate.LevelMenu.prototype = {
              this.pageSelectors[k].height = 50;
              }*/
         }
-        this.scrollingMap.events.onDragStart.add(function (sprite, pointer) {
+        this.scrollingMap.events.onDragStart.add(function(sprite, pointer) {
             this.scrollingMap.startPosition = this.scrollingMap.x;
         }, this);
-        this.scrollingMap.events.onDragStop.add(function (sprite, pointer) {
+        this.scrollingMap.events.onDragStop.add(function(sprite, pointer) {
             if (this.scrollingMap.startPosition == this.scrollingMap.x) {
                 for (i = 0; i < this.scrollingMap.children.length; i++) {
                     var bounds = this.scrollingMap.children[i].getBounds();
@@ -94,7 +94,7 @@ Associate.LevelMenu.prototype = {
         this.colors = colors;
     },
 
-    getStarFrame: function (number) {
+    getStarFrame: function(number) {
         var moves = localStorage.getItem("level-" + number);
         var level = LevelManager.getLevel(number);
         moves = parseInt(moves);
@@ -112,7 +112,7 @@ Associate.LevelMenu.prototype = {
         }
     },
 
-    changePage: function (page) {
+    changePage: function(page) {
         this.currentPage += page;
         for (var k = 0; k < this.colors.length; k++) {
             if (k == this.currentPage) {
@@ -126,17 +126,22 @@ Associate.LevelMenu.prototype = {
         }, 300, Phaser.Easing.Cubic.Out, true);
     },
 
-    update: function () {
+    update: function() {
 
     },
 
-    onLevelClick: function (levelNumber) {
-        return function () {
-            this.state.start(this.stateName, true, false, LevelManager.getLevel(levelNumber));
+    onLevelClick: function(levelNumber) {
+        return function() {
+            this.state.start(this.stateName,
+                Phaser.Plugin.StateTransition.Out.SlideBottom,
+                Phaser.Plugin.StateTransition.In.ScaleUp, true, false,
+                LevelManager.getLevel(levelNumber));
         }
     },
 
-    onBackClick: function () {
-        this.state.start('MainMenu', true, false);
+    onBackClick: function() {
+        this.state.start('MainMenu',
+            Phaser.Plugin.StateTransition.Out.SlideTop,
+            Phaser.Plugin.StateTransition.In.ScaleUp, true, false);
     }
 };

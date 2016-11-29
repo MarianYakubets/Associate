@@ -109,6 +109,8 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('star', 'images/tiles/star.png', 79, 84);
         this.load.image('starOn', 'images/btn/starOn.png');
         this.load.image('starOff', 'images/btn/starOff.png');
+        this.load.image('starSmall', 'images/btn/starSmall.png')
+        this.load.image('starSmallOff', 'images/btn/starSmallOff.png')
 
         this.load.image('shadow', 'images/tiles/shadow.png');
         this.load.image('hiliteCircle', 'images/tiles/hiliteCircle.png');

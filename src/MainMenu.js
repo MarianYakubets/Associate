@@ -1,4 +1,4 @@
-Associate.MainMenu = function (game) {
+Associate.MainMenu = function(game) {
 
     this.music = null;
     this.playButton = null;
@@ -7,7 +7,7 @@ Associate.MainMenu = function (game) {
 
 Associate.MainMenu.prototype = {
 
-    create: function () {
+    create: function() {
         LevelManager.syncLevels();
         this.drawLeavesBgr();
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
@@ -24,20 +24,23 @@ Associate.MainMenu.prototype = {
         this.game.add.button(this.game.world.width - 80, this.game.world.height - 80, 'option', this.onBtnClick('Editor'), this, 1, 0).alpha = 0;
     },
 
-    drawLeavesBgr: function () {
+    drawLeavesBgr: function() {
         this.game.add.tileSprite(0, 0, this.game.width, this.game.height, "tileLeave");
     },
 
 
-    update: function () {
+    update: function() {
 
         //	Do some nice funky main menu effect here
 
     },
 
-    onBtnClick: function (state) {
-        return function () {
-            this.state.start('LevelMenu', true, false, state);
+    onBtnClick: function(state) {
+        return function() {
+            this.state.start('LevelMenu',
+                Phaser.Plugin.StateTransition.Out.SlideBottom,
+                Phaser.Plugin.StateTransition.In.ScaleUp,
+                true, false, state);
         }
     }
 
