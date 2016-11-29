@@ -36,7 +36,7 @@ Associate.Game = function (game) {
     this.clicked = false;
     this.selectedTile = null;
 
-    this.transformed = 0;
+    this.moves = 0;
 };
 
 Associate.Game.prototype = {
@@ -253,6 +253,7 @@ Associate.Game.prototype = {
     },
 
     checkWin: function () {
+        this.moves = this.moves + 1;
         var victory = true;
         this.legendTiles.entities.forEach(function (tile) {
             if (this.tiles.get(new Pair(tile.x, tile.y)).color != tile.color) {
@@ -264,7 +265,7 @@ Associate.Game.prototype = {
             var timer = this.game.time.create(false);
             timer.add(750, this.setOnVictory, this);
             timer.start();
-            this.saveHighestLevel();
+            this.saveLevelInformation();
         }
         this.clicked = false;
         return victory;
@@ -296,7 +297,6 @@ Associate.Game.prototype = {
             context.selectedTile = null;
 
             context.clicked = true;
-            context.transformed = context.transformed + 1;
             var x = item.tileX;
             var y = item.tileY;
             var nearTiles = context.getNeighbors(x, y, context.tiles);
@@ -490,16 +490,18 @@ Associate.Game.prototype = {
         label.anchor.setTo(0.5, 0.5);
         this.menu.add(label);
 
-
-        var star1 = this.menu.create(back.centerX - 100, 300, 'starOn');
+        var starName = this.moves < this.level.star.one ? 'starOn' : 'starOff';
+        var star1 = this.menu.create(back.centerX - 100, 300, starName);
         star1.anchor.setTo(0.5, 0.5);
         star1.scale.setTo(2, 2);
 
-        var star2 = this.menu.create(back.centerX, 300, 'starOn');
+        starName = this.moves < this.level.star.two ? 'starOn' : 'starOff';
+        var star2 = this.menu.create(back.centerX, 300, starName);
         star2.anchor.setTo(0.5, 0.5);
         star2.scale.setTo(2, 2);
 
-        var star3 = this.menu.create(back.centerX + 100, 300, 'starOff');
+        starName = this.moves < this.level.star.three ? 'starOn' : 'starOff';
+        var star3 = this.menu.create(back.centerX + 100, 300, starName);
         star3.anchor.setTo(0.5, 0.5);
         star3.scale.setTo(2, 2);
 
@@ -600,11 +602,17 @@ Associate.Game.prototype = {
         this.game.paused = false;
     },
 
-    saveHighestLevel: function () {
+    saveLevelInformation: function () {
         var oldMax = localStorage.getItem("reached-level");
         var currentMax = 1 + parseInt(this.level.number);
         if (currentMax > oldMax) {
             localStorage.setItem("reached-level", currentMax);
+        }
+
+        var maxMoves = localStorage.getItem("level-" + this.level.number);
+        var currentMaxMoves = 1 + parseInt(this.moves);
+        if (currentMaxMoves > maxMoves) {
+            localStorage.setItem("level-" + this.level.number, currentMaxMoves);
         }
     }
 

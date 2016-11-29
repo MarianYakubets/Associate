@@ -1,4 +1,4 @@
-Associate.LevelMenu = function(game) {
+Associate.LevelMenu = function (game) {
     this.music = null;
     this.playButton = null;
     this.stateName;
@@ -6,11 +6,11 @@ Associate.LevelMenu = function(game) {
 
 Associate.LevelMenu.prototype = {
 
-    init: function(state) {
+    init: function (state) {
         this.stateName = state;
     },
 
-    create: function() {
+    create: function () {
         var game = this.game;
         var highestLevel = localStorage.getItem("reached-level");
         if (highestLevel == null) {
@@ -44,7 +44,7 @@ Associate.LevelMenu.prototype = {
             for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < rows; j++) {
                     var num = k * (rows * columns) + j * columns + i + 1;
-                    var frame = this.game.rnd.integerInRange(0, 3);
+                    var frame = this.getStarFrame(num);
                     var btn = new LabelButton(this.game, k * game.width + leftMargin + i * (thumbWidth + spacing) + thumbWidth / 2, topMargin + j * (thumbHeight + spacing) + thumbHeight / 2, "level", num, null, this.onLevelClick(num), this, frame, frame, frame, frame);
                     if (this.stateName != 'Editor' && num > highestLevel) {
                         btn.destroy();
@@ -55,22 +55,22 @@ Associate.LevelMenu.prototype = {
                 }
             }
             /*this.pageSelectors[k] = game.add.button(game.width / 3 * 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 100, game.height - 250, "sliderHandle", function(e) {
-                var difference = e.pageIndex - this.currentPage;
-                this.changePage(difference);
-            }, this);
-            this.pageSelectors[k].anchor.set(0.5);
-            this.pageSelectors[k].pageIndex = k;
-            this.pageSelectors[k].tint = colors[k];
-            if (k == this.currentPage) {
-                this.pageSelectors[k].height = 70;
-            } else {
-                this.pageSelectors[k].height = 50;
-            }*/
+             var difference = e.pageIndex - this.currentPage;
+             this.changePage(difference);
+             }, this);
+             this.pageSelectors[k].anchor.set(0.5);
+             this.pageSelectors[k].pageIndex = k;
+             this.pageSelectors[k].tint = colors[k];
+             if (k == this.currentPage) {
+             this.pageSelectors[k].height = 70;
+             } else {
+             this.pageSelectors[k].height = 50;
+             }*/
         }
-        this.scrollingMap.events.onDragStart.add(function(sprite, pointer) {
+        this.scrollingMap.events.onDragStart.add(function (sprite, pointer) {
             this.scrollingMap.startPosition = this.scrollingMap.x;
         }, this);
-        this.scrollingMap.events.onDragStop.add(function(sprite, pointer) {
+        this.scrollingMap.events.onDragStop.add(function (sprite, pointer) {
             if (this.scrollingMap.startPosition == this.scrollingMap.x) {
                 for (i = 0; i < this.scrollingMap.children.length; i++) {
                     var bounds = this.scrollingMap.children[i].getBounds();
@@ -94,13 +94,31 @@ Associate.LevelMenu.prototype = {
         this.colors = colors;
     },
 
-    changePage: function(page) {
+    getStarFrame: function (number) {
+        var moves = localStorage.getItem("level-" + number);
+        var level = LevelManager.getLevel(number);
+        moves = parseInt(moves);
+        if (moves == null || level == null || level.star == null) {
+            return 0;
+        }
+        if (level.star.three > moves) {
+            return 3;
+        }
+        if (level.star.two > (moves)) {
+            return 2;
+        }
+        if (level.star.one > (moves)) {
+            return 1;
+        }
+    },
+
+    changePage: function (page) {
         this.currentPage += page;
         for (var k = 0; k < this.colors.length; k++) {
             if (k == this.currentPage) {
-               // this.pageSelectors[k].height = 70;
+                // this.pageSelectors[k].height = 70;
             } else {
-              //  this.pageSelectors[k].height = 50;
+                //  this.pageSelectors[k].height = 50;
             }
         }
         var tween = this.game.add.tween(this.scrollingMap).to({
@@ -108,17 +126,17 @@ Associate.LevelMenu.prototype = {
         }, 300, Phaser.Easing.Cubic.Out, true);
     },
 
-    update: function() {
+    update: function () {
 
     },
 
-    onLevelClick: function(levelNumber) {
-        return function() {
+    onLevelClick: function (levelNumber) {
+        return function () {
             this.state.start(this.stateName, true, false, LevelManager.getLevel(levelNumber));
         }
     },
 
-    onBackClick: function() {
+    onBackClick: function () {
         this.state.start('MainMenu', true, false);
     }
 };
