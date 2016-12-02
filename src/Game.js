@@ -86,19 +86,19 @@ Associate.Game.prototype = {
     addQuake: function(sprite) {
 
         // define the camera offset for the quake
-        var rumbleOffset = 5;
+        var rumbleOffset = 4;
 
         // we need to move according to the camera's current position
         var properties = {
-            x: sprite.x - rumbleOffset
+            y: sprite.y - rumbleOffset
         };
 
         // we make it a relly fast movement
-        var duration = 30;
+        var duration = 100;
         // because it will repeat
         var repeat = 2;
         // we use bounce in-out to soften it a little bit
-        var ease = Phaser.Easing.Bounce.InOut;
+        var ease = Phaser.Easing.Bounce.Out;
         var autoStart = false;
         // a little delay because we will run it indefinitely
         var delay = 10;
@@ -239,12 +239,12 @@ Associate.Game.prototype = {
                     //------------------------------------------------------------------------------
                     //------------------SHADOW------------------------------------------------------
                     //------------------------------------------------------------------------------
-                    var shadow = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'shadow');
-                    var scaleFactor = size * .8 / shadow.width;
+                    var shadow = this.selectedGroup.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'shadow');
+                    var scaleFactor = size * .65 / shadow.width;
                     shadow.scale.setTo(scaleFactor, scaleFactor);
                     shadow.anchor.x = 0.5;
                     shadow.anchor.y = 0.5;
-                    shadow.y = shadow.y + size * .3;
+                    shadow.y = shadow.y + size * .4;
 
                     sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'monster');
 
@@ -671,8 +671,8 @@ Associate.Game.prototype = {
         }
 
         var maxMoves = localStorage.getItem("level-" + this.level.number);
-        var currentMaxMoves = 1 + parseInt(this.moves);
-        if (currentMaxMoves > maxMoves) {
+        var currentMaxMoves = parseInt(this.moves);
+        if (currentMaxMoves < maxMoves) {
             localStorage.setItem("level-" + this.level.number, currentMaxMoves);
         }
     }

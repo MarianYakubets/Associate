@@ -101,13 +101,13 @@ Associate.LevelMenu.prototype = {
         if (moves == null || level == null || level.star == null) {
             return 0;
         }
-        if (level.star.three > moves) {
+        if (level.star.three >= moves) {
             return 3;
         }
-        if (level.star.two > (moves)) {
+        if (level.star.two >= moves) {
             return 2;
         }
-        if (level.star.one > (moves)) {
+        if (level.star.one >= moves) {
             return 1;
         }
     },
