@@ -78,6 +78,7 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('playLong', 'images/btn/playLong.png', 667, 427);
         this.load.spritesheet('option', 'images/btn/option.png', 73, 73);
         this.load.spritesheet('homeBig', 'images/btn/homeBig.png', 101, 101);
+        this.load.spritesheet('plashka', 'images/btn/plashka.png', 101, 101);
         this.load.spritesheet('home', 'images/btn/home.png', 73, 73);
         this.load.spritesheet('pause', 'images/btn/pause.png', 69, 69);
         this.load.image('sliderHandle', 'images/btn/sliderHandle.png');
