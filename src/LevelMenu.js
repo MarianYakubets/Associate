@@ -46,6 +46,7 @@ Associate.LevelMenu.prototype = {
                     var num = k * (rows * columns) + j * columns + i + 1;
                     var frame = this.getStarFrame(num);
                     var btn = new LabelButton(this.game, k * game.width + leftMargin + i * (thumbWidth + spacing) + thumbWidth / 2, topMargin + j * (thumbHeight + spacing) + thumbHeight / 2, "level", num, null, this.onLevelClick(num), this, frame, frame, frame, frame);
+                    //btn.tint = 0xFFFFFF;
                     if (this.stateName != 'Editor' && num > highestLevel) {
                         btn.destroy();
                         btn = this.game.add.sprite(btn.x - btn.width / 2, btn.y - btn.height / 2, 'level');

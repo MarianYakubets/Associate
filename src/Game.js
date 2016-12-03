@@ -1,4 +1,4 @@
-Associate.Game = function(game) {
+Associate.Game = function (game) {
     //  When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
     this.game; //   a reference to the currently running game
     this.add; //    used to add sprites, text, groups, etc
@@ -48,7 +48,7 @@ Associate.Game = function(game) {
 
 Associate.Game.prototype = {
 
-    init: function(level) {
+    init: function (level) {
         this.tiles = new TileMap();
         this.legendTiles = new TileMap();
         this.sprites = new TileMap();
@@ -62,18 +62,18 @@ Associate.Game.prototype = {
         this.calculateTileSize();
 
         this.legendTiles = new TileMap();
-        this.level.legend.forEach(function(tile) {
+        this.level.legend.forEach(function (tile) {
             this.legendTiles.set(new Pair(tile.x, tile.y), new Tile(tile.x, tile.y, tile.color, tile.lock));
         }, this);
 
         this.tiles = new TileMap();
-        this.level.tiles.forEach(function(tile) {
-            this.tiles.set(new Pair(tile.x, tile.y), new Tile(tile.x, tile.y, tile.color, tile.lock));
+        this.level.tiles.forEach(function (tile) {
+            this.tiles.set(new Pair(tile.x, tile.y), new Tile(tile.x, tile.y, tile.color, tile.lock, tile.egg, tile.grass));
         }, this);
     },
 
-    anyDown: function(context) {
-        return function() {
+    anyDown: function (context) {
+        return function () {
             if (context.selectedTile != null) {
                 context.selectedTile.width = context.selectedTile.width / 1.1;
                 context.selectedTile.height = context.selectedTile.height / 1.1;
@@ -83,7 +83,7 @@ Associate.Game.prototype = {
         }
     },
 
-    addQuake: function(sprite) {
+    addQuake: function (sprite) {
 
         // define the camera offset for the quake
         var rumbleOffset = 4;
@@ -115,7 +115,7 @@ Associate.Game.prototype = {
         quake.start();
     },
 
-    create: function() {
+    create: function () {
         this.menu = null;
         this.moves = 0;
         this.drawTilesBcgr();
@@ -160,19 +160,19 @@ Associate.Game.prototype = {
         this.starOne.scale.setTo(2, 2);
         this.starOne.anchor.setTo(.5, .5);
 
-
-
-        this.selectedGroup = this.game.add.group();
-        this.selectedGroup.x = this.tileDistance / 2;
-        this.selectedGroup.y = 200 + this.tileDistance / 2;
-
         this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance, 'legend');
 
 
         this.tilesGroup = this.game.add.group();
         this.drawTiles(this.tiles, this.tilesGroup, this.tileSize, 'monster');
 
-        this.sprites.entities.forEach(function(sprite) {
+
+        this.selectedGroup = this.game.add.group();
+        this.selectedGroup.x = this.tileDistance / 2;
+        this.selectedGroup.y = 200 + this.tileDistance / 2;
+
+
+        this.sprites.entities.forEach(function (sprite) {
             sprite.inputEnabled = true;
             sprite.events.onInputDown.add(this.onTileClick(this), this);
         }, this);
@@ -181,13 +181,13 @@ Associate.Game.prototype = {
         this.game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
     },
 
-    updateCounter: function() {
+    updateCounter: function () {
         var x = this.game.rnd.integerInRange(0, this.sprites.entities.length - 1);
         var tile = this.sprites.entities[x];
         this.addQuake(tile);
     },
 
-    drawTilesBcgr: function() {
+    drawTilesBcgr: function () {
         this.game.add.tileSprite(0, 0, this.game.width, this.game.height, "backTile");
 
         var back = this.game.add.group();
@@ -222,8 +222,21 @@ Associate.Game.prototype = {
         back.setAll('input.priorityID', 0);
     },
 
-    drawTiles: function(tiles, group, size, type) {
-        tiles.entities.forEach(function(tile) {
+    drawTiles: function (tiles, group, size, type) {
+        tiles.entities.forEach(function (tile) {
+            if (tile.grass) {
+                var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'tiles');
+                sprite.frame = 2;
+
+                sprite.tileX = tile.x;
+                sprite.tileY = tile.y;
+
+                sprite.anchor.x = 0.5;
+                sprite.anchor.y = 0.5;
+
+                sprite.width = size * 1.15;
+                sprite.height = size * 1.15;
+            }
             if (tile.color != Color.NONE) {
 
 
@@ -239,7 +252,7 @@ Associate.Game.prototype = {
                     //------------------------------------------------------------------------------
                     //------------------SHADOW------------------------------------------------------
                     //------------------------------------------------------------------------------
-                    var shadow = this.selectedGroup.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'shadow');
+                    var shadow = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'shadow');
                     var scaleFactor = size * .65 / shadow.width;
                     shadow.scale.setTo(scaleFactor, scaleFactor);
                     shadow.anchor.x = 0.5;
@@ -250,13 +263,19 @@ Associate.Game.prototype = {
 
                     var legend = this.legendTiles.get(new Pair(tile.x, tile.y));
                     if (legend.color == tile.color) {
-                        sprite.frame = ColorToFrame[tile.color] /*+ 1*/ ;
+                        sprite.frame = ColorToFrame[tile.color] /*+ 1*/;
                     } else {
                         sprite.frame = ColorToFrame[tile.color];
                     }
 
                     sprite.width = size;
                     sprite.height = size;
+
+                    if (tile.egg) {
+                        sprite.alpha = 0;
+                    }
+
+                    this.sprites.set(new Pair(tile.x, tile.y), sprite);
                 }
 
                 sprite.tileX = tile.x;
@@ -266,11 +285,14 @@ Associate.Game.prototype = {
                 sprite.anchor.y = 0.5;
 
 
-                this.sprites.set(new Pair(tile.x, tile.y), sprite);
-
-                if (tile.lock) {
-                    var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'monster');
-                    sprite.frame = 12;
+                if (tile.lock || tile.egg) {
+                    if (tile.egg) {
+                        var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'tiles');
+                        sprite.frame = 1;
+                    } else {
+                        var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'monster');
+                        sprite.frame = 12;
+                    }
 
                     sprite.tileX = tile.x;
                     sprite.tileY = tile.y;
@@ -283,6 +305,8 @@ Associate.Game.prototype = {
 
                     this.noClickSprites.set(new Pair(tile.x, tile.y), sprite);
                 }
+
+
             }
 
         }, this);
@@ -291,7 +315,7 @@ Associate.Game.prototype = {
         return group;
     },
 
-    onTilesMove: function() {
+    onTilesMove: function () {
         this.moves = this.moves + 1;
         this.movesText.text = this.moves;
         this.bar.width = 10 + 250 * (this.level.star.one - this.moves * .8) / this.level.star.one;
@@ -310,11 +334,14 @@ Associate.Game.prototype = {
         }
     },
 
-    checkWin: function() {
+    checkWin: function () {
         this.onTilesMove();
         var victory = true;
-        this.legendTiles.entities.forEach(function(tile) {
-            if (this.tiles.get(new Pair(tile.x, tile.y)).color != tile.color) {
+        this.legendTiles.entities.forEach(function (tile) {
+            if (tile.color == Color.NONE) {
+
+            }
+            else if (this.tiles.get(new Pair(tile.x, tile.y)).color != tile.color) {
                 victory = false;
             }
         }, this);
@@ -329,9 +356,10 @@ Associate.Game.prototype = {
         return victory;
     },
 
-    onTileClick: function(context) {
-        return function(item) {
-            if (context.clicked || context.tiles.get(new Pair(item.tileX, item.tileY)).lock) {
+    onTileClick: function (context) {
+        return function (item) {
+            if (context.clicked || context.tiles.get(new Pair(item.tileX, item.tileY)).lock ||
+                context.tiles.get(new Pair(item.tileX, item.tileY)).egg) {
                 return;
             }
 
@@ -359,22 +387,31 @@ Associate.Game.prototype = {
             var y = item.tileY;
             var nearTiles = context.getNeighbors(x, y, context.tiles);
             var baseTile = context.tiles.get(new Pair(x, y));
-            nearTiles.forEach(function(a, i) {
+            nearTiles.forEach(function (a, i) {
                 var tile = context.tiles.get(new Pair(a[0], a[1]));
-                if (tile.lock) {
+                if (tile.lock || tile.egg) {
                     var ice = context.noClickSprites.get(new Pair(a[0], a[1]));
                     ice.loadTexture('explosionIce', 0);
                     ice.height = item.height * .7;
                     ice.width = item.width * .7;
                     var anim = ice.animations.add('boom');
-                    anim.onComplete.add(function() {
+                    anim.onComplete.add(function () {
                         ice.destroy();
                     }, this);
                     ice.animations.play('boom', 20, false);
-                    tile.lock = false;
+                    if (tile.lock) {
+                        tile.lock = false;
+                    }
+                    if (tile.egg) {
+                        tile.egg = false;
+                        context.sprites.get(new Pair(tile.x, tile.y)).alpha = 1;
+
+                    }
                 } else if (tile.color != baseTile.color) {
-                    context.flip(context, baseTile.color, context.sprites.get(new Pair(a[0], a[1])), i * 50);
-                    tile.color = baseTile.color;
+                    if (!tile.grass) {
+                        context.flip(context, baseTile.color, context.sprites.get(new Pair(a[0], a[1])), i * 50);
+                        tile.color = baseTile.color;
+                    }
                 }
             }, context);
             var timer = context.game.time.create(false);
@@ -383,17 +420,17 @@ Associate.Game.prototype = {
         }
     },
 
-    flip: function(context, type, item) {
+    flip: function (context, type, item) {
         item.alpha = 0;
         var tile = this.tiles.get(new Pair(item.tileX, item.tileY));
         var boom = this.game.add.sprite(item.world.x, item.world.y, 'explosion' + tile.color, 0);
         boom.anchor.x = .5;
         boom.anchor.y = .5;
         var anim = boom.animations.add('boom', [0, 1, 2, 3, 4, 5]);
-        anim.onComplete.add(function() {
+        anim.onComplete.add(function () {
             boom.loadTexture('explosion' + type, 0);
             var reverse = boom.animations.add('reverse', [0, 1, 2, 3, 4, 5]).reverse();
-            reverse.onComplete.add(function() {
+            reverse.onComplete.add(function () {
                 boom.destroy();
 
                 this.legendTiles.get(new Pair(item.tileX, item.tileY));
@@ -408,7 +445,7 @@ Associate.Game.prototype = {
         boom.animations.play('boom', 20, false);
     },
 
-    deselectNeighbors: function() {
+    deselectNeighbors: function () {
         this.selectedGroup.removeAll();
         if (this.selectedTile == null) {
             return;
@@ -417,19 +454,19 @@ Associate.Game.prototype = {
         tile.frame = tile.frame - 1;
 
         var nearTiles = this.getNeighbors(tile.tileX, tile.tileY, this.tiles);
-        nearTiles.forEach(function(tile) {
+        nearTiles.forEach(function (tile) {
             var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
             sprite.frame = sprite.frame - 1;
         }, this);
     },
 
-    selectNeighbors: function() {
+    selectNeighbors: function () {
         var tile = this.selectedTile;
 
-        /* var circle = this.selectedGroup.create(tile.x, tile.y, 'hiliteCircle');
-         circle.anchor.set(.5, .5);
-         circle.width = tile.width * .8;
-         circle.height = tile.height * .8;*/
+        var circle = this.selectedGroup.create(tile.x, tile.y, 'tiles', 0);
+        circle.anchor.set(.5, .5);
+        circle.width = tile.width;
+        circle.height = tile.height;
 
         tile.frame = tile.frame + 1;
 
@@ -438,7 +475,7 @@ Associate.Game.prototype = {
          h.scale.setTo(tile.width * .8 / 75, tile.height * .8 / 75);*/
 
         var nearTiles = this.getNeighbors(tile.tileX, tile.tileY, this.tiles);
-        nearTiles.forEach(function(tile) {
+        nearTiles.forEach(function (tile) {
             var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
             sprite.frame = sprite.frame + 1;
             /*    var circle = this.selectedGroup.create(sprite.x, sprite.y, 'hiliteCircle');
@@ -448,7 +485,7 @@ Associate.Game.prototype = {
         }, this);
     },
 
-    getNeighbors: function(x, y, tiles) {
+    getNeighbors: function (x, y, tiles) {
         var n = [];
 
         var i = x - 1;
@@ -457,7 +494,7 @@ Associate.Game.prototype = {
                 break;
             }
             n.push([i, y]);
-            if (tiles.get(new Pair(i, y)).lock) {
+            if (tiles.get(new Pair(i, y)).lock || tiles.get(new Pair(i, y)).egg) {
                 break;
             }
             i--;
@@ -469,7 +506,7 @@ Associate.Game.prototype = {
                 break;
             }
             n.push([i, y]);
-            if (tiles.get(new Pair(i, y)).lock) {
+            if (tiles.get(new Pair(i, y)).lock || tiles.get(new Pair(i, y)).egg) {
                 break;
             }
             i++;
@@ -481,7 +518,7 @@ Associate.Game.prototype = {
                 break;
             }
             n.push([x, i]);
-            if (tiles.get(new Pair(x, i)).lock) {
+            if (tiles.get(new Pair(x, i)).lock || tiles.get(new Pair(x, i)).egg) {
                 break;
             }
             i--;
@@ -493,7 +530,7 @@ Associate.Game.prototype = {
                 break;
             }
             n.push([x, i]);
-            if (tiles.get(new Pair(x, i)).lock) {
+            if (tiles.get(new Pair(x, i)).lock || tiles.get(new Pair(x, i)).egg) {
                 break;
             }
             i++;
@@ -502,11 +539,11 @@ Associate.Game.prototype = {
         return n;
     },
 
-    onPauseClick: function() {
+    onPauseClick: function () {
         this.setOnPause();
     },
 
-    calculateTileSize: function() {
+    calculateTileSize: function () {
         if (this.w <= 4) {
             this.tileDistance = this.game.world.width / 4;
         } else {
@@ -517,11 +554,11 @@ Associate.Game.prototype = {
         this.spacing = this.tileSize / 5;
     },
 
-    update: function() {
+    update: function () {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
     },
 
-    quitGame: function(pointer) {
+    quitGame: function (pointer) {
 
         //  Here you should destroy anything you no longer need.
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
@@ -532,7 +569,7 @@ Associate.Game.prototype = {
     },
 
 
-    setOnVictory: function() {
+    setOnVictory: function () {
         this.menu = this.game.add.group();
 
         var back = this.menu.create(0, 0, 'menu');
@@ -569,14 +606,14 @@ Associate.Game.prototype = {
         line.width = this.menu.width * .8;
         line.height = 20;
 
-        var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function() {
+        var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function () {
             this.game.state.restart(true, false, this.level);
         }, this, 0, 0, 1, 0);
         retry.anchor.x = .5;
         retry.scale.setTo(2, 2);
         this.menu.add(retry);
 
-        var next = this.game.add.button(back.centerX, this.menu.height - 300, 'next', function() {
+        var next = this.game.add.button(back.centerX, this.menu.height - 300, 'next', function () {
             this.state.start('Game', Phaser.Plugin.StateTransition.Out.SlideLeft,
                 Phaser.Plugin.StateTransition.In.ScaleUp, true, false, LevelManager.getLevel(++this.level.number));
         }, this, 0, 0, 1, 0);
@@ -597,7 +634,7 @@ Associate.Game.prototype = {
         }, 1000, Phaser.Easing.Bounce.Out, true);
     },
 
-    setOnPause: function() {
+    setOnPause: function () {
         if (this.menu != null) {
             return;
         }
@@ -617,7 +654,7 @@ Associate.Game.prototype = {
         this.menu.add(label);
 
 
-        var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function() {
+        var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function () {
             this.game.state.restart(true, false, this.level);
         }, this, 0, 0, 1, 0);
         retry.anchor.x = .5;
@@ -645,25 +682,25 @@ Associate.Game.prototype = {
 
     },
 
-    onBtnClick: function(name) {
-        return function() {
+    onBtnClick: function (name) {
+        return function () {
             this.state.start(name, Phaser.Plugin.StateTransition.Out.SlideTop,
                 Phaser.Plugin.StateTransition.In.ScaleUp,
                 true, false, 'Game');
         }
     },
 
-    onCloseClick: function() {
+    onCloseClick: function () {
         this.unPause();
     },
 
-    unPause: function() {
+    unPause: function () {
         this.menu.removeAll();
         this.menu = null;
         this.game.paused = false;
     },
 
-    saveLevelInformation: function() {
+    saveLevelInformation: function () {
         var oldMax = localStorage.getItem("reached-level");
         var currentMax = 1 + parseInt(this.level.number);
         if (currentMax > oldMax) {
@@ -672,7 +709,7 @@ Associate.Game.prototype = {
 
         var maxMoves = localStorage.getItem("level-" + this.level.number);
         var currentMaxMoves = parseInt(this.moves);
-        if (currentMaxMoves < maxMoves) {
+        if (!maxMoves || currentMaxMoves < maxMoves) {
             localStorage.setItem("level-" + this.level.number, currentMaxMoves);
         }
     }

@@ -1,4 +1,4 @@
-Associate.Editor = function(game) {
+Associate.Editor = function (game) {
 
     //  When a State is added to Phaser it automatically has the following properties set on it, even if they already exist:
 
@@ -54,24 +54,24 @@ Associate.Editor = function(game) {
 
 Associate.Editor.prototype = {
 
-    init: function(level) {
+    init: function (level) {
         this.number = level.number;
         this.level = level;
         this.w = level.w;
         this.h = level.h;
 
         this.legendTiles = new TileMap();
-        this.level.legend.forEach(function(tile) {
+        this.level.legend.forEach(function (tile) {
             this.legendTiles.set(new Pair(tile.x, tile.y), new Tile(tile.x, tile.y, tile.color, tile.lock));
         }, this);
 
         this.tiles = new TileMap();
-        this.level.tiles.forEach(function(tile) {
-            this.tiles.set(new Pair(tile.x, tile.y), new Tile(tile.x, tile.y, tile.color, tile.lock));
+        this.level.tiles.forEach(function (tile) {
+            this.tiles.set(new Pair(tile.x, tile.y), new Tile(tile.x, tile.y, tile.color, tile.lock, tile.egg, tile.grass));
         }, this);
     },
 
-    create: function() {
+    create: function () {
         this.menu = null;
         this.tileSize = this.calculateTileSize();
         this.spacing = this.tileSize / 5;
@@ -114,6 +114,19 @@ Associate.Editor.prototype = {
         var lock = palette.create(7 * this.palleteSize, palleteY, 'lock');
         lock.width = this.palleteSize;
         lock.height = this.palleteSize;
+
+        var egg = palette.create(8 * this.palleteSize, palleteY, 'tiles', 1);
+        egg.width = this.palleteSize;
+        egg.height = this.palleteSize;
+        egg.key = 'egg';
+
+
+        var grass = palette.create(9 * this.palleteSize, palleteY, 'tiles', 2);
+        grass.width = this.palleteSize;
+        grass.height = this.palleteSize;
+        grass.key = 'grass';
+
+
         this.squareMask = palette.create(0, (-2) * this.palleteSize, 'squareBlack');
         this.squareMask.scale.setTo(scaleBtn, scaleBtn);
 
@@ -128,7 +141,7 @@ Associate.Editor.prototype = {
 
     },
 
-    drawLegendTiles: function() {
+    drawLegendTiles: function () {
         if (this.legendGroup) {
             this.legendGroup.destroy();
         }
@@ -139,7 +152,7 @@ Associate.Editor.prototype = {
     },
 
 
-    drawLevelTiles: function() {
+    drawLevelTiles: function () {
         if (this.tilesGroup) {
             this.tilesGroup.destroy();
         }
@@ -151,8 +164,16 @@ Associate.Editor.prototype = {
     },
 
 
-    drawTiles: function(tiles, group, size) {
-        tiles.entities.forEach(function(tile) {
+    drawTiles: function (tiles, group, size) {
+        tiles.entities.forEach(function (tile) {
+            if (tile.grass) {
+                var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'tiles', 2);
+                sprite.anchor.x = 0.5;
+                sprite.anchor.y = 0.5;
+                sprite.width = size;
+                sprite.height = size;
+            }
+
             var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, tile.color);
             sprite.anchor.x = 0.5;
             sprite.anchor.y = 0.5;
@@ -170,12 +191,21 @@ Associate.Editor.prototype = {
                 sprite.width = size;
                 sprite.height = size;
             }
+
+            if (tile.egg) {
+                sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'tiles', 1);
+                sprite.anchor.x = 0.5;
+                sprite.anchor.y = 0.5;
+                sprite.width = size * .6;
+                sprite.height = size * .6;
+            }
+
         }, this);
         group.x = this.game.world.centerX - (this.w - 1) * this.tileDistance / 2;
         group.y = this.game.world.centerY - (this.h - 1) * this.tileDistance / 2;
     },
 
-    showLevels: function() {
+    showLevels: function () {
         if (this.layer1Active) {
             this.tilesGroup.alpha = 1;
             this.tilesGroup.setAll('inputEnabled', true);
@@ -196,14 +226,14 @@ Associate.Editor.prototype = {
         }
     },
 
-    loadLevel: function() {
+    loadLevel: function () {
         this.tilesGroup.setAll('inputEnabled', false);
         this.game.world.removeAll();
         this.create();
     },
 
-    onTileClick: function(context, tiles) {
-        return function(item) {
+    onTileClick: function (context, tiles) {
+        return function (item) {
             if (context.selectedColor != null) {
                 var x = item.tileX;
                 var y = item.tileY;
@@ -212,7 +242,12 @@ Associate.Editor.prototype = {
                     context.legendTiles.get(new Pair(x, y)).color = context.selectedColor;
                 } else if (context.selectedColor == 'lock') {
                     tiles.get(new Pair(x, y)).lock = !tiles.get(new Pair(x, y)).lock;
-                    context.legendTiles.get(new Pair(x, y)).color = tiles.get(new Pair(x, y)).color;
+                } else if (context.selectedColor == 'egg') {
+                    context.tiles.get(new Pair(x, y)).egg = !context.tiles.get(new Pair(x, y)).egg;
+                    context.legendTiles.get(new Pair(x, y)).color = Color.NONE;
+                } else if (context.selectedColor == 'grass') {
+                    context.tiles.get(new Pair(x, y)).grass = !context.tiles.get(new Pair(x, y)).grass;
+                    context.legendTiles.get(new Pair(x, y)).color = Color.NONE;
                 } else {
                     tiles.get(new Pair(x, y)).color = context.selectedColor;
                 }
@@ -223,8 +258,8 @@ Associate.Editor.prototype = {
     },
 
 
-    onPaletteClick: function(context) {
-        return function(item) {
+    onPaletteClick: function (context) {
+        return function (item) {
             if (item.key != context.selectedColor) {
                 context.selectedColor = item.key;
                 context.squareMask.y = item.y;
@@ -238,23 +273,23 @@ Associate.Editor.prototype = {
     },
 
 
-    onBackClick: function() {
+    onBackClick: function () {
         this.state.start('LevelMenu', Phaser.Plugin.StateTransition.Out.SlideTop,
             Phaser.Plugin.StateTransition.In.ScaleUp, true, false, 'Editor');
     },
 
-    onLoadClick: function() {
+    onLoadClick: function () {
         this.init(this.level);
         this.loadLevel();
     },
 
-    onSaveClick: function() {
+    onSaveClick: function () {
         var json = JSON.stringify(new Level(this.number, this.w, this.h, this.tiles.entities, this.legendTiles.entities, new Stars(this.threeStar, this.twoStar, this.oneStar)));
         firebase.database().ref('levels/' + this.number).set(json);
         alert('Level saved');
     },
 
-    onLeftBtnClick: function() {
+    onLeftBtnClick: function () {
         this.w = 4;
         this.h = 5;
         this.tiles = new TileMap();
@@ -268,7 +303,7 @@ Associate.Editor.prototype = {
         this.loadLevel();
     },
 
-    onRightBtnClick: function() {
+    onRightBtnClick: function () {
         this.w = 8;
         this.h = 10;
         this.tiles = new TileMap();
@@ -282,7 +317,7 @@ Associate.Editor.prototype = {
         this.loadLevel();
     },
 
-    onUpBtnClick: function() {
+    onUpBtnClick: function () {
         this.h -= 1;
         for (var i = 0; i < this.w; i++) {
             this.tiles.delete(new Pair(i, this.h));
@@ -291,7 +326,7 @@ Associate.Editor.prototype = {
         this.loadLevel();
     },
 
-    onDownBtnClick: function() {
+    onDownBtnClick: function () {
         for (var i = 0; i < this.w; i++) {
             this.tiles.set(new Pair(i, this.h), new Tile(i, this.h, Color.GREY));
             this.legendTiles.set(new Pair(i, this.h), new Tile(i, this.h, Color.GREY));
@@ -300,7 +335,7 @@ Associate.Editor.prototype = {
         this.loadLevel();
     },
 
-    onLayer1Click: function(item) {
+    onLayer1Click: function (item) {
         this.layer1Active = !this.layer1Active;
         /*if (this.layer1Active) {
          this.l1Btn.setFrames(1, 0, 2);
@@ -310,7 +345,7 @@ Associate.Editor.prototype = {
         this.showLevels();
     },
 
-    onLayer2Click: function(item) {
+    onLayer2Click: function (item) {
         this.layer2Active = !this.layer2Active;
         /*  if (this.layer2Active) {
          this.l2Btn.setFrames(1, 0, 2);
@@ -320,11 +355,11 @@ Associate.Editor.prototype = {
         this.showLevels();
     },
 
-    update: function() {
+    update: function () {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
     },
 
-    calculateTileSize: function() {
+    calculateTileSize: function () {
         var h = this.game.world.height - Screen.PADDING_HEIGHT;
         var distanceH = Math.floor(h / this.h);
         var tileW = Math.floor(distanceH * .8)
@@ -341,7 +376,7 @@ Associate.Editor.prototype = {
         return tileSize;
     },
 
-    setOnPause: function() {
+    setOnPause: function () {
         if (this.menu != null) {
             return;
         }
@@ -444,28 +479,28 @@ Associate.Editor.prototype = {
         }, 1000, Phaser.Easing.Bounce.Out, true);
     },
 
-    onStarLeft: function(star, label) {
-        return function() {
+    onStarLeft: function (star, label) {
+        return function () {
             this[star] = this[star] - 1;
             label.text = this[star];
         }
     },
 
-    onStarRight: function(star, label) {
-        return function() {
+    onStarRight: function (star, label) {
+        return function () {
             this[star] = this[star] + 1;
             label.text = this[star];
         }
     },
 
-    unPause: function() {
+    unPause: function () {
         this.menu.removeAll();
         this.menu = null;
         this.game.paused = false;
     },
 
 
-    quitGame: function(pointer) {
+    quitGame: function (pointer) {
 
         //  Here you should destroy anything you no longer need.
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
