@@ -39,13 +39,13 @@ Associate.LevelMenu.prototype = {
         this.scrollingMap.input.boundsRect = new Phaser.Rectangle(game.width - this.scrollingMap.width, game.height - this.scrollingMap.height, this.scrollingMap.width * 2 - game.width, this.scrollingMap.height * 2 - game.height);
 
         var home = this.game.add.button(30, this.game.world.height - 230, 'homeBig', this.onBackClick, this, 1, 0);
-        home.scale.setTo(2, 2);
+        home.scale.setTo(1.5, 1.5);
 
         this.game.add.image(this.game.width * .85, 20, 'starOn');
         var style = {
             'font': '60px Dosis',
             'fill': 'white',
-            'fontWeight': 'bold'
+            'fontWeight': 'Bold'
         };
         this.totalStars = this.game.add.text(this.game.width * .92, 20, 0, style);
 
@@ -64,16 +64,15 @@ Associate.LevelMenu.prototype = {
                     this.scrollingMap.addChild(btn);
                 }
             }
-            this.pageSelectors[k] = game.add.button(game.width / 3 * 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 170, game.height - 100, "plashka", function (e) {
+            this.pageSelectors[k] = game.add.button(game.width / 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 170, this.game.world.height - 230, "plashka", function (e) {
                 var difference = e.pageIndex - this.currentPage;
                 this.changePage(difference);
             }, this);
-            this.pageSelectors[k].anchor.set(0.5);
             this.pageSelectors[k].pageIndex = k;
             this.pageSelectors[k].tint = colors[k];
             this.pageSelectors[k].width = 150;
             if (k == this.currentPage) {
-                this.pageSelectors[k].height = this.pageSelectors[k].width*.8;
+                this.pageSelectors[k].height = this.pageSelectors[k].width * .8;
             } else {
                 this.pageSelectors[k].height = this.pageSelectors[k].width;
 
@@ -135,7 +134,7 @@ Associate.LevelMenu.prototype = {
         this.currentPage += page;
         for (var k = 0; k < this.colors.length; k++) {
             if (k == this.currentPage) {
-                this.pageSelectors[k].height = this.pageSelectors[k].width*.8;
+                this.pageSelectors[k].height = this.pageSelectors[k].width * .8;
             } else {
                 this.pageSelectors[k].height = this.pageSelectors[k].width;
 

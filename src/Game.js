@@ -358,10 +358,14 @@ Associate.Game.prototype = {
 
     onTileClick: function (context) {
         return function (item) {
-            if (context.clicked || context.tiles.get(new Pair(item.tileX, item.tileY)).lock ||
-                context.tiles.get(new Pair(item.tileX, item.tileY)).egg) {
+            if (this.menu != null) {
                 return;
             }
+            if (this.menu)
+                if (context.clicked || context.tiles.get(new Pair(item.tileX, item.tileY)).lock ||
+                    context.tiles.get(new Pair(item.tileX, item.tileY)).egg) {
+                    return;
+                }
 
             if (context.selectedTile == null) {
                 context.selectedTile = item;
@@ -640,6 +644,7 @@ Associate.Game.prototype = {
         }
         this.menu = this.game.add.group();
 
+
         var back = this.menu.create(0, 0, 'menu');
         back.width = this.game.world.width * .8;
         back.height = this.game.world.height * .8;
@@ -651,6 +656,28 @@ Associate.Game.prototype = {
         };
         var label = this.game.add.text(back.centerX, 110, 'Game Paused', style);
         label.anchor.setTo(0.5, 0.5);
+        this.menu.add(label);
+
+        var style = {
+            'font': '60px Dosis',
+            'fill': 'white',
+            'fontWeight': 'normal'
+        };
+
+
+        this.menu.create(back.centerX / 4, 250, 'starSmall').scale.set(3, 3);
+        this.menu.create(back.centerX / 4 + 50, 250, 'starSmall').scale.set(3, 3);
+        this.menu.create(back.centerX / 4 + 100, 250, 'starSmall').scale.set(3, 3);
+        var label = this.game.add.text(back.centerX, 250, '< ' + this.level.star.three + ' moves', style);
+        this.menu.add(label);
+
+        this.menu.create(back.centerX / 4, 350, 'starSmall').scale.set(3, 3);
+        this.menu.create(back.centerX / 4 + 50, 350, 'starSmall').scale.set(3, 3);
+        var label = this.game.add.text(back.centerX, 350, '< ' + this.level.star.two + ' moves', style);
+        this.menu.add(label);
+
+        this.menu.create(back.centerX / 4, 450, 'starSmall').scale.set(3, 3);
+        var label = this.game.add.text(back.centerX, 450, '< ' + this.level.star.one + ' moves', style);
         this.menu.add(label);
 
 
