@@ -87,6 +87,10 @@ Associate.Preloader.prototype = {
         this.load.image('frameTop', 'images/btn/frameTop.png');
         this.load.image('frameBottom', 'images/btn/frameBottom.png');
         this.load.image('lineHorz', 'images/btn/lineHorz.png');
+        this.load.image('boardShadow', 'images/btn/boardShadow.png');
+
+
+
 
         this.load.spritesheet('explosionred', 'images/explosion/explosionRed.png', 108, 112);
         this.load.spritesheet('explosionblue', 'images/explosion/explosionBlue.png', 108, 112);
@@ -102,6 +106,12 @@ Associate.Preloader.prototype = {
         this.load.image('tileLeave', 'images/bgr/tileLeave.png');
         this.load.image('backTile', 'images/bgr/backTile.png');
         this.load.image('backTileRound', 'images/bgr/backTileRound.png');
+
+        this.load.image('titleTop', 'images/bgr/titleTop.png');
+        this.load.image('titleBottom', 'images/bgr/titleBottom.png');
+        this.load.image('titleMid', 'images/bgr/titleMid.png');
+
+
 
         this.load.spritesheet('level', 'images/btn/level.png', 208, 229);
 

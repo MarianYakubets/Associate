@@ -16,6 +16,8 @@ Associate.Game = function (game) {
     this.physics; //    the physics manager
     this.rnd; //    the repeatable random number generator
 
+    this.tilesTopDistance = 280;
+
     this.tileSize;
     this.spacing;
     this.tileDistance;
@@ -84,34 +86,18 @@ Associate.Game.prototype = {
     },
 
     addQuake: function (sprite) {
-
-        // define the camera offset for the quake
         var rumbleOffset = 4;
-
-        // we need to move according to the camera's current position
         var properties = {
             y: sprite.y - rumbleOffset
         };
-
-        // we make it a relly fast movement
         var duration = 100;
-        // because it will repeat
         var repeat = 2;
-        // we use bounce in-out to soften it a little bit
         var ease = Phaser.Easing.Bounce.Out;
         var autoStart = false;
-        // a little delay because we will run it indefinitely
         var delay = 10;
-        // we want to go back to the original position
         var yoyo = true;
-
         var quake = this.game.add.tween(sprite)
             .to(properties, duration, ease, autoStart, delay, 4, yoyo);
-
-        // we're using this line for the example to run indefinitely
-        //quake.onComplete.addOnce(this.addQuake);
-
-        // let the earthquake begins
         quake.start();
     },
 
@@ -124,6 +110,9 @@ Associate.Game.prototype = {
         frameTop.width = this.game.world.width;
         frameTop.height = 200;
 
+        var shadow = this.game.add.sprite(0, 200, 'boardShadow');
+        shadow.width = this.game.world.width;
+        shadow.height = 65;
 
         var frameBottom = this.game.add.sprite(0, 1820, 'frameTop');
         frameBottom.width = this.game.world.width;
@@ -146,7 +135,6 @@ Associate.Game.prototype = {
         this.bar.width = 270;
         this.bar.height = 14;
 
-
         var difference = track.width / this.level.star.one;
         this.starThree = this.game.add.image(track.x + 30 + difference * (this.level.star.one - this.level.star.three), track.y, 'starSmall');
         this.starThree.scale.setTo(2, 2);
@@ -162,21 +150,17 @@ Associate.Game.prototype = {
 
         this.drawTiles(this.legendTiles, this.game.add.group(), this.tileDistance, 'legend');
 
-
         this.tilesGroup = this.game.add.group();
         this.drawTiles(this.tiles, this.tilesGroup, this.tileSize, 'monster');
 
-
         this.selectedGroup = this.game.add.group();
         this.selectedGroup.x = this.tileDistance / 2;
-        this.selectedGroup.y = 200 + this.tileDistance / 2;
-
+        this.selectedGroup.y = this.tilesTopDistance + this.tileDistance / 2;
 
         this.sprites.entities.forEach(function (sprite) {
             sprite.inputEnabled = true;
             sprite.events.onInputDown.add(this.onTileClick(this), this);
         }, this);
-
 
         this.game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
     },
@@ -189,7 +173,6 @@ Associate.Game.prototype = {
 
     drawTilesBcgr: function () {
         this.game.add.tileSprite(0, 0, this.game.width, this.game.height, "backTile");
-
         var back = this.game.add.group();
         var leaveSize = this.tileDistance;
         var w = Math.ceil(this.game.world.width / leaveSize);
@@ -215,7 +198,7 @@ Associate.Game.prototype = {
             }
         }
         back.x = 0;
-        back.y = 200;
+        back.y = this.tilesTopDistance;
         back.setAll('inputEnabled', true);
         back.callAll('events.onInputDown.add', 'events.onInputDown', this.anyDown(this));
 
@@ -238,8 +221,6 @@ Associate.Game.prototype = {
                 sprite.height = size * 1.15;
             }
             if (tile.color != Color.NONE) {
-
-
                 if (type == 'legend') {
                     var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'frame');
                     sprite.frame = ColorToFrame[tile.color] / 2;
@@ -249,9 +230,6 @@ Associate.Game.prototype = {
 
                     sprite.alpha = .6;
                 } else {
-                    //------------------------------------------------------------------------------
-                    //------------------SHADOW------------------------------------------------------
-                    //------------------------------------------------------------------------------
                     var shadow = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'shadow');
                     var scaleFactor = size * .65 / shadow.width;
                     shadow.scale.setTo(scaleFactor, scaleFactor);
@@ -305,13 +283,11 @@ Associate.Game.prototype = {
 
                     this.noClickSprites.set(new Pair(tile.x, tile.y), sprite);
                 }
-
-
             }
 
         }, this);
         group.x = this.tileDistance / 2;
-        group.y = 200 + this.tileDistance / 2;
+        group.y = this.tilesTopDistance + this.tileDistance / 2;
         return group;
     },
 
@@ -322,7 +298,6 @@ Associate.Game.prototype = {
         if (this.bar.width < 10) {
             this.bar.width = 10;
         }
-
         if (this.level.star.three < this.moves) {
             this.starThree.loadTexture('starSmallOff');
         }
@@ -361,12 +336,10 @@ Associate.Game.prototype = {
             if (this.menu != null) {
                 return;
             }
-            if (this.menu)
-                if (context.clicked || context.tiles.get(new Pair(item.tileX, item.tileY)).lock ||
-                    context.tiles.get(new Pair(item.tileX, item.tileY)).egg) {
-                    return;
-                }
-
+            if (context.clicked || context.tiles.get(new Pair(item.tileX, item.tileY)).lock ||
+                context.tiles.get(new Pair(item.tileX, item.tileY)).egg) {
+                return;
+            }
             if (context.selectedTile == null) {
                 context.selectedTile = item;
                 context.selectedTile.width = context.selectedTile.width * 1.1;
@@ -374,10 +347,8 @@ Associate.Game.prototype = {
                 context.selectNeighbors();
                 return;
             }
-
             context.selectedTile.width = context.selectedTile.width / 1.1;
             context.selectedTile.height = context.selectedTile.height / 1.1;
-
             if (context.selectedTile != item) {
                 this.deselectNeighbors();
                 context.selectedTile = null;
@@ -439,9 +410,6 @@ Associate.Game.prototype = {
 
                 this.legendTiles.get(new Pair(item.tileX, item.tileY));
                 item.frame = ColorToFrame[type];
-                /*if (legend.color == type) {
-                 item.frame = ColorToFrame[type] + 1;
-                 }*/
                 item.alpha = 1;
             }, this);
             boom.animations.play('reverse', 20, false);
@@ -474,18 +442,10 @@ Associate.Game.prototype = {
 
         tile.frame = tile.frame + 1;
 
-        /* var h = this.selectedGroup.create(tile.x, tile.y, 'hiliteH');
-         h.anchor.set(0, .5);
-         h.scale.setTo(tile.width * .8 / 75, tile.height * .8 / 75);*/
-
         var nearTiles = this.getNeighbors(tile.tileX, tile.tileY, this.tiles);
         nearTiles.forEach(function (tile) {
             var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
             sprite.frame = sprite.frame + 1;
-            /*    var circle = this.selectedGroup.create(sprite.x, sprite.y, 'hiliteCircle');
-             circle.anchor.set(.5, .5);
-             circle.width = sprite.width;
-             circle.height = sprite.height;*/
         }, this);
     },
 
@@ -559,17 +519,9 @@ Associate.Game.prototype = {
     },
 
     update: function () {
-        //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
     },
 
     quitGame: function (pointer) {
-
-        //  Here you should destroy anything you no longer need.
-        //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
-
-        //  Then let's go back to the main menu.
-        //this.state.start('MainMenu');
-
     },
 
 
@@ -705,8 +657,6 @@ Associate.Game.prototype = {
         this.game.add.tween(this.menu).from({
             y: -600
         }, 1000, Phaser.Easing.Bounce.Out, true);
-
-
     },
 
     onBtnClick: function (name) {
@@ -733,12 +683,10 @@ Associate.Game.prototype = {
         if (currentMax > oldMax) {
             localStorage.setItem("reached-level", currentMax);
         }
-
         var maxMoves = localStorage.getItem("level-" + this.level.number);
         var currentMaxMoves = parseInt(this.moves);
         if (!maxMoves || currentMaxMoves < maxMoves) {
             localStorage.setItem("level-" + this.level.number, currentMaxMoves);
         }
     }
-
 };
