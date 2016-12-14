@@ -57,6 +57,7 @@ Associate.Preloader.prototype = {
         this.load.image('grey', 'images/tiles/grey.png');
         this.load.image('red', 'images/tiles/red.png');
         this.load.image('yellow', 'images/tiles/yellow.png');
+        this.load.image('white', 'images/tiles/white.png');
         this.load.image('orange', 'images/tiles/orange.png');
         this.load.image('none', 'images/tiles/none.png');
         this.load.image('lock', 'images/tiles/locked.png');
@@ -131,6 +132,10 @@ Associate.Preloader.prototype = {
 
 
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
+
+
+        this.load.spritesheet("orbs", "images/sprites/orbs.png", 100, 100);
+        this.load.image("hand", "images/sprites/hand.png");
 
         this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     },
