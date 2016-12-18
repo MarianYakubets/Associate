@@ -46,6 +46,7 @@ Associate.Game = function (game) {
     this.starTwo;
     this.starThree;
 
+    this.fpsText;
 };
 
 Associate.Game.prototype = {
@@ -102,6 +103,7 @@ Associate.Game.prototype = {
     },
 
     create: function () {
+        this.time.advancedTiming = true;
         this.menu = null;
         this.moves = 0;
         this.drawTilesBcgr();
@@ -164,6 +166,9 @@ Associate.Game.prototype = {
         }, this);
 
         this.game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
+
+
+        this.fpsText = this.game.add.text(100, pause.y, '', style);
     },
 
     updateCounter: function () {
@@ -189,7 +194,7 @@ Associate.Game.prototype = {
                             tile.height = leaveSize;
                         }
                     } else {
-                        if (j < 10) {
+                        if (j < 7) {
                             var tile = back.create(i * leaveSize, j * leaveSize, 'backTileRound');
                             tile.width = leaveSize;
                             tile.height = leaveSize;
@@ -531,6 +536,8 @@ Associate.Game.prototype = {
     },
 
     update: function () {
+        "use strict";
+        this.fpsText.setText("FPS: " + this.game.time.fps);
     },
 
     quitGame: function (pointer) {
