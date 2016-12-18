@@ -304,8 +304,8 @@ Associate.Editor.prototype = {
     },
 
     onRightBtnClick: function () {
-        this.w = 8;
-        this.h = 10;
+        this.w = 6;
+        this.h = 7;
         this.tiles = new TileMap();
         this.legendTiles = new TileMap();
         for (var i = 0; i < this.w; i++) {
@@ -362,11 +362,11 @@ Associate.Editor.prototype = {
     calculateTileSize: function () {
         var h = this.game.world.height - Screen.PADDING_HEIGHT;
         var distanceH = Math.floor(h / this.h);
-        var tileW = Math.floor(distanceH * .8)
+        var tileW = Math.floor(distanceH * .8);
 
         var w = this.game.world.width;
         var distanceW = Math.floor(w / this.w);
-        var tileH = Math.floor(distanceW * .8)
+        var tileH = Math.floor(distanceW * .8);
         var tileSize = tileW < tileH ? tileW : tileH;
 
         if (tileSize > Screen.MAX_TILE_SIZE) {

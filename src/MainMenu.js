@@ -11,14 +11,14 @@ Associate.MainMenu.prototype = {
         LevelManager.syncLevels();
         this.drawLeavesBgr();
 
-        /* this.game.add.image(0, 0, 'titleTop').scale.set(1.1, 1.1);
+         this.game.add.image(0, 0, 'titleTop').scale.set(1.1, 1.1);
 
          var mid = this.game.add.image(this.game.width / 2, this.game.height * .7, 'titleMid');
          mid.anchor.set(0.5, 0);
 
          var bot = this.game.add.image(this.game.width / 2, this.game.height, 'titleBottom');
          bot.scale.set(1.1, 1.1);
-         bot.anchor.set(0.5, 1);*/
+         bot.anchor.set(0.5, 1);
 
 
         //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
@@ -31,15 +31,6 @@ Associate.MainMenu.prototype = {
         var play = this.game.add.button(this.game.world.centerX, this.game.world.centerY * .7, 'playBig', this.onBtnClick('Game'), this, 0, 0);
         play.anchor.set(.5, .5);
         play.scale.setTo(1.8, 1.8);
-
-        var playB = this.game.add.button(this.game.world.centerX, this.game.world.centerY * 1.2, 'playBig', function () {
-            this.game.state.start('BeGame',
-                Phaser.Plugin.StateTransition.Out.SlideBottom,
-                Phaser.Plugin.StateTransition.In.ScaleUp,
-                true, false);
-        }, this, 0, 0);
-        playB.anchor.set(.5, .5);
-        playB.scale.setTo(1.8, 1.8);
 
         this.game.add.button(this.game.world.width - 80, this.game.world.height - 80, 'option', this.onBtnClick('Editor'), this, 1, 0).alpha = 0;
     },
