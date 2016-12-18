@@ -536,7 +536,6 @@ Associate.Game.prototype = {
     },
 
     update: function () {
-        "use strict";
         this.fpsText.setText("FPS: " + this.game.time.fps);
     },
 
