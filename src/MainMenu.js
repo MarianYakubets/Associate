@@ -48,6 +48,8 @@ Associate.MainMenu.prototype = {
 
     onBtnClick: function (state) {
         return function () {
+            this.game.sound.play('click');
+
             this.state.start('LevelMenu',
                 Phaser.Plugin.StateTransition.Out.SlideBottom,
                 Phaser.Plugin.StateTransition.In.ScaleUp,

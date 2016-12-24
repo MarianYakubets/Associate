@@ -91,8 +91,6 @@ Associate.Preloader.prototype = {
         this.load.image('boardShadow', 'images/btn/boardShadow.png');
 
 
-
-
         this.load.spritesheet('explosionred', 'images/explosion/explosionRed.png', 108, 112);
         this.load.spritesheet('explosionblue', 'images/explosion/explosionBlue.png', 108, 112);
         this.load.spritesheet('explosiongreen', 'images/explosion/explosionGreen.png', 108, 112);
@@ -111,7 +109,6 @@ Associate.Preloader.prototype = {
         this.load.image('titleTop', 'images/bgr/titleTop.png');
         this.load.image('titleBottom', 'images/bgr/titleBottom.png');
         this.load.image('titleMid', 'images/bgr/titleMid.png');
-
 
 
         this.load.spritesheet('level', 'images/btn/level.png', 208, 229);
@@ -138,6 +135,16 @@ Associate.Preloader.prototype = {
         this.load.image("hand", "images/sprites/hand.png");
 
         this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
+
+        this.load.audio('click', 'sound/click.mp3');
+        this.load.audio('flip', 'sound/flip.mp3');
+        this.load.audio('ice', 'sound/ice.mp3');
+        this.load.audio('tap', 'sound/tap.mp3');
+        this.load.audio('victory', 'sound/victory.mp3');
+        this.load.audio('boop', 'sound/boop.mp3');
+        this.load.audio('stone', 'sound/stone.mp3');
+        this.load.audio('swip', 'sound/swip.mp3');
     },
 
     create: function () {

@@ -151,6 +151,8 @@ Associate.LevelMenu.prototype = {
 
     onLevelClick: function (levelNumber) {
         return function () {
+            this.game.sound.play('click');
+
             this.state.start(this.stateName,
                 Phaser.Plugin.StateTransition.Out.SlideBottom,
                 Phaser.Plugin.StateTransition.In.ScaleUp, true, false,
@@ -159,6 +161,8 @@ Associate.LevelMenu.prototype = {
     },
 
     onBackClick: function () {
+        this.game.sound.play('click');
+
         this.state.start('MainMenu',
             Phaser.Plugin.StateTransition.Out.SlideTop,
             Phaser.Plugin.StateTransition.In.ScaleUp, true, false);

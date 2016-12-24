@@ -324,6 +324,8 @@ Associate.Game.prototype = {
         }, this);
 
         if (victory) {
+            this.game.sound.play('victory');
+
             var timer = this.game.time.create(false);
             timer.add(750, this.setOnVictory, this);
             timer.start();
@@ -367,6 +369,8 @@ Associate.Game.prototype = {
             nearTiles.forEach(function (a, i) {
                 var tile = context.tiles.get(new Pair(a[0], a[1]));
                 if (tile.lock || tile.egg) {
+                    this.game.sound.play('ice');
+
                     var ice = context.noClickSprites.get(new Pair(a[0], a[1]));
                     ice.loadTexture('explosionIce', 0);
                     ice.height = item.height * .7;
@@ -398,12 +402,15 @@ Associate.Game.prototype = {
     },
 
     flip: function (context, type, item) {
+        this.game.sound.play('flip');
         item.alpha = 0;
         var tile = this.tiles.get(new Pair(item.tileX, item.tileY));
         var boom = this.game.add.sprite(item.world.x, item.world.y, 'explosion' + tile.color, 0);
         boom.anchor.x = .5;
         boom.anchor.y = .5;
         var anim = boom.animations.add('boom', [0, 1, 2, 3, 4, 5]);
+        this.game.sound.play('flip');
+
         anim.onComplete.add(function () {
             boom.loadTexture('explosion' + type, 0);
             var reverse = boom.animations.add('reverse', [0, 1, 2, 3, 4, 5]).reverse();
@@ -417,6 +424,8 @@ Associate.Game.prototype = {
             boom.animations.play('reverse', 20, false);
         }, this);
         boom.animations.play('boom', 20, false);
+        this.game.sound.play('flip');
+
     },
 
     deselectNeighbors: function () {
@@ -438,6 +447,9 @@ Associate.Game.prototype = {
     selectNeighbors: function () {
         var baseTile = this.selectedTile;
         var color = this.tiles.get(new Pair(this.selectedTile.tileX, this.selectedTile.tileY)).color;
+
+        this.game.sound.play('swip', .3);
+        this.game.sound.play('swip', .3);
 
 
 
@@ -490,6 +502,9 @@ Associate.Game.prototype = {
     },
 
     getNeighbors: function (x, y, tiles) {
+        this.game.sound.play('tap', .3);
+        this.game.sound.play('tap', .3);
+
         var n = [];
 
         var i = x - 1;
@@ -544,6 +559,7 @@ Associate.Game.prototype = {
     },
 
     onPauseClick: function () {
+        this.game.sound.play('click');
         this.setOnPause();
     },
 
@@ -604,6 +620,7 @@ Associate.Game.prototype = {
         line.height = 20;
 
         var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function () {
+            this.game.sound.play('click');
             this.game.state.restart(true, false, this.level);
         }, this, 0, 0, 1, 0);
         retry.anchor.x = .5;
@@ -611,6 +628,7 @@ Associate.Game.prototype = {
         this.menu.add(retry);
 
         var next = this.game.add.button(back.centerX, this.menu.height - 300, 'next', function () {
+            this.game.sound.play('click');
             this.state.start('Game', Phaser.Plugin.StateTransition.Out.SlideLeft,
                 Phaser.Plugin.StateTransition.In.ScaleUp, true, false, LevelManager.getLevel(++this.level.number));
         }, this, 0, 0, 1, 0);
@@ -675,6 +693,7 @@ Associate.Game.prototype = {
 
 
         var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function () {
+            this.game.sound.play('click');
             this.game.state.restart(true, false, this.level);
         }, this, 0, 0, 1, 0);
         retry.anchor.x = .5;
@@ -702,6 +721,7 @@ Associate.Game.prototype = {
 
     onBtnClick: function (name) {
         return function () {
+            this.game.sound.play('click');
             this.state.start(name, Phaser.Plugin.StateTransition.Out.SlideTop,
                 Phaser.Plugin.StateTransition.In.ScaleUp,
                 true, false, 'Game');
@@ -709,6 +729,7 @@ Associate.Game.prototype = {
     },
 
     onCloseClick: function () {
+        this.game.sound.play('click');
         this.unPause();
     },
 
