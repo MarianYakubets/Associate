@@ -110,15 +110,11 @@ Associate.Game.prototype = {
 
         var frameTop = this.game.add.sprite(0, 0, 'frameTop');
         frameTop.width = this.game.world.width;
-        frameTop.height = 200;
+        frameTop.height = 250;
 
-        var shadow = this.game.add.sprite(0, 200, 'boardShadow');
+        var shadow = this.game.add.sprite(0, 250, 'boardShadow');
         shadow.width = this.game.world.width;
         shadow.height = 65;
-
-        var frameBottom = this.game.add.sprite(0, 1820, 'frameTop');
-        frameBottom.width = this.game.world.width;
-        frameBottom.height = 100;
 
         var pause = this.game.add.button(this.game.width - 160, 20, 'pause', this.onPauseClick, this, 0, 0, 1, 0);
         pause.scale.setTo(2, 2);
@@ -443,6 +439,8 @@ Associate.Game.prototype = {
         var baseTile = this.selectedTile;
         var color = this.tiles.get(new Pair(this.selectedTile.tileX, this.selectedTile.tileY)).color;
 
+
+
         if (!this.tiles.get(new Pair(baseTile.tileX, baseTile.tileY)).grass) {
             var circle = this.selectedGroup.create(baseTile.x, baseTile.y, 'hiliteCircle');
             circle.anchor.set(.5, .5);
@@ -483,6 +481,12 @@ Associate.Game.prototype = {
 
             }
         }, this);
+
+
+        var round = this.selectedGroup.create(baseTile.x, baseTile.y, 'tiles', 0);
+        round.anchor.set(.5, .5);
+        round.width = baseTile.width;
+        round.height = baseTile.height;
     },
 
     getNeighbors: function (x, y, tiles) {

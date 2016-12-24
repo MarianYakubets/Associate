@@ -11,13 +11,13 @@ Associate.MainMenu.prototype = {
         LevelManager.syncLevels();
         this.drawLeavesBgr();
 
-         this.game.add.image(0, 0, 'titleTop').scale.set(1.1, 1.1);
+         this.game.add.image(-50, -50, 'titleTop').scale.set(1.2, 1.2);
 
          var mid = this.game.add.image(this.game.width / 2, this.game.height * .7, 'titleMid');
          mid.anchor.set(0.5, 0);
 
-         var bot = this.game.add.image(this.game.width / 2, this.game.height, 'titleBottom');
-         bot.scale.set(1.1, 1.1);
+         var bot = this.game.add.image(this.game.width / 2, this.game.height+50, 'titleBottom');
+         bot.scale.set(1.3, 1.3);
          bot.anchor.set(0.5, 1);
 
 
