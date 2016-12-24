@@ -8,7 +8,7 @@ var LevelManager = {
                 var level = JSON.parse(snapshot.val()[key]);
                 LevelManager.levels[level.number] = level;
             }, this);
-            console.log(JSON.stringify(LevelManager.levels));
+            //console.log(JSON.stringify(LevelManager.levels));
         });
     },
 

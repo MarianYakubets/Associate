@@ -440,29 +440,48 @@ Associate.Game.prototype = {
     },
 
     selectNeighbors: function () {
-        var tile = this.selectedTile;
+        var baseTile = this.selectedTile;
         var color = this.tiles.get(new Pair(this.selectedTile.tileX, this.selectedTile.tileY)).color;
 
-        var circle = this.selectedGroup.create(tile.x, tile.y, 'hiliteCircle');
-        circle.anchor.set(.5, .5);
-        circle.width = tile.width;
-        circle.height = tile.height;
-        circle.tint = ColorToTint[color];
+        if (!this.tiles.get(new Pair(baseTile.tileX, baseTile.tileY)).grass) {
+            var circle = this.selectedGroup.create(baseTile.x, baseTile.y, 'hiliteCircle');
+            circle.anchor.set(.5, .5);
+            circle.width = baseTile.width;
+            circle.height = baseTile.height;
+            circle.tint = ColorToTint[color];
+            circle.alpha = 0;
+
+            this.game.add.tween(circle).to({alpha: 1}, 700, Phaser.Easing.Linear.None, true, 0, 1000, true);
+        }
 
 
-        tile.frame = tile.frame + 1;
+        baseTile.frame = baseTile.frame + 1;
 
-        var nearTiles = this.getNeighbors(tile.tileX, tile.tileY, this.tiles);
+
+        var nearTiles = this.getNeighbors(baseTile.tileX, baseTile.tileY, this.tiles);
         nearTiles.forEach(function (tile) {
+            var diff = 0;
+            if (tile[0] == baseTile.tileX) {
+                diff = Math.abs(baseTile.tileY - tile[1]);
+            } else {
+                diff = Math.abs(baseTile.tileX - tile[0]);
+            }
+
+
             var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
             sprite.frame = sprite.frame + 1;
 
-            var circle = this.selectedGroup.create(sprite.x, sprite.y, 'hiliteCircle');
-            circle.anchor.set(.5, .5);
-            circle.width = sprite.width;
-            circle.height = sprite.height;
-            circle.tint = ColorToTint[color];
+            if (!this.tiles.get(new Pair(tile[0], tile[1])).grass) {
+                var circle = this.selectedGroup.create(sprite.x, sprite.y, 'hiliteCircle');
+                circle.anchor.set(.5, .5);
+                circle.width = sprite.width;
+                circle.height = sprite.height;
+                circle.tint = ColorToTint[color];
+                circle.alpha = 0;
 
+                this.game.add.tween(circle).to({alpha: 1}, 700, Phaser.Easing.Linear.None, true, 250 * diff, 1000, true);
+
+            }
         }, this);
     },
 
