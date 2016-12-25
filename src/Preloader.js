@@ -112,6 +112,8 @@ Associate.Preloader.prototype = {
 
 
         this.load.spritesheet('level', 'images/btn/level.png', 208, 229);
+        this.load.spritesheet('musicBtn', 'images/btn/musicBtn.png', 73, 73);
+        this.load.spritesheet('soundBtn', 'images/btn/soundBtn.png', 73, 73);
 
         this.load.spritesheet('monster', 'images/tiles/tiles.png', 127, 126);
         this.load.spritesheet('tiles', 'images/tiles/moreTiles.png', 126, 126);
