@@ -90,6 +90,8 @@ Associate.Preloader.prototype = {
         this.load.image('lineHorz', 'images/btn/lineHorz.png');
         this.load.image('boardShadow', 'images/btn/boardShadow.png');
 
+        this.load.image('true', 'images/btn/checkTrue.png');
+        this.load.image('false', 'images/btn/checkFalse.png');
 
         this.load.spritesheet('explosionred', 'images/explosion/explosionRed.png', 108, 112);
         this.load.spritesheet('explosionblue', 'images/explosion/explosionBlue.png', 108, 112);
@@ -133,7 +135,6 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
 
 
-        this.load.spritesheet("orbs", "images/sprites/orbs.png", 100, 100);
         this.load.image("hand", "images/sprites/hand.png");
 
         this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');

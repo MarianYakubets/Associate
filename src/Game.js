@@ -164,7 +164,10 @@ Associate.Game.prototype = {
         this.game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
 
 
-        this.fpsText = this.game.add.text(100, pause.y, '', style);
+        //this.fpsText = this.game.add.text(100, pause.y, '', style);
+        if (this.level.number == 1) {
+            this.showTutorial();
+        }
     },
 
     updateCounter: function () {
@@ -452,7 +455,6 @@ Associate.Game.prototype = {
         this.game.sound.play('swip', .3);
 
 
-
         if (!this.tiles.get(new Pair(baseTile.tileX, baseTile.tileY)).grass) {
             var circle = this.selectedGroup.create(baseTile.x, baseTile.y, 'hiliteCircle');
             circle.anchor.set(.5, .5);
@@ -575,10 +577,66 @@ Associate.Game.prototype = {
     },
 
     update: function () {
-        this.fpsText.setText("FPS: " + this.game.time.fps);
+        //this.fpsText.setText("FPS: " + this.game.time.fps);
     },
 
     quitGame: function (pointer) {
+    },
+
+
+    showTutorial: function () {
+        if (this.menu != null) {
+            return;
+        }
+        this.menu = this.game.add.group();
+
+
+        var back = this.menu.create(0, 0, 'menu');
+        back.width = this.game.world.width * .8;
+        back.height = this.game.world.height * .8;
+
+        var w = 200;
+        var h = 200;
+
+        var cell = this.menu.create(100, 60, 'frame', 1);
+        cell.width = w;
+        cell.height = w;
+        var m = this.menu.create(100, 60, 'monster', 2);
+        m.width = w;
+        m.height = h;
+        var c = this.menu.create(50 + w, h, 'true');
+
+
+        var cell = this.menu.create(400, 60, 'frame', 1);
+        cell.width = w;
+        cell.height = w;
+        var m = this.menu.create(400, 60, 'monster', 4);
+        m.width = w;
+        m.height = h;
+        var c = this.menu.create(m.x + 150, h, 'false');
+
+
+        var cell = this.menu.create(700, 60, 'frame', 2);
+        cell.width = w;
+        cell.height = w;
+        var m = this.menu.create(700, 60, 'monster', 4);
+        m.width = w;
+        m.height = h;
+        var c = this.menu.create(m.x + 150, h, 'false');
+
+
+        var play = this.game.add.button(back.centerX, this.menu.height - 350, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
+        play.anchor.x = .5;
+        play.scale.setTo(2, 2);
+        this.menu.add(play);
+
+
+        this.menu.x = this.game.world.centerX - back.width / 2;
+        this.menu.y = this.game.world.centerY - back.height / 2;
+
+        this.game.add.tween(this.menu).from({
+            y: -600
+        }, 1000, Phaser.Easing.Bounce.Out, true);
     },
 
 
@@ -751,4 +809,6 @@ Associate.Game.prototype = {
             localStorage.setItem("level-" + this.level.number, currentMaxMoves);
         }
     }
+
+
 };
