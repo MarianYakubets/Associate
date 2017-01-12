@@ -131,6 +131,11 @@ Associate.Preloader.prototype = {
         this.load.image('hiliteH', 'images/tiles/hiliteH.png');
         this.load.image('hiliteV', 'images/tiles/hiliteV.png');
 
+        this.load.image('arrowDown', 'images/tiles/arrowDown.png');
+        this.load.image('arrowLeft', 'images/tiles/arrowLeft.png');
+        this.load.image('arrowRight', 'images/tiles/arrowRight.png');
+        this.load.image('arrowUp', 'images/tiles/arrowUp.png');
+
 
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
 

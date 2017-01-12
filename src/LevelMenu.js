@@ -32,6 +32,7 @@ Associate.LevelMenu.prototype = {
         var colHeight = thumbHeight * rows + spacing * (rows - 1);
         var topMargin = (game.height - colHeight) / 3;
 
+        this.game.stage.backgroundColor = "#56433C";
         this.scrollingMap = game.add.tileSprite(0, 0, colors.length * game.width, game.height, "tileLeave");
         this.scrollingMap.inputEnabled = true;
         this.scrollingMap.input.enableDrag(false);
