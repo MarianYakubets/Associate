@@ -158,7 +158,7 @@ Associate.Game.prototype = {
             sprite.inputEnabled = true;
             sprite.events.onInputDown.add(this.onTileClick(this), this);
         }, this);
-        this.game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
+        //this.game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
 
         //this.fpsText = this.game.add.text(100, pause.y, '', style);
         if (this.level.number == 1) {
@@ -183,6 +183,8 @@ Associate.Game.prototype = {
 
     drawTilesBcgr: function () {
         this.game.stage.backgroundColor = "#56433C";
+        this.game.add.tileSprite(0, 0, this.game.width, this.game.height, "backTile");
+
         var back = this.game.add.group();
         var leaveSize = this.tileDistance;
         var w = Math.ceil(this.game.world.width / leaveSize);
@@ -585,10 +587,6 @@ Associate.Game.prototype = {
         //this.fpsText.setText("FPS: " + this.game.time.fps);
     },
 
-    quitGame: function (pointer) {
-    },
-
-
     showTutorialBase: function () {
         if (this.menu != null) {
             return;
@@ -897,7 +895,117 @@ Associate.Game.prototype = {
     },
 
     showTutorialGrass: function () {
+        if (this.menu != null) {
+            return;
+        }
+        this.menu = this.game.add.group();
+        var back = this.menu.create(0, 0, 'menu');
+        back.width = this.game.world.width * .8;
+        back.height = this.game.world.height * .8;
 
+        //STEP CELLS
+        //         1
+        var startX = 50;
+        var startY = back.height / 8;
+        var w = back.width / 6;
+        var m = this.menu.create(startX + 20, startY, 'monster', 0);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + w, startY, 'monster', 2);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 2 * w, startY, 'monster', 4);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 3 * w, startY, 'tiles', 2);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 3 * w, startY, 'monster', 6);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 4 * w, startY, 'monster', 6);
+        m.width = w;
+        m.height = w;
+        var arrow = this.menu.create(startX + 20 + 2 * w, startY + w, 'arrowDown');
+        arrow.width = w;
+        arrow.height = w;
+        var hand = this.menu.create(startX + 20 + w, startY + w, 'hand');
+        hand.width = w;
+        hand.height = w;
+        hand.anchor.setTo(0.5, 0.5);
+        hand.rotation = 45;
+        //         2
+        startX = 50;
+        startY = back.height / 8 + w * 2;
+        w = back.width / 6;
+        var circle = this.menu.create(startX + 20, startY, 'hiliteCircle');
+        circle.width = m.width;
+        circle.height = m.height;
+        circle.tint = ColorToTint[Color.BLUE];
+        m = this.menu.create(startX + 20, startY, 'monster', 1);
+        m.width = w;
+        m.height = w;
+        var round = this.menu.create(startX + 20 + w, startY, 'tiles', 0);
+        round.width = w;
+        round.height = w;
+        m = this.menu.create(startX + 20 + w, startY, 'monster', 3);
+        m.width = w;
+        m.height = w;
+        circle = this.menu.create(startX + 20 + 2 * w, startY, 'hiliteCircle');
+        circle.width = m.width;
+        circle.height = m.height;
+        circle.tint = ColorToTint[Color.BLUE];
+        m = this.menu.create(startX + 20 + 2 * w, startY, 'monster', 5);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 3 * w, startY, 'tiles', 2);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 3 * w, startY, 'monster', 7);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 4 * w, startY, 'monster', 6);
+        m.width = w;
+        m.height = w;
+        arrow = this.menu.create(startX + 20 + 2 * w, startY + w, 'arrowDown');
+        arrow.width = w;
+        arrow.height = w;
+        hand = this.menu.create(startX + 20 + w, startY + w, 'hand');
+        hand.width = w;
+        hand.height = w;
+        hand.anchor.setTo(0.5, 0.5);
+        hand.rotation = 45;
+        //         3
+        startX = 50;
+        startY = back.height / 8 + 4 * w;
+        m = this.menu.create(startX + 20, startY, 'monster', 2);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + w, startY, 'monster', 2);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 2 * w, startY, 'monster', 2);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 3 * w, startY, 'tiles', 2);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 3 * w, startY, 'monster', 6);
+        m.width = w;
+        m.height = w;
+        m = this.menu.create(startX + 20 + 4 * w, startY, 'monster', 6);
+        m.width = w;
+        m.height = w;
+
+
+        var play = this.game.add.button(back.centerX, this.menu.height - 250, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
+        play.anchor.x = .5;
+        this.menu.add(play);
+        this.menu.x = this.game.world.centerX - back.width / 2;
+        this.menu.y = this.game.world.centerY - back.height / 2;
+        this.game.add.tween(this.menu).from({
+            y: -600
+        }, 1000, Phaser.Easing.Bounce.Out, true);
     },
 
     showTutorialEgg: function () {
@@ -1018,7 +1126,7 @@ Associate.Game.prototype = {
         back.height = this.game.world.height * .8;
 
         var style = {
-            'font': '120px Dosis',
+            'font': '100px Dosis',
             'fill': 'white',
             'fontWeight': 'bold'
         };
@@ -1047,12 +1155,12 @@ Associate.Game.prototype = {
         line.width = this.menu.width * .8;
         line.height = 20;
 
-        var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function () {
+        var retry = this.game.add.button(back.centerX - 300, this.menu.height - 300, 'retry', function () {
             this.game.sound.play('click');
             this.game.state.restart(true, false, this.level);
         }, this, 0, 0, 1, 0);
         retry.anchor.x = .5;
-        retry.scale.setTo(2, 2);
+        retry.scale.setTo(1.5, 1.5);
         this.menu.add(retry);
 
         var next = this.game.add.button(back.centerX, this.menu.height - 300, 'next', function () {
@@ -1061,12 +1169,12 @@ Associate.Game.prototype = {
                 Phaser.Plugin.StateTransition.In.ScaleUp, true, false, LevelManager.getLevel(++this.level.number));
         }, this, 0, 0, 1, 0);
         next.anchor.x = .5;
-        next.scale.setTo(2, 2);
+        next.scale.setTo(1.5, 1.5);
         this.menu.add(next);
 
-        var home = this.game.add.button(back.centerX + 330, this.menu.height - 300, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
+        var home = this.game.add.button(back.centerX + 300, this.menu.height - 300, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
         home.anchor.x = .5;
-        home.scale.setTo(2, 2);
+        home.scale.setTo(1.5, 1.5);
         this.menu.add(home);
 
         this.menu.x = this.game.world.centerX - back.width / 2;
@@ -1089,7 +1197,7 @@ Associate.Game.prototype = {
         back.height = this.game.world.height * .8;
 
         var style = {
-            'font': '120px Dosis',
+            'font': '100px Dosis',
             'fill': 'white',
             'fontWeight': 'bold'
         };
@@ -1120,22 +1228,22 @@ Associate.Game.prototype = {
         this.menu.add(label);
 
 
-        var retry = this.game.add.button(back.centerX - 330, this.menu.height - 300, 'retry', function () {
+        var retry = this.game.add.button(back.centerX - 300, this.menu.height - 300, 'retry', function () {
             this.game.sound.play('click');
             this.game.state.restart(true, false, this.level);
         }, this, 0, 0, 1, 0);
         retry.anchor.x = .5;
-        retry.scale.setTo(2, 2);
+        retry.scale.setTo(1.5, 1.5);
         this.menu.add(retry);
 
         var play = this.game.add.button(back.centerX, this.menu.height - 350, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
         play.anchor.x = .5;
-        play.scale.setTo(2, 2);
+        play.scale.setTo(1.5, 1.5);
         this.menu.add(play);
 
-        var home = this.game.add.button(back.centerX + 330, this.menu.height - 300, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
+        var home = this.game.add.button(back.centerX + 300, this.menu.height - 300, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
         home.anchor.x = .5;
-        home.scale.setTo(2, 2);
+        home.scale.setTo(1.5, 1.5);
         this.menu.add(home);
 
 
