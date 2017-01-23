@@ -11,7 +11,9 @@ Associate.MainMenu.prototype = {
         LevelManager.syncLevels();
         this.drawLeavesBgr();
 
-         this.game.add.image(-50, -50, 'titleTop').scale.set(1.2, 1.2);
+        // var top = this.game.add.image(this.game.width / 2, -50, 'titleTop');
+        // top.scale.set(1.3, 1.3);
+        // top.anchor.set(0.5, 1);
 
          var mid = this.game.add.image(this.game.width / 2, this.game.height * .7, 'titleMid');
          mid.anchor.set(0.5, 0);
