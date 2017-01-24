@@ -12,6 +12,7 @@ Associate.LevelMenu.prototype = {
     },
 
     create: function () {
+        Music.mute(true);
         var game = this.game;
         var highestLevel = localStorage.getItem("reached-level");
         if (highestLevel == null) {

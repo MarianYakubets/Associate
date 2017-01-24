@@ -50,6 +50,8 @@ Associate.Preloader.prototype = {
         /*this.load.binary('2', 'images/2.flac');*/
         /*this.load.binary('3', 'images/3.flac');*/
 
+        this.load.audio('titleMusic', ['sound/sappy.mp3']);
+
         this.load.image('squareBlack', 'images/tiles/squareBlack.png');
         this.load.image('squareWhite', 'images/tiles/squareWhite.png');
         this.load.image('blue', 'images/tiles/blue.png');
@@ -156,12 +158,9 @@ Associate.Preloader.prototype = {
     },
 
     create: function () {
-
         //	Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes
         //this.preloadBar.cropEnabled = false;
         this.state.start('MainMenu');
-
-
     },
 
     update: function () {

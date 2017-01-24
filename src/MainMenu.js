@@ -8,6 +8,8 @@ Associate.MainMenu = function (game) {
 Associate.MainMenu.prototype = {
 
     create: function () {
+        Music.initMusic(this.game, localStorage);
+
         LevelManager.syncLevels();
         this.drawLeavesBgr();
 

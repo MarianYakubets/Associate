@@ -103,6 +103,7 @@ Associate.Game.prototype = {
     },
 
     create: function () {
+        Music.mute(false);
         this.time.advancedTiming = true;
         this.menu = null;
         this.moves = 0;
