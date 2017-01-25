@@ -12,7 +12,6 @@ Associate.LevelMenu.prototype = {
     },
 
     create: function () {
-        Music.mute(true);
         var game = this.game;
         var highestLevel = localStorage.getItem("reached-level");
         if (highestLevel == null) {
@@ -153,7 +152,8 @@ Associate.LevelMenu.prototype = {
 
     onLevelClick: function (levelNumber) {
         return function () {
-            this.game.sound.play('click');
+            if (Music.isPlaySound())
+                this.game.sound.play('click');
 
             this.state.start(this.stateName,
                 Phaser.Plugin.StateTransition.Out.SlideBottom,
@@ -163,7 +163,8 @@ Associate.LevelMenu.prototype = {
     },
 
     onBackClick: function () {
-        this.game.sound.play('click');
+        if (Music.isPlaySound())
+            this.game.sound.play('click');
 
         this.state.start('MainMenu',
             Phaser.Plugin.StateTransition.Out.SlideTop,
