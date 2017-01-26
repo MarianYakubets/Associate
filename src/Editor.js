@@ -18,7 +18,7 @@ Associate.Editor = function (game) {
     this.physics; //    the physics manager
     this.rnd; //    the repeatable random number generator
 
-    this.palleteSize = 48 * 2;
+    this.palleteSize = 60;
     this.tileSize = 60;
     this.spacing = this.tileSize / 6;
     this.tileDistance = this.tileSize + this.spacing;
@@ -79,8 +79,8 @@ Associate.Editor.prototype = {
 
         this.game.stage.backgroundColor = 0x7e7657;
 
-        var scaleBtn = .8;
-        var btnSize = 137;
+        var scaleBtn = .4;
+        var btnSize = 69;
 
         this.game.add.button(0, 1, 'exit', this.onBackClick, this, 1, 0, 2).scale.setTo(scaleBtn, scaleBtn);
         this.game.add.button(btnSize, 1, 'save', this.onSaveClick, this, 1, 0, 2).scale.setTo(scaleBtn, scaleBtn);
@@ -89,7 +89,7 @@ Associate.Editor.prototype = {
         this.game.add.button(btnSize * 3, 1, 'right', this.onRightBtnClick, this, 1, 0, 2).scale.setTo(scaleBtn, scaleBtn);
 
         var style = {
-            'font': '60px Dosis',
+            'font': '30px Dosis',
             'fill': 'white',
             'fontWeight': 'bold'
         };
@@ -100,7 +100,7 @@ Associate.Editor.prototype = {
 
         var palette = this.game.add.group();
 
-        scaleBtn = 2;
+        scaleBtn = 1.2;
         var palleteY = this.game.world.height - this.palleteSize;
         palette.create(0, palleteY, 'squareWhite').scale.setTo(scaleBtn, scaleBtn);
         palette.create(0, palleteY, 'none').scale.setTo(scaleBtn, scaleBtn);
@@ -133,7 +133,7 @@ Associate.Editor.prototype = {
         palette.setAll('inputEnabled', true);
         palette.callAll('events.onInputDown.add', 'events.onInputDown', this.onPaletteClick(this));
 
-        this.game.add.button(this.game.width - 160, this.game.height - 160, 'pause', this.setOnPause, this, 0, 0, 1, 0).scale.setTo(2, 2);
+        this.game.add.button(this.game.width - 80, this.game.height - 80, 'pause', this.setOnPause, this, 0, 0, 1, 0).scale.setTo(2, 2);
 
         this.squareMask.input.enabled = false;
         this.drawLegendTiles();

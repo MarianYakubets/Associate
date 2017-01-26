@@ -1164,7 +1164,7 @@ Associate.Game.prototype = {
         back.height = this.game.world.height * .8;
 
         var style = {
-            'font': '70px Dosis',
+            'font': '60px Dosis',
             'fill': 'white',
             'fontWeight': 'bold'
         };
