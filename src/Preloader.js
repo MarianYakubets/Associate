@@ -46,10 +46,6 @@ Associate.Preloader.prototype = {
          this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');*/
         //	+ lots of other required assets here
 
-        /*this.load.binary('1', 'images/1.flac');*/
-        /*this.load.binary('2', 'images/2.flac');*/
-        /*this.load.binary('3', 'images/3.flac');*/
-
         this.load.audio('titleMusic', ['sound/sappy.mp3']);
 
         this.load.image('squareBlack', 'images/tiles/squareBlack.png');
@@ -75,15 +71,15 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('up', 'images/btn/up.png', 173, 173);
         this.load.spritesheet('down', 'images/btn/down.png', 173, 173);
 
-        this.load.spritesheet('retry', 'images/btn/retry.png', 101, 101);
-        this.load.spritesheet('next', 'images/btn/next.png', 161, 101);
-        this.load.spritesheet('playBig', 'images/btn/playBig.png', 157, 157);
-        this.load.spritesheet('playLong', 'images/btn/playLong.png', 667, 427);
+        this.load.spritesheet('retry', 'images/btn/retry.png', 50.5, 50.5);
+        this.load.spritesheet('next', 'images/btn/next.png', 80.5, 50.5);
+        this.load.spritesheet('playBig', 'images/btn/playBig.png', 79, 79);
+        this.load.spritesheet('playLong', 'images/btn/playLong.png', 334, 214);
         this.load.spritesheet('option', 'images/btn/option.png', 73, 73);
-        this.load.spritesheet('homeBig', 'images/btn/homeBig.png', 101, 101);
-        this.load.spritesheet('plashka', 'images/btn/plashka.png', 101, 101);
+        this.load.spritesheet('homeBig', 'images/btn/homeBig.png', 50.5, 50.5);
+        this.load.spritesheet('plashka', 'images/btn/plashka.png', 50.5, 50.5);
         this.load.spritesheet('home', 'images/btn/home.png', 73, 73);
-        this.load.spritesheet('pause', 'images/btn/pause.png', 69, 69);
+        this.load.spritesheet('pause', 'images/btn/pause.png', 34.5, 34.5);
         this.load.image('sliderHandle', 'images/btn/sliderHandle.png');
 
 
@@ -95,33 +91,35 @@ Associate.Preloader.prototype = {
         this.load.image('true', 'images/btn/checkTrue.png');
         this.load.image('false', 'images/btn/checkFalse.png');
 
-        this.load.spritesheet('explosionred', 'images/explosion/explosionRed.png', 108, 112);
-        this.load.spritesheet('explosionblue', 'images/explosion/explosionBlue.png', 108, 112);
-        this.load.spritesheet('explosiongreen', 'images/explosion/explosionGreen.png', 108, 112);
-        this.load.spritesheet('explosiongrey', 'images/explosion/explosionGrey.png', 108, 112);
-        this.load.spritesheet('explosionorange', 'images/explosion/explosionOrange.png', 108, 112);
-        this.load.spritesheet('explosionpurple', 'images/explosion/explosionPurple.png', 108, 112);
-        this.load.spritesheet('explosionyellow', 'images/explosion/explosionYellow.png', 108, 112);
-        this.load.spritesheet('explosionIce', 'images/explosion/explosionIce.png', 87, 87, 10);
+        this.load.spritesheet('explosionred', 'images/explosion/explosionRed.png', 54, 56);
+        this.load.spritesheet('explosionblue', 'images/explosion/explosionBlue.png', 54, 56);
+        this.load.spritesheet('explosiongreen', 'images/explosion/explosionGreen.png', 54, 56);
+        this.load.spritesheet('explosiongrey', 'images/explosion/explosionGrey.png', 54, 56);
+        this.load.spritesheet('explosionorange', 'images/explosion/explosionOrange.png', 54, 56);
+        this.load.spritesheet('explosionpurple', 'images/explosion/explosionPurple.png', 54, 56);
+        this.load.spritesheet('explosionyellow', 'images/explosion/explosionYellow.png', 54, 56);
+        this.load.spritesheet('explosionIce', 'images/explosion/explosionIce.png', 43.5, 43.5, 10);
 
 
         this.load.image('menu', 'images/bgr/menu.png');
         this.load.image('tileLeave', 'images/bgr/tileLeave.png');
-        this.load.image('backTile', 'images/bgr/backTile.png');
+        //this.load.image('backTile', 'images/bgr/backTile.png');
         this.load.image('backTileRound', 'images/bgr/backTileRound.png');
 
-        this.load.image('titleTop', 'images/bgr/titleTop.png');
+        //this.load.image('titleTop', 'images/bgr/titleTop.png');
         this.load.image('titleBottom', 'images/bgr/titleBottom.png');
         this.load.image('titleMid', 'images/bgr/titleMid.png');
 
 
-        this.load.spritesheet('level', 'images/btn/level.png', 208, 229);
+        this.load.spritesheet('level', 'images/btn/level.png', 104, 114.5);
         this.load.spritesheet('musicBtn', 'images/btn/musicBtn.png', 73, 73);
         this.load.spritesheet('soundBtn', 'images/btn/soundBtn.png', 73, 73);
 
         this.load.spritesheet('monster', 'images/tiles/tiles.png', 127, 126);
-        this.load.spritesheet('tiles', 'images/tiles/moreTiles.png', 126, 126);
+        this.load.spritesheet('tiles', 'images/tiles/moreTiles.png', 127, 126);
         this.load.spritesheet('frame', 'images/tiles/frame.png', 154.3, 152);
+
+
         this.load.spritesheet('star', 'images/tiles/star.png', 79, 84);
         this.load.image('starOn', 'images/btn/starOn.png');
         this.load.image('starOff', 'images/btn/starOff.png');

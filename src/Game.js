@@ -16,7 +16,7 @@ Associate.Game = function (game) {
     this.physics; //    the physics manager
     this.rnd; //    the repeatable random number generator
 
-    this.tilesTopDistance = 280;
+    this.tilesTopDistance = 130;
 
     this.tileSize;
     this.spacing;
@@ -47,6 +47,9 @@ Associate.Game = function (game) {
     this.starThree;
 
     this.fpsText;
+
+    this.soundBtn = null;
+    this.musicBtn = null;
 };
 
 Associate.Game.prototype = {
@@ -110,13 +113,13 @@ Associate.Game.prototype = {
 
         var frameTop = this.game.add.sprite(0, 0, 'frameTop');
         frameTop.width = this.game.world.width;
-        frameTop.height = 250;
+        frameTop.height = 100;
 
-        var shadow = this.game.add.sprite(0, 250, 'boardShadow');
+        var shadow = this.game.add.sprite(0, 100, 'boardShadow');
         shadow.width = this.game.world.width;
-        shadow.height = 65;
+        shadow.height = 35;
 
-        var pause = this.game.add.button(this.game.width - 160, 20, 'pause', this.onPauseClick, this, 0, 0, 1, 0);
+        var pause = this.game.add.button(this.game.width - 120, 20, 'pause', this.onPauseClick, this, 0, 0, 1, 0);
         pause.scale.setTo(2, 2);
 
         var style = {
@@ -126,10 +129,10 @@ Associate.Game.prototype = {
         };
         this.movesText = this.game.add.text(pause.x - pause.width, pause.y, this.moves, style);
 
-        var track = this.game.add.image(pause.x - pause.width * 2.1, pause.y + pause.height * .8, 'preloaderTrack');
+        var track = this.game.add.image(pause.x - pause.width * 6.1, pause.y + pause.height * .5, 'preloaderTrack');
         track.width = 270;
         track.height = 17;
-        this.bar = this.game.add.image(pause.x - pause.width * 2.1, pause.y + pause.height * .8, 'preloaderBar');
+        this.bar = this.game.add.image(pause.x - pause.width * 6.1, pause.y + pause.height * .5, 'preloaderBar');
         this.bar.width = 270;
         this.bar.height = 14;
 
@@ -159,18 +162,17 @@ Associate.Game.prototype = {
             sprite.events.onInputDown.add(this.onTileClick(this), this);
         }, this);
         //this.game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
-
         //this.fpsText = this.game.add.text(100, pause.y, '', style);
         if (this.level.number == 1) {
             this.showTutorialBase();
         }
-        else if (this.level.number == 2) {
+        else if (this.level.number == 14) {
             this.showTutorialIce();
         }
-        else if (this.level.number == 4) {
+        else if (this.level.number == 7) {
             this.showTutorialGrass();
         }
-        else if (this.level.number == 3) {
+        else if (this.level.number == 21) {
             this.showTutorialEgg();
         }
     },
@@ -295,6 +297,27 @@ Associate.Game.prototype = {
 
                     this.noClickSprites.set(new Pair(tile.x, tile.y), sprite);
                 }
+            } else {
+                if (tile.lock || tile.egg) {
+                    if (tile.egg) {
+                        var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'tiles');
+                        sprite.frame = 1;
+                    } else {
+                        var sprite = group.create(tile.x * this.tileDistance, tile.y * this.tileDistance, 'monster');
+                        sprite.frame = 12;
+                    }
+
+                    sprite.tileX = tile.x;
+                    sprite.tileY = tile.y;
+
+                    sprite.anchor.x = 0.5;
+                    sprite.anchor.y = 0.5;
+
+                    sprite.width = size;
+                    sprite.height = size;
+
+                    this.sprites.set(new Pair(tile.x, tile.y), sprite);
+                }
             }
 
         }, this);
@@ -384,6 +407,9 @@ Associate.Game.prototype = {
                         this.game.sound.play('ice');
 
                     var ice = context.noClickSprites.get(new Pair(a[0], a[1]));
+                    if (tile.egg) {
+                        ice = context.sprites.get(new Pair(a[0], a[1]));
+                    }
                     ice.loadTexture('explosionIce', 0);
                     ice.height = item.height * .7;
                     ice.width = item.width * .7;
@@ -453,9 +479,11 @@ Associate.Game.prototype = {
 
         var nearTiles = this.getNeighbors(tile.tileX, tile.tileY, this.tiles);
         nearTiles.forEach(function (tile) {
-            var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
-            sprite.frame = sprite.frame - 1;
-            sprite.tint = 0xFFFFFF;
+            if (!this.tiles.get(new Pair(tile[0], tile[1])).egg) {
+                var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
+                sprite.frame = sprite.frame - 1;
+                sprite.tint = 0xFFFFFF;
+            }
         }, this);
     },
 
@@ -495,7 +523,8 @@ Associate.Game.prototype = {
 
 
             var sprite = this.sprites.get(new Pair(tile[0], tile[1]));
-            sprite.frame = sprite.frame + 1;
+            if (!this.tiles.get(new Pair(tile[0], tile[1])).egg)
+                sprite.frame = sprite.frame + 1;
 
             if (!this.tiles.get(new Pair(tile[0], tile[1])).grass) {
                 var circle = this.selectedGroup.create(sprite.x, sprite.y, 'hiliteCircle');
@@ -526,11 +555,11 @@ Associate.Game.prototype = {
 
         var i = x - 1;
         while (i >= 0) {
-            if ((tiles.get(new Pair(i, y)).color == Color.NONE)) {
+            if ((tiles.get(new Pair(i, y)).color == Color.NONE) && !tiles.get(new Pair(i, y)).egg) {
                 break;
             }
             n.push([i, y]);
-            if (tiles.get(new Pair(i, y)).lock || tiles.get(new Pair(i, y)).egg) {
+            if (tiles.get(new Pair(i, y)).lock) {
                 break;
             }
             i--;
@@ -538,11 +567,11 @@ Associate.Game.prototype = {
 
         i = x + 1;
         while (i < this.w) {
-            if ((tiles.get(new Pair(i, y)).color == Color.NONE)) {
+            if ((tiles.get(new Pair(i, y)).color == Color.NONE) && !tiles.get(new Pair(i, y)).egg) {
                 break;
             }
             n.push([i, y]);
-            if (tiles.get(new Pair(i, y)).lock || tiles.get(new Pair(i, y)).egg) {
+            if (tiles.get(new Pair(i, y)).lock) {
                 break;
             }
             i++;
@@ -550,11 +579,11 @@ Associate.Game.prototype = {
 
         i = y - 1;
         while (i >= 0) {
-            if ((tiles.get(new Pair(x, i)).color == Color.NONE)) {
+            if ((tiles.get(new Pair(x, i)).color == Color.NONE) && !tiles.get(new Pair(x, i)).egg) {
                 break;
             }
             n.push([x, i]);
-            if (tiles.get(new Pair(x, i)).lock || tiles.get(new Pair(x, i)).egg) {
+            if (tiles.get(new Pair(x, i)).lock) {
                 break;
             }
             i--;
@@ -562,11 +591,11 @@ Associate.Game.prototype = {
 
         i = y + 1;
         while (i < this.h) {
-            if ((tiles.get(new Pair(x, i)).color == Color.NONE)) {
+            if ((tiles.get(new Pair(x, i)).color == Color.NONE) && !tiles.get(new Pair(x, i)).egg) {
                 break;
             }
             n.push([x, i]);
-            if (tiles.get(new Pair(x, i)).lock || tiles.get(new Pair(x, i)).egg) {
+            if (tiles.get(new Pair(x, i)).lock) {
                 break;
             }
             i++;
@@ -628,7 +657,7 @@ Associate.Game.prototype = {
         m.height = w;
         this.menu.create(m.x + w * .75, w - 50, 'true');
 
-        var line = this.menu.create(back.width / 2, w + 30, 'hiliteH');
+        var line = this.menu.create(back.width / 2, w + 10, 'hiliteH');
         line.anchor.setTo(0.5, 0.5);
         line.height = line.height / 10;
         line.width = back.width * .95;
@@ -774,7 +803,7 @@ Associate.Game.prototype = {
         m.height = w;
 
 
-        var play = this.game.add.button(back.centerX, this.menu.height - 250, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
+        var play = this.game.add.button(back.centerX, this.menu.height - 150, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
         play.anchor.x = .5;
         this.menu.add(play);
         this.menu.x = this.game.world.centerX - back.width / 2;
@@ -893,7 +922,7 @@ Associate.Game.prototype = {
         m.height = w;
 
 
-        var play = this.game.add.button(back.centerX, this.menu.height - 250, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
+        var play = this.game.add.button(back.centerX, this.menu.height - 150, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
         play.anchor.x = .5;
         this.menu.add(play);
         this.menu.x = this.game.world.centerX - back.width / 2;
@@ -1007,7 +1036,7 @@ Associate.Game.prototype = {
         m.height = w;
 
 
-        var play = this.game.add.button(back.centerX, this.menu.height - 250, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
+        var play = this.game.add.button(back.centerX, this.menu.height - 150, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
         play.anchor.x = .5;
         this.menu.add(play);
         this.menu.x = this.game.world.centerX - back.width / 2;
@@ -1117,7 +1146,7 @@ Associate.Game.prototype = {
         m.height = w;
 
 
-        var play = this.game.add.button(back.centerX, this.menu.height - 250, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
+        var play = this.game.add.button(back.centerX, this.menu.height - 150, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
         play.anchor.x = .5;
         this.menu.add(play);
         this.menu.x = this.game.world.centerX - back.width / 2;
@@ -1135,7 +1164,7 @@ Associate.Game.prototype = {
         back.height = this.game.world.height * .8;
 
         var style = {
-            'font': '100px Dosis',
+            'font': '70px Dosis',
             'fill': 'white',
             'fontWeight': 'bold'
         };
@@ -1146,17 +1175,17 @@ Associate.Game.prototype = {
         var starName = this.moves < this.level.star.one ? 'starOn' : 'starOff';
         var star1 = this.menu.create(back.centerX - 100, 300, starName);
         star1.anchor.setTo(0.5, 0.5);
-        star1.scale.setTo(2, 2);
+        //star1.scale.setTo(2, 2);
 
         starName = this.moves < this.level.star.two ? 'starOn' : 'starOff';
         var star2 = this.menu.create(back.centerX, 300, starName);
         star2.anchor.setTo(0.5, 0.5);
-        star2.scale.setTo(2, 2);
+        //star2.scale.setTo(2, 2);
 
         starName = this.moves < this.level.star.three ? 'starOn' : 'starOff';
         var star3 = this.menu.create(back.centerX + 100, 300, starName);
         star3.anchor.setTo(0.5, 0.5);
-        star3.scale.setTo(2, 2);
+        //star3.scale.setTo(2, 2);
 
 
         var line = this.menu.create(this.menu.centerX, this.menu.centerY, 'lineHorz');
@@ -1164,28 +1193,28 @@ Associate.Game.prototype = {
         line.width = this.menu.width * .8;
         line.height = 20;
 
-        var retry = this.game.add.button(back.centerX - 300, this.menu.height - 300, 'retry', function () {
+        var retry = this.game.add.button(back.centerX - 170, this.menu.height - 200, 'retry', function () {
             if (Music.isPlaySound())
                 this.game.sound.play('click');
             this.game.state.restart(true, false, this.level);
         }, this, 0, 0, 1, 0);
         retry.anchor.x = .5;
-        retry.scale.setTo(1.5, 1.5);
+        retry.scale.setTo(2, 2);
         this.menu.add(retry);
 
-        var next = this.game.add.button(back.centerX, this.menu.height - 300, 'next', function () {
+        var next = this.game.add.button(back.centerX, this.menu.height - 200, 'next', function () {
             if (Music.isPlaySound())
                 this.game.sound.play('click');
             this.state.start('Game', Phaser.Plugin.StateTransition.Out.SlideLeft,
                 Phaser.Plugin.StateTransition.In.ScaleUp, true, false, LevelManager.getLevel(++this.level.number));
         }, this, 0, 0, 1, 0);
         next.anchor.x = .5;
-        next.scale.setTo(1.5, 1.5);
+        next.scale.setTo(2, 2);
         this.menu.add(next);
 
-        var home = this.game.add.button(back.centerX + 300, this.menu.height - 300, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
+        var home = this.game.add.button(back.centerX + 170, this.menu.height - 200, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
         home.anchor.x = .5;
-        home.scale.setTo(1.5, 1.5);
+        home.scale.setTo(2, 2);
         this.menu.add(home);
 
         this.menu.x = this.game.world.centerX - back.width / 2;
@@ -1208,7 +1237,7 @@ Associate.Game.prototype = {
         back.height = this.game.world.height * .8;
 
         var style = {
-            'font': '100px Dosis',
+            'font': '80px Dosis',
             'fill': 'white',
             'fontWeight': 'bold'
         };
@@ -1217,45 +1246,57 @@ Associate.Game.prototype = {
         this.menu.add(label);
 
         var style = {
-            'font': '60px Dosis',
+            'font': '40px Dosis',
             'fill': 'white',
             'fontWeight': 'normal'
         };
 
 
-        this.menu.create(back.centerX / 4, 250, 'starSmall').scale.set(3, 3);
-        this.menu.create(back.centerX / 4 + 50, 250, 'starSmall').scale.set(3, 3);
-        this.menu.create(back.centerX / 4 + 100, 250, 'starSmall').scale.set(3, 3);
+        this.menu.create(back.centerX / 4, 250, 'starSmall').scale.set(2, 2);
+        this.menu.create(back.centerX / 4 + 50, 250, 'starSmall').scale.set(2, 2);
+        this.menu.create(back.centerX / 4 + 100, 250, 'starSmall').scale.set(2, 2);
         var label = this.game.add.text(back.centerX, 250, '< ' + this.level.star.three + ' moves', style);
         this.menu.add(label);
 
-        this.menu.create(back.centerX / 4, 350, 'starSmall').scale.set(3, 3);
-        this.menu.create(back.centerX / 4 + 50, 350, 'starSmall').scale.set(3, 3);
+        this.menu.create(back.centerX / 4, 350, 'starSmall').scale.set(2, 2);
+        this.menu.create(back.centerX / 4 + 50, 350, 'starSmall').scale.set(2, 2);
         var label = this.game.add.text(back.centerX, 350, '< ' + this.level.star.two + ' moves', style);
         this.menu.add(label);
 
-        this.menu.create(back.centerX / 4, 450, 'starSmall').scale.set(3, 3);
+        this.menu.create(back.centerX / 4, 450, 'starSmall').scale.set(2, 2);
         var label = this.game.add.text(back.centerX, 450, '< ' + this.level.star.one + ' moves', style);
         this.menu.add(label);
 
 
-        var retry = this.game.add.button(back.centerX - 300, this.menu.height - 300, 'retry', function () {
+        this.musicBtn = this.game.add.button(back.centerX - 100, this.menu.height - 300, 'musicBtn', this.onMusicClick, this, 2, 2, 3);
+        this.musicBtn.anchor.set(0.5, 0.5);
+        this.menu.add(this.musicBtn);
+        this.setMusicFrames();
+
+        this.soundBtn = this.game.add.button(back.centerX + 100, this.menu.height - 300, 'soundBtn', this.onSoundClick, this, 2, 2, 3);
+        this.soundBtn.anchor.set(0.5, 0.5);
+        this.menu.add(this.soundBtn);
+        this.setSoundFrames();
+
+
+
+        var retry = this.game.add.button(back.centerX - 170, this.menu.height - 150, 'retry', function () {
             if (Music.isPlaySound())
                 this.game.sound.play('click');
             this.game.state.restart(true, false, this.level);
         }, this, 0, 0, 1, 0);
         retry.anchor.x = .5;
-        retry.scale.setTo(1.5, 1.5);
+        retry.scale.setTo(2, 2);
         this.menu.add(retry);
 
-        var play = this.game.add.button(back.centerX, this.menu.height - 350, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
+        var play = this.game.add.button(back.centerX, this.menu.height - 170, 'playBig', this.onCloseClick, this, 0, 0, 1, 0);
         play.anchor.x = .5;
-        play.scale.setTo(1.5, 1.5);
+        play.scale.setTo(1.7, 1.7);
         this.menu.add(play);
 
-        var home = this.game.add.button(back.centerX + 300, this.menu.height - 300, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
+        var home = this.game.add.button(back.centerX + 170, this.menu.height - 150, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
         home.anchor.x = .5;
-        home.scale.setTo(1.5, 1.5);
+        home.scale.setTo(2, 2);
         this.menu.add(home);
 
 
@@ -1300,7 +1341,33 @@ Associate.Game.prototype = {
         if (!maxMoves || currentMaxMoves < maxMoves) {
             localStorage.setItem("level-" + this.level.number, currentMaxMoves);
         }
-    }
+    },
+
+    onMusicClick: function () {
+        Music.mute(!Music.isMuted());
+        this.setMusicFrames();
+    },
+
+    setMusicFrames: function () {
+        if (Music.isMuted()) {
+            this.musicBtn.setFrames(0, 0, 1);
+        } else {
+            this.musicBtn.setFrames(2, 2, 3);
+        }
+    },
+
+    setSoundFrames: function () {
+        if (!Music.isPlaySound()) {
+            this.soundBtn.setFrames(0, 0, 1);
+        } else {
+            this.soundBtn.setFrames(2, 2, 3);
+        }
+    },
+
+    onSoundClick: function () {
+        Music.playSound(!Music.isPlaySound());
+        this.setSoundFrames();
+    },
 
 
 };

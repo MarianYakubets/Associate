@@ -5,12 +5,12 @@ var LabelButton = function(game, x, y, key, label, style, callback,
 
     //Style how you wish...
     this.style = style || {
-        'font': '110px Dosis',
+        'font': '70px Dosis',
         'fill': 'white',
         'fontWeight': 'Bold'
     };
     this.anchor.setTo(0.5, 0.5);
-    this.label = new Phaser.Text(game, 0, -20, label, this.style);
+    this.label = new Phaser.Text(game, 0, -10, label, this.style);
 
     //puts the label in the center of the button
     this.label.anchor.setTo(0.5, 0.5);

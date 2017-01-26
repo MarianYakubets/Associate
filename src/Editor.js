@@ -242,15 +242,19 @@ Associate.Editor.prototype = {
                     context.legendTiles.get(new Pair(x, y)).color = context.selectedColor;
                 } else if (context.selectedColor == 'lock') {
                     tiles.get(new Pair(x, y)).lock = !tiles.get(new Pair(x, y)).lock;
-                } else if (context.selectedColor == 'egg') {
-                    context.tiles.get(new Pair(x, y)).egg = !context.tiles.get(new Pair(x, y)).egg;
-                    context.legendTiles.get(new Pair(x, y)).color = Color.NONE;
                 } else if (context.selectedColor == 'grass') {
                     context.tiles.get(new Pair(x, y)).grass = !context.tiles.get(new Pair(x, y)).grass;
                     context.legendTiles.get(new Pair(x, y)).color = Color.NONE;
                 } else {
-                    tiles.get(new Pair(x, y)).color = context.selectedColor;
+                    if (context.selectedColor == 'egg') {
+                        context.tiles.get(new Pair(x, y)).egg = !context.tiles.get(new Pair(x, y)).egg;
+                        context.legendTiles.get(new Pair(x, y)).color = Color.NONE;
+                        context.tiles.get(new Pair(x, y)).color = Color.NONE;
+                    } else {
+                        tiles.get(new Pair(x, y)).color = context.selectedColor;
+                    }
                 }
+
                 context.drawLegendTiles();
                 context.drawLevelTiles();
             }
@@ -270,24 +274,28 @@ Associate.Editor.prototype = {
                 context.squareMask.x = context.tileSize * (-2);
             }
         }
-    },
+    }
+    ,
 
 
     onBackClick: function () {
         this.state.start('LevelMenu', Phaser.Plugin.StateTransition.Out.SlideTop,
             Phaser.Plugin.StateTransition.In.ScaleUp, true, false, 'Editor');
-    },
+    }
+    ,
 
     onLoadClick: function () {
         this.init(this.level);
         this.loadLevel();
-    },
+    }
+    ,
 
     onSaveClick: function () {
         var json = JSON.stringify(new Level(this.number, this.w, this.h, this.tiles.entities, this.legendTiles.entities, new Stars(this.threeStar, this.twoStar, this.oneStar)));
         firebase.database().ref('levels/' + this.number).set(json);
         alert('Level saved');
-    },
+    }
+    ,
 
     onLeftBtnClick: function () {
         this.w = 4;
@@ -301,7 +309,8 @@ Associate.Editor.prototype = {
             }
         }
         this.loadLevel();
-    },
+    }
+    ,
 
     onRightBtnClick: function () {
         this.w = 6;
@@ -315,7 +324,8 @@ Associate.Editor.prototype = {
             }
         }
         this.loadLevel();
-    },
+    }
+    ,
 
     onUpBtnClick: function () {
         this.h -= 1;
@@ -324,7 +334,8 @@ Associate.Editor.prototype = {
             this.legendTiles.delete(new Pair(i, this.h));
         }
         this.loadLevel();
-    },
+    }
+    ,
 
     onDownBtnClick: function () {
         for (var i = 0; i < this.w; i++) {
@@ -333,7 +344,8 @@ Associate.Editor.prototype = {
         }
         this.h += 1;
         this.loadLevel();
-    },
+    }
+    ,
 
     onLayer1Click: function (item) {
         this.layer1Active = !this.layer1Active;
@@ -343,7 +355,8 @@ Associate.Editor.prototype = {
          this.l1Btn.setFrames(2, 0, 1);
          }*/
         this.showLevels();
-    },
+    }
+    ,
 
     onLayer2Click: function (item) {
         this.layer2Active = !this.layer2Active;
@@ -353,11 +366,13 @@ Associate.Editor.prototype = {
          this.l2Btn.setFrames(2, 0, 1);
          }*/
         this.showLevels();
-    },
+    }
+    ,
 
     update: function () {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-    },
+    }
+    ,
 
     calculateTileSize: function () {
         var h = this.game.world.height - Screen.PADDING_HEIGHT;
@@ -374,7 +389,8 @@ Associate.Editor.prototype = {
         }
 
         return tileSize;
-    },
+    }
+    ,
 
     setOnPause: function () {
         if (this.menu != null) {
@@ -477,27 +493,31 @@ Associate.Editor.prototype = {
         this.game.add.tween(this.menu).from({
             y: -600
         }, 1000, Phaser.Easing.Bounce.Out, true);
-    },
+    }
+    ,
 
     onStarLeft: function (star, label) {
         return function () {
             this[star] = this[star] - 1;
             label.text = this[star];
         }
-    },
+    }
+    ,
 
     onStarRight: function (star, label) {
         return function () {
             this[star] = this[star] + 1;
             label.text = this[star];
         }
-    },
+    }
+    ,
 
     unPause: function () {
         this.menu.removeAll();
         this.menu = null;
         this.game.paused = false;
-    },
+    }
+    ,
 
 
     quitGame: function (pointer) {
@@ -510,4 +530,5 @@ Associate.Editor.prototype = {
 
     }
 
-};
+}
+;

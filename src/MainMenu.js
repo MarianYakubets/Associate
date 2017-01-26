@@ -61,11 +61,11 @@ Associate.MainMenu.prototype = {
          this.add.sprite(0, 0, 'titlepage');
          this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');*/
         this.musicBtn = this.game.add.button(50, this.game.world.centerY + 100, 'musicBtn', this.onMusicClick, this, 2, 2, 3);
-        this.musicBtn.scale.set(2, 2);
+        //this.musicBtn.scale.set(2, 2);
         this.setMusicFrames();
 
-        this.soundBtn = this.game.add.button(50, this.game.world.centerY + 300, 'soundBtn', this.onSoundClick, this, 2, 2, 3);
-        this.soundBtn.scale.set(2, 2);
+        this.soundBtn = this.game.add.button(50, this.game.world.centerY + 200, 'soundBtn', this.onSoundClick, this, 2, 2, 3);
+        //this.soundBtn.scale.set(2, 2);
         this.setSoundFrames();
 
 

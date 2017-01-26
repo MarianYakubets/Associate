@@ -22,9 +22,9 @@ Associate.LevelMenu.prototype = {
         var colors = ["0xffffff", "0xff0000", "0x00ff00", "0x660066"];
         var columns = 4;
         var rows = 5;
-        var thumbWidth = 208;
-        var thumbHeight = 228;
-        var spacing = 40;
+        var thumbWidth = 104;
+        var thumbHeight = 114;
+        var spacing = 30;
         this.currentPage = 0;
         this.pageSelectors = [];
         var rowLength = thumbWidth * columns + spacing * (columns - 1);
@@ -40,15 +40,15 @@ Associate.LevelMenu.prototype = {
         this.scrollingMap.input.boundsRect = new Phaser.Rectangle(game.width - this.scrollingMap.width, game.height - this.scrollingMap.height, this.scrollingMap.width * 2 - game.width, this.scrollingMap.height * 2 - game.height);
 
         var home = this.game.add.button(30, this.game.world.height - 230, 'homeBig', this.onBackClick, this, 1, 0);
-        home.scale.setTo(1.5, 1.5);
+        home.scale.setTo(2, 2);
 
-        this.game.add.image(this.game.width * .85, 20, 'starOn');
+        this.game.add.image(this.game.width * .85 - 30, 20, 'starOn');
         var style = {
-            'font': '60px Dosis',
+            'font': '40px Dosis',
             'fill': 'white',
             'fontWeight': 'Bold'
         };
-        this.totalStars = this.game.add.text(this.game.width * .92, 20, 0, style);
+        this.totalStars = this.game.add.text(this.game.width * .92, 30, 0, style);
 
         for (var k = 0; k < colors.length; k++) {
             for (var i = 0; i < columns; i++) {
@@ -65,13 +65,13 @@ Associate.LevelMenu.prototype = {
                     this.scrollingMap.addChild(btn);
                 }
             }
-            this.pageSelectors[k] = game.add.button(game.width / 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 170, this.game.world.height - 230, "plashka", function (e) {
+            this.pageSelectors[k] = game.add.button(game.width / 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 110, this.game.world.height - 230, "plashka", function (e) {
                 var difference = e.pageIndex - this.currentPage;
                 this.changePage(difference);
             }, this);
             this.pageSelectors[k].pageIndex = k;
             this.pageSelectors[k].tint = colors[k];
-            this.pageSelectors[k].width = 150;
+            this.pageSelectors[k].width = 85;
             if (k == this.currentPage) {
                 this.pageSelectors[k].height = this.pageSelectors[k].width * .8;
             } else {
