@@ -39,7 +39,7 @@ Associate.LevelMenu.prototype = {
         this.scrollingMap.input.allowVerticalDrag = false;
         this.scrollingMap.input.boundsRect = new Phaser.Rectangle(game.width - this.scrollingMap.width, game.height - this.scrollingMap.height, this.scrollingMap.width * 2 - game.width, this.scrollingMap.height * 2 - game.height);
 
-        var home = this.game.add.button(30, this.game.world.height - 230, 'homeBig', this.onBackClick, this, 1, 0);
+        var home = this.game.add.button(30, this.game.world.height - 200, 'homeBig', this.onBackClick, this, 1, 0);
         home.scale.setTo(2, 2);
 
         this.game.add.image(this.game.width * .85 - 30, 20, 'starOn');
@@ -65,7 +65,7 @@ Associate.LevelMenu.prototype = {
                     this.scrollingMap.addChild(btn);
                 }
             }
-            this.pageSelectors[k] = game.add.button(game.width / 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 110, this.game.world.height - 230, "plashka", function (e) {
+            this.pageSelectors[k] = game.add.button(game.width / 2 + (k - Math.floor(colors.length / 2) + 0.5 * (1 - colors.length % 2)) * 110, this.game.world.height - 200, "plashka", function (e) {
                 var difference = e.pageIndex - this.currentPage;
                 this.changePage(difference);
             }, this);

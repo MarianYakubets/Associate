@@ -1268,12 +1268,12 @@ Associate.Game.prototype = {
         this.menu.add(label);
 
 
-        this.musicBtn = this.game.add.button(back.centerX - 100, this.menu.height - 300, 'musicBtn', this.onMusicClick, this, 2, 2, 3);
+        this.musicBtn = this.game.add.button(back.centerX - 100, this.menu.height - 260, 'musicBtn', this.onMusicClick, this, 2, 2, 3);
         this.musicBtn.anchor.set(0.5, 0.5);
         this.menu.add(this.musicBtn);
         this.setMusicFrames();
 
-        this.soundBtn = this.game.add.button(back.centerX + 100, this.menu.height - 300, 'soundBtn', this.onSoundClick, this, 2, 2, 3);
+        this.soundBtn = this.game.add.button(back.centerX + 100, this.menu.height - 260, 'soundBtn', this.onSoundClick, this, 2, 2, 3);
         this.soundBtn.anchor.set(0.5, 0.5);
         this.menu.add(this.soundBtn);
         this.setSoundFrames();
