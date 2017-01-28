@@ -19,10 +19,10 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <platform name="android">
-        <icon src="images/btn/starOn.png" density="ldpi" />
-        <icon src="images/btn/starOn.png" density="mdpi" />
-        <icon src="images/btn/starOn.png" density="hdpi" />
-        <icon src="images/btn/starOn.png" density="xhdpi" />
+        <icon src="icons/icon.png" density="ldpi" />
+        <icon src="icons/icon.png" density="mdpi" />
+        <icon src="icons/icon.png" density="hdpi" />
+        <icon src="icons/icon.png" density="xhdpi" />
         <allow-intent href="market:*" />
     </platform>
 
