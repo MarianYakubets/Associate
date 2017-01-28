@@ -115,21 +115,19 @@ Associate.Preloader.prototype = {
         this.load.spritesheet('musicBtn', 'images/btn/musicBtn.png', 73, 73);
         this.load.spritesheet('soundBtn', 'images/btn/soundBtn.png', 73, 73);
 
-        this.load.spritesheet('monster', 'images/tiles/tiles.png', 127, 126);
-        this.load.spritesheet('tiles', 'images/tiles/moreTiles.png', 127, 126);
-        this.load.spritesheet('frame', 'images/tiles/frame.png', 154.3, 152);
+        this.load.spritesheet('monster', 'images/tiles/tiles.png', 63.5, 63);
+        this.load.spritesheet('tiles', 'images/tiles/moreTiles.png', 63, 63);
+        this.load.spritesheet('frame', 'images/tiles/frame.png', 77.15, 76);
 
 
         this.load.spritesheet('star', 'images/tiles/star.png', 79, 84);
         this.load.image('starOn', 'images/btn/starOn.png');
         this.load.image('starOff', 'images/btn/starOff.png');
-        this.load.image('starSmall', 'images/btn/starSmall.png')
-        this.load.image('starSmallOff', 'images/btn/starSmallOff.png')
+        this.load.image('starSmall', 'images/btn/starSmall.png');
+        this.load.image('starSmallOff', 'images/btn/starSmallOff.png');
 
         this.load.image('shadow', 'images/tiles/shadow.png');
         this.load.image('hiliteCircle', 'images/tiles/hiliteCircle.png');
-        this.load.image('hiliteH', 'images/tiles/hiliteH.png');
-        this.load.image('hiliteV', 'images/tiles/hiliteV.png');
 
         this.load.image('arrowDown', 'images/tiles/arrowDown.png');
         this.load.image('arrowLeft', 'images/tiles/arrowLeft.png');

@@ -657,10 +657,10 @@ Associate.Game.prototype = {
         m.height = w;
         this.menu.create(m.x + w * .75, w - 50, 'true');
 
-        var line = this.menu.create(back.width / 2, w + 10, 'hiliteH');
+       /* var line = this.menu.create(back.width / 2, w + 10, 'hiliteH');
         line.anchor.setTo(0.5, 0.5);
         line.height = line.height / 10;
-        line.width = back.width * .95;
+        line.width = back.width * .95;*/
         //STEP CELLS
         //         1
         var startX = 0;
