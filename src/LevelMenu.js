@@ -22,9 +22,9 @@ Associate.LevelMenu.prototype = {
         var colors = ["0xffffff", "0xff0000", "0x00ff00", "0x660066"];
         var columns = 3;
         var rows = 4;
-        var thumbWidth = 160;
-        var thumbHeight = 160;
-        var spacing = 40;
+        var thumbWidth = 120;
+        var thumbHeight = 120;
+        var spacing = 30;
         this.currentPage = 0;
         this.pageSelectors = [];
         var rowLength = thumbWidth * columns + spacing * (columns - 1);
@@ -57,7 +57,7 @@ Associate.LevelMenu.prototype = {
                     var frame = this.getStarFrame(num);
                     var btn = new LabelButton(this.game, k * game.width + leftMargin + i * (thumbWidth + spacing) + thumbWidth / 2, topMargin + j * (thumbHeight + spacing) + thumbHeight / 2, "level", num, null, this.onLevelClick(num), this, frame, frame, frame, frame);
                     btn.tint = colors[k];
-                    btn.scale.setTo(1.5,1.5);
+                    btn.scale.setTo(1.4,1.4);
                     if (this.stateName != 'Editor' && num > highestLevel) {
                         btn.destroy();
                         btn = this.game.add.sprite(btn.x - btn.width / 2, btn.y - btn.height / 2, 'level');
