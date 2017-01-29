@@ -45,11 +45,19 @@ Associate.MainMenu.prototype = {
         // top.scale.set(1.3, 1.3);
         // top.anchor.set(0.5, 1);
 
+        var style = {
+            'font': '90px Dosis',
+            'fill': 'white',
+            'fontWeight': 'bold'
+        };
+        var label = this.game.add.text(this.game.width / 2, 130, 'Color Faces', style);
+        label.anchor.setTo(.5, .5);
+
         var mid = this.game.add.image(this.game.width / 2, this.game.height * .7, 'titleMid');
         mid.anchor.set(0.5, 0);
 
         var bot = this.game.add.image(this.game.width / 2, this.game.height + 50, 'titleBottom');
-        bot.scale.set(1.3, 1.3);
+        bot.scale.set(1.7, 1.7);
         bot.anchor.set(0.5, 1);
 
 
@@ -71,7 +79,7 @@ Associate.MainMenu.prototype = {
 
         var play = this.game.add.button(this.game.world.centerX, this.game.world.centerY * .7, 'playBig', this.onBtnClick('Game'), this, 1, 0);
         play.anchor.set(.5, .5);
-        play.scale.setTo(1.8, 1.8);
+        play.scale.setTo(2, 2);
 
         this.game.add.button(this.game.world.width - 80, this.game.world.height - 80, 'option', this.onBtnClick('Editor'), this, 1, 0).alpha = 0;
     },
