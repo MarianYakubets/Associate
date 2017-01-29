@@ -127,7 +127,7 @@ Associate.Game.prototype = {
             'fill': 'white',
             'fontWeight': 'bold'
         };
-        this.movesText = this.game.add.text(pause.x - pause.width, pause.y, this.moves, style);
+        this.movesText = this.game.add.text(pause.x - pause.width - 20, pause.y, this.moves, style);
 
         var track = this.game.add.image(pause.x - pause.width * 6.1, pause.y + pause.height * .5, 'preloaderTrack');
         track.width = 270;
