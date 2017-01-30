@@ -12,7 +12,9 @@
 
     <access origin="*" />
     <plugin name="cordova-plugin-whitelist" version="1" />
+<!--
     <plugin name="com.admob.plugin" version="5.5.0" />
+-->
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
