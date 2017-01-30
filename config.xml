@@ -6,6 +6,7 @@
         version="1.0.0">
 
     <plugin name="cordova-plugin-firebase" spec="0.1.18" />
+    <plugin name="com.admob.plugin" version="3.0.0" />
 
     <name>Color Faces</name>
     <content src="index.html"/>
