@@ -43,6 +43,14 @@
             messagingSenderId: "644718760744"
         };
         firebase.initializeApp(config);
+
+        admob.initAdmob("ca-app-pub-6362858486849834/5867906107","ca-app-pub-6362858486849834~4391172907");
+
+        document.addEventListener(admob.Event.onInterstitialReceive, this.onInterstitialReceive, false);
+        admob.cacheInterstitial();
+
+        admob.showBanner(admob.BannerSize.BANNER, admob.Position.BOTTOM_APP);
+        admob.showBannerAbsolute(admob.BannerSize.BANNER,0,70);
     </script>
     <script src="js/phaser.js"></script>
     <script src="js/phaser-state-transition.js"></script>

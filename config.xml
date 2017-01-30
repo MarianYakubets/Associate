@@ -12,6 +12,7 @@
 
     <access origin="*" />
     <plugin name="cordova-plugin-whitelist" version="1" />
+    <gap:plugin name="com.admob.plugin" version="5.5.0" source="plugins.cordova.io" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -30,7 +31,7 @@
         An example for phonegap build docs.
     </description>
 
-    <author href="https://build.phonegap.com" email="no@no.com">
+    <author href="https://build.phonegap.com" email="marian.yakubets@gmail.com">
         Mifik
     </author>
 
