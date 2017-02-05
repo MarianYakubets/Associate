@@ -5,8 +5,8 @@
         versionCode="1"
         version="1.0.0">
 
-    <plugin name="cordova-plugin-firebase" spec="0.1.18" />
-     <gap:plugin name="com-admob-plugin" version="5.5.0" source="npm"/>
+    <plugin name="cordova-plugin-firebase" spec="0.1.19" />
+    <plugin name="com.admob.google" spec="4.0.8" source="pgb" />
 
     <name>Color Faces</name>
     <content src="index.html"/>
