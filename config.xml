@@ -6,7 +6,7 @@
         version="1.0.0">
 
     <plugin name="cordova-plugin-firebase" spec="0.1.19" />
-    <gap:plugin name="cordova-plugin-admob" source="npm" />
+    <gap:plugin name="cordova-plugin-admobpro" source="npm" />
 
     <name>Color Faces</name>
     <content src="index.html"/>
@@ -30,6 +30,17 @@
     <description>
         An example for phonegap build docs.
     </description>
+    XHTML
+
+    <feature name="AdMob">
+        <param name="android-package" value="CDVAdMobPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+
+    <feature name="AdMob">
+        <param name="ios-package" value="CDVAdMobPlugin" />
+        <param name="onload" value="true" />
+    </feature>
 
     <author href="https://build.phonegap.com" email="marian.yakubets@gmail.com">
         Mifik

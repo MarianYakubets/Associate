@@ -56,18 +56,18 @@
         admobParam.isTesting=true;*/
 
 
-        function onDeviceReady() {
+        /*function onDeviceReady() {
             document.removeEventListener('deviceready', onDeviceReady, false);
 
             // Set AdMobAds options:
             admob.setOptions({
                 publisherId:          "ca-app-pub-6362858486849834/5867906107",  // Required
-               /* interstitialAdId:     "ca-app-pub-6362858486849834~4391172907",  // Optional
+               /!* interstitialAdId:     "ca-app-pub-6362858486849834~4391172907",  // Optional
                 tappxIdiOS:           "/XXXXXXXXX/Pub-XXXX-iOS-IIII",            // Optional
-                tappxIdAndroid:       "/XXXXXXXXX/Pub-XXXX-Android-AAAA",        // Optional*/
-/*
+                tappxIdAndroid:       "/XXXXXXXXX/Pub-XXXX-Android-AAAA",        // Optional*!/
+/!*
                 tappxShare:           0.5                                        // Optional
-*/
+*!/
             });
 
             // Start showing banners (atomatic when autoShowBanner is set to true)
@@ -77,9 +77,10 @@
             admob.requestInterstitialAd();
         }
 
-        document.addEventListener("deviceready", onDeviceReady, false);
+        document.addEventListener("deviceready", onDeviceReady, false);*/
 
     </script>
+    <script src="src/cordova.js"></script>
     <script src="js/phaser.js"></script>
     <script src="js/phaser-state-transition.js"></script>
     <script src="src/ScreenUtils.js"></script>
