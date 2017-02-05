@@ -7,6 +7,7 @@
 
     <plugin name="cordova-plugin-firebase" spec="0.1.19" />
     <gap:plugin name="cordova-plugin-admob" source="npm" />
+    <gap:plugin name="cordova-plugin-googleplayservices" source="npm" />
 
     <name>Color Faces</name>
     <content src="index.html"/>
