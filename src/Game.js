@@ -1215,9 +1215,7 @@ Associate.Game.prototype = {
         }, this, 0, 0, 1, 0);
         next.anchor.x = .5;
         next.scale.setTo(2, 2);
-        if (this.level.number != 24) {
             this.menu.add(next);
-        }
 
         var home = this.game.add.button(back.centerX + 170, this.menu.height - 200, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
         home.anchor.x = .5;
