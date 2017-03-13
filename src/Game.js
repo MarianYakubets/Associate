@@ -1205,6 +1205,10 @@ Associate.Game.prototype = {
         var next = this.game.add.button(back.centerX, this.menu.height - 200, 'next', function () {
             if (Music.isPlaySound())
                 this.game.sound.play('click');
+
+            if(this.level.number == 24){
+                this.onBtnClick('LevelMenu');
+            }
             this.state.start('Game', Phaser.Plugin.StateTransition.Out.SlideLeft,
                 Phaser.Plugin.StateTransition.In.ScaleUp, true, false, LevelManager.getLevel(++this.level.number));
         }, this, 0, 0, 1, 0);
