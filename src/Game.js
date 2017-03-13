@@ -1168,7 +1168,12 @@ Associate.Game.prototype = {
             'fill': 'white',
             'fontWeight': 'bold'
         };
-        var label = this.game.add.text(back.centerX, 130, 'Level Completed', style);
+
+        if (this.level.number != 24) {
+            var label = this.game.add.text(back.centerX, 130, 'Level Completed', style);
+        } else {
+            var label = this.game.add.text(back.centerX, 130, 'Last Level Completed \n Thank you for playing', style);
+        }
         label.anchor.setTo(0.5, 0.5);
         this.menu.add(label);
 
@@ -1202,20 +1207,23 @@ Associate.Game.prototype = {
         retry.scale.setTo(2, 2);
         this.menu.add(retry);
 
-        var next = this.game.add.button(back.centerX, this.menu.height - 200, 'next', function () {
-            if (Music.isPlaySound())
-                this.game.sound.play('click');
-            if (this.level.number == 24) {
-                this.onBtnClick('LevelMenu')
-            } else {
-                this.state.start('Game', Phaser.Plugin.StateTransition.Out.SlideLeft,
-                    Phaser.Plugin.StateTransition.In.ScaleUp, true, false, LevelManager.getLevel(++this.level.number));
-            }
+        if (this.level.number != 24) {
 
-        }, this, 0, 0, 1, 0);
-        next.anchor.x = .5;
-        next.scale.setTo(2, 2);
+            var next = this.game.add.button(back.centerX, this.menu.height - 200, 'next', function () {
+                if (Music.isPlaySound())
+                    this.game.sound.play('click');
+                if (this.level.number == 24) {
+                    this.onBtnClick('LevelMenu')
+                } else {
+                    this.state.start('Game', Phaser.Plugin.StateTransition.Out.SlideLeft,
+                        Phaser.Plugin.StateTransition.In.ScaleUp, true, false, LevelManager.getLevel(++this.level.number));
+                }
+
+            }, this, 0, 0, 1, 0);
+            next.anchor.x = .5;
+            next.scale.setTo(2, 2);
             this.menu.add(next);
+        }
 
         var home = this.game.add.button(back.centerX + 170, this.menu.height - 200, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
         home.anchor.x = .5;
