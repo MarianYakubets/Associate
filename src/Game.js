@@ -657,10 +657,10 @@ Associate.Game.prototype = {
         m.height = w;
         this.menu.create(m.x + w * .75, w - 50, 'true');
 
-       /* var line = this.menu.create(back.width / 2, w + 10, 'hiliteH');
-        line.anchor.setTo(0.5, 0.5);
-        line.height = line.height / 10;
-        line.width = back.width * .95;*/
+        /* var line = this.menu.create(back.width / 2, w + 10, 'hiliteH');
+         line.anchor.setTo(0.5, 0.5);
+         line.height = line.height / 10;
+         line.width = back.width * .95;*/
         //STEP CELLS
         //         1
         var startX = 0;
@@ -1206,15 +1206,14 @@ Associate.Game.prototype = {
             if (Music.isPlaySound())
                 this.game.sound.play('click');
 
-            if(this.level.number == 24){
-                this.onBtnClick('LevelMenu');
-            }
             this.state.start('Game', Phaser.Plugin.StateTransition.Out.SlideLeft,
                 Phaser.Plugin.StateTransition.In.ScaleUp, true, false, LevelManager.getLevel(++this.level.number));
         }, this, 0, 0, 1, 0);
         next.anchor.x = .5;
         next.scale.setTo(2, 2);
-        this.menu.add(next);
+        if (this.level.number != 24) {
+            this.menu.add(next);
+        }
 
         var home = this.game.add.button(back.centerX + 170, this.menu.height - 200, 'homeBig', this.onBtnClick('LevelMenu'), this, 0, 0, 1, 0);
         home.anchor.x = .5;
@@ -1281,7 +1280,6 @@ Associate.Game.prototype = {
         this.soundBtn.anchor.set(0.5, 0.5);
         this.menu.add(this.soundBtn);
         this.setSoundFrames();
-
 
 
         var retry = this.game.add.button(back.centerX - 170, this.menu.height - 150, 'retry', function () {
