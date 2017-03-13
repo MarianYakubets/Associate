@@ -172,7 +172,7 @@ Associate.Game.prototype = {
         else if (this.level.number == 7) {
             this.showTutorialGrass();
         }
-        else if (this.level.number == 21) {
+        else if (this.level.number == 20) {
             this.showTutorialEgg();
         }
     },

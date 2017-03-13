@@ -19,7 +19,7 @@ Associate.LevelMenu.prototype = {
             localStorage.setItem("reached-level", highestLevel);
         }
 
-        var colors = ["0xffffff", "0xff0000", "0x00ff00", "0x660066"];
+        var colors = ["0xffffff", "0x02ff55"];
         var columns = 3;
         var rows = 4;
         var thumbWidth = 120;
